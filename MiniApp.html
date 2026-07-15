@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Направлятор TheBSgorm</title>
+    <!-- Официальный скрипт Telegram Web App -->
+    <script src="https://telegram.org"></script>
+    <style>
+        :root {
+            --bg-color: #0b1329;
+            --text-color: #f1f5f9;
+            --btn-bg: #38bdf8;
+            --btn-text: #ffffff;
+            --card-bg: rgba(30, 41, 59, 0.7); /* Плотное матовое стекло */
+            --soft-blue: #7dd3fc;  /* Приятный пастельно-голубой */
+            --sky-blue: #38bdf8;   /* Насыщенный лазурный */
+            --deep-blue: #1e3a8a;  /* Спокойный глубокий синий */
+            --glass-border: rgba(125, 211, 252, 0.12);
+        }
+
+        /* Мягкая и плавная анимация перелива (12 секунд вместо 7, чтобы не резало глаза) */
+        @keyframes softBlueGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            /* Спокойная палитра без едких неоновых цветов */
+            background: linear-gradient(-45deg, #0b1329, #1c2541, #1e3a8a, #0f172a);
+            background-size: 300% 300%;
+            animation: softBlueGradient 12s ease infinite;
+            background-attachment: fixed;
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Спокойное, мягкое свечение аватара */
+        @keyframes softNeonPulse {
+            0% { box-shadow: 0 0 15px rgba(125, 211, 252, 0.2), 0 0 30px rgba(30, 58, 138, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(125, 211, 252, 0.4), 0 0 40px rgba(56, 189, 248, 0.4); }
+            100% { box-shadow: 0 0 15px rgba(125, 211, 252, 0.2), 0 0 30px rgba(30, 58, 138, 0.3); }
+        }
+
+        .container { 
+            width: 100%; 
+            max-width: 400px; 
+            text-align: center;
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .avatar {
+            width: 95px; height: 95px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--soft-blue), var(--sky-blue));
+            margin: 25px auto 18px; display: flex; align-items: center;
+            justify-content: center; font-size: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            animation: softNeonPulse 3s infinite ease-in-out;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .avatar:hover { transform: scale(1.08) rotate(5deg); }
+
+        h1 { font-size: 25px; margin: 0 0 6px 0; font-weight: 800; letter-spacing: -0.5px; text-shadow: 0 2px 10px rgba(0,0,0,0.4); }
+        .subtitle { font-size: 14px; opacity: 0.7; margin-bottom: 35px; font-weight: 500; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+
+        .nav-buttons-block { display: flex; flex-direction: column; gap: 14px; width: 100%; }
+        
+        /* Кнопки с приятным эффектом дорогого матового стекла */
+        .nav-button {
+            background: var(--card-bg); color: var(--text-color);
+            border: 1px solid var(--glass-border); padding: 18px 22px; border-radius: 22px;
+            font-size: 16px; font-weight: 700; display: flex; align-items: center;
+            justify-content: space-between; cursor: pointer; text-decoration: none;
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        }
+        
+        .nav-button:active { 
+            transform: scale(0.96); 
+            border-color: var(--soft-blue);
+            box-shadow: 0 0 15px rgba(125, 211, 252, 0.3);
+        }
+        
+        .primary-btn { 
+            background: linear-gradient(135deg, #0284c7, #0369a1); 
+            color: #ffffff; border: none;
+        }
+        .primary-btn:active { box-shadow: 0 0 20px rgba(3, 105, 161, 0.4); }
+
+        .stars-btn { 
+            border: 1px solid rgba(255, 205, 0, 0.3); 
+            background: rgba(255, 205, 0, 0.03);
+        }
+        .stars-btn:active { border-color: #ffcd00; box-shadow: 0 0 15px rgba(255, 205, 0, 0.3); }
+        
+        /* Главная кнопка проектов в стильном лазурно-синем градиенте */
+        .projects-trigger-btn { 
+            background: linear-gradient(135deg, var(--sky-blue), #025aa5); 
+            color: #ffffff; border: none; margin-top: 8px; 
+        }
+        .projects-trigger-btn:active { box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
+
+        .icon { font-size: 22px; transition: transform 0.2s ease; }
+        .nav-button:active .icon { transform: scale(1.18); }
+        .arrow { opacity: 0.5; font-size: 14px; transition: transform 0.2s ease; }
+        .nav-button:active .arrow { transform: translateX(3px); }
+        /* --- СТИЛИ ОКНА МЕНЮ ПРОЕКТОВ (МАТОВОЕ СТЕКЛО В ЛАЗУРНЫХ ТОНАХ) --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(11, 19, 41, 0.4); backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex; align-items: flex-end; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 1000;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .modal-content {
+            width: 100%; max-width: 450px; 
+            background: rgba(15, 23, 42, 0.88); /* Плотный слой для контраста на переливающемся фоне */
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-top-left-radius: 28px; border-top-right-radius: 28px;
+            padding: 24px; box-sizing: border-box;
+            transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            max-height: 88vh; display: flex; flex-direction: column;
+            border-top: 1px solid rgba(125, 211, 252, 0.15);
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.45);
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+        .modal-title { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; }
+        .close-btn { 
+            background: rgba(255, 255, 255, 0.06); border: 1px solid var(--glass-border); 
+            color: var(--text-color); font-size: 13px; font-weight: 700; padding: 8px 14px; 
+            border-radius: 12px; cursor: pointer; transition: background 0.2s;
+        }
+        .close-btn:active { background: rgba(255, 255, 255, 0.12); }
+
+        /* Вкладки/Табы */
+        .tabs { display: flex; gap: 6px; background: rgba(0, 0, 0, 0.25); padding: 5px; border-radius: 14px; margin-bottom: 18px; flex-shrink: 0; }
+        .tab-btn {
+            flex: 1; background: none; border: none; color: var(--text-color); padding: 11px 5px;
+            font-size: 14px; font-weight: 700; border-radius: 10px; cursor: pointer; opacity: 0.5; transition: all 0.25s;
+        }
+        .tab-btn.active { background: var(--card-bg); opacity: 1; border: 1px solid var(--glass-border); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+
+        /* Контейнер списка */
+        .projects-scroll-container { overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 14px; padding-bottom: 15px; }
+        
+        /* Карточки проектов с высокой контрастностью */
+        .project-card {
+            background: rgba(30, 41, 59, 0.85); 
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 16px; border-radius: 20px; display: flex; flex-direction: column; gap: 8px; text-align: left;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            animation: fadeInUp 0.4s ease both;
+        }
+        .project-card-header { display: flex; justify-content: space-between; align-items: center; }
+        .project-name { font-weight: 800; font-size: 16px; letter-spacing: -0.2px; }
+        .project-id { font-size: 10px; opacity: 0.3; font-family: monospace; }
+        
+        /* Статусные плашки в голубом и мягком стиле */
+        .badge { font-size: 10px; font-weight: 800; padding: 5px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge.current { background: rgba(56, 189, 248, 0.15); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.3); }
+        .badge.planned { background: rgba(234, 179, 8, 0.15); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.3); }
+        .badge.finished { background: rgba(148, 163, 184, 0.15); color: #e2e8f0; border: 1px solid rgba(148, 163, 184, 0.3); }
+        
+        .project-desc { font-size: 13px; opacity: 0.85; line-height: 1.5; font-weight: 400; }
+        .project-link { font-size: 13px; color: var(--soft-blue); text-decoration: none; font-weight: 700; margin-top: 4px; display: inline-block; transition: opacity 0.2s; }
+        .project-link:active { opacity: 0.7; }
+        .empty-text { text-align: center; opacity: 0.4; padding: 30px; font-size: 14px; font-weight: 500; }
+
+        /* ПАНЕЛЬ ДОБАВЛЕНИЯ ПРОЕКТОВ ДЛЯ АДМИНА */
+        .admin-panel {
+            display: none; background: rgba(0, 0, 0, 0.2); border: 1px dashed rgba(125, 211, 252, 0.2);
+            border-radius: 20px; padding: 14px; margin-bottom: 18px; flex-direction: column; gap: 10px; flex-shrink: 0;
+        }
+        .admin-input, .admin-select {
+            background: #0f172a; border: 1px solid rgba(255,255,255,0.08); color: var(--text-color);
+            padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none; transition: border-color 0.2s;
+        }
+        .admin-input:focus, .admin-select:focus { border-color: var(--soft-blue); }
+        .admin-panel-btn {
+            background: linear-gradient(135deg, #0284c7, #0369a1); color: white; border: none;
+            padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+        }
+        
+        .admin-controls { display: flex; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); justify-content: flex-end; align-items: center; }
+        .admin-btn { background: #334155; border: none; color: white; padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .admin-btn.delete { background: #ef4444; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2); }
+        .admin-btn:active { opacity: 0.7; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="avatar">🚀</div>
+    <h1>TheBSgorm</h1>
+    <div class="subtitle">Официальный навигатор по проектам и контактам</div>
+
+    <div class="nav-buttons-block">
+        <a href="#" class="nav-button" id="btn-channel"><span class="icon">📢</span> <span>Телеграм Канал</span> <span class="arrow">▶</span></a>
+        <a href="#" class="nav-button primary-btn" id="btn-contact"><span class="icon">💬</span> <span>Связь с TheBSgorm</span> <span class="arrow">▶</span></a>
+        <a href="#" class="nav-button stars-btn" id="btn-stars"><span class="icon">⭐</span> <span>Поддержать (Донат Stars)</span> <span class="arrow">▶</span></a>
+        
+        <button class="nav-button projects-trigger-btn" id="openProjectsBtn">
+            <span class="icon">📂</span> <span>Посмотреть проекты</span> <span class="arrow">▼</span>
+        </button>
+    </div>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">Проекты TheBSgorm</div>
+            <button class="close-btn" id="closeProjectsBtn">Закрыть</button>
+        </div>
+
+        <!-- Админка -->
+        <div class="admin-panel" id="adminPanel">
+            <input type="text" id="newProjName" class="admin-input" placeholder="Название проекта">
+            <input type="text" id="newProjDesc" class="admin-input" placeholder="Описание проекта">
+            <input type="text" id="newProjLink" class="admin-input" placeholder="Ссылка (если есть)">
+            <select id="newProjStatus" class="admin-select">
+                <option value="current">🔥 Вкладка: Есть</option>
+                <option value="planned">⏳ Вкладка: Планируются</option>
+                <option value="finished">✅ Вкладка: Завершены</option>
+            </select>
+            <button class="admin-panel-btn" id="addProjBtn">➕ Добавить новый проект</button>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" id="tab-current">🔥 Есть</button>
+            <button class="tab-btn" id="tab-planned">⏳ Планируются</button>
+            <button class="tab-btn" id="tab-finished">✅ Завершены</button>
+        </div>
+
+        <div class="projects-scroll-container" id="projectsContainer"></div>
+    </div>
+</div>
+
+<script>
+    // =========================================================================
+    // НАСТРОЙКА ДАННЫХ
+    // =========================================================================
+    const LINK_CHANNEL = "https://t.me";
+    const LINK_CONTACT = "https://t.me";
+    const ADMIN_USERNAME = "BSgormYou123"; // Твой ник в Telegram без @
+
+    // Начальные проекты по умолчанию
+    const defaultProjects = [
+        { id: 1718000000001, name: "🤖 Направлятор Mini App", status: "current", badgeText: "Запущен", desc: "Текущее интерактивное приложение-визитка для удобной и быстрой навигации.", link: "" },
+        { id: 1718000000002, name: "🎮 AQUAPHOBIA: Escape", status: "planned", badgeText: "В разработке", desc: "Моя будущая игра в Roblox. Приготовься встретиться со своими страхами и найти выход!", link: "" }
+    ];
+
+    let myProjects = JSON.parse(localStorage.getItem('savedProjects')) || defaultProjects;
+
+    // =========================================================================
+    // ЛОГИКА РАБОТЫ САЙТА
+    // =========================================================================
+    const tg = window.Telegram.WebApp;
+    tg.ready(); tg.expand();
+
+    let currentFilter = "current";
+    
+    // Проверка прав: админ ли зашел?
+    const isOwner = (tg.initDataUnsafe?.user?.username === ADMIN_USERNAME) || true; // Для тестов на ПК включено всегда
+
+    function openLink(url) {
+        if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        tg.openLink(url);
+    }
+
+    // Привязка ссылок главных кнопок
+    document.getElementById('btn-channel').addEventListener('click', (e) => { e.preventDefault(); openLink(LINK_CHANNEL); });
+    document.getElementById('btn-contact').addEventListener('click', (e) => { e.preventDefault(); openLink(LINK_CONTACT); });
+    document.getElementById('btn-stars').addEventListener('click', (e) => { 
+        e.preventDefault(); 
+        if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        tg.showAlert('Функция доната настраивается!'); 
+    });
+
+    const modal = document.getElementById('modalOverlay');
+    const adminPanel = document.getElementById('adminPanel');
+
+    // Открытие окна проектов
+    document.getElementById('openProjectsBtn').addEventListener('click', () => {
+        if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        modal.classList.add('active');
+        
+        // Показываем форму добавления только админу
+        if (isOwner) adminPanel.style.display = "flex";
+        
+        renderProjects();
+    });
+    
+    document.getElementById('closeProjectsBtn').addEventListener('click', () => {
+        modal.classList.remove('active');
+    });
+
+    // Настройка табов
+    function setupTabs() {
+        const tabs = { 'tab-current': 'current', 'tab-planned': 'planned', 'tab-finished': 'finished' };
+        Object.keys(tabs).forEach(tabId => {
+            document.getElementById(tabId).addEventListener('click', (e) => {
+                if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+                currentFilter = tabs[tabId];
+                renderProjects();
+            });
+        });
+    }
+
+    // ЛОГИКА АДМИНКИ: Создание нового проекта
+    document.getElementById('addProjBtn').addEventListener('click', () => {
+        const nameInput = document.getElementById('newProjName');
+        const descInput = document.getElementById('newProjDesc');
+        const linkInput = document.getElementById('newProjLink');
+        const statusSelect = document.getElementById('newProjStatus');
+
+        if (!nameInput.value.trim() || !descInput.value.trim()) {
+            tg.showAlert("Заполните хотя бы Название и Описание!");
+            return;
+        }
+
+        let badgeText = "Запущен";
+        if (statusSelect.value === "planned") badgeText = "В разработке";
+        if (statusSelect.value === "finished") badgeText = "Архив";
+
+        const newProject = {
+            id: Date.now(), // Уникальный ID
+            name: nameInput.value.trim(),
+            status: statusSelect.value,
+            badgeText: badgeText,
+            desc: descInput.value.trim(),
+            link: linkInput.value.trim()
+        };
+
+        myProjects.push(newProject);
+        localStorage.setItem('savedProjects', JSON.stringify(myProjects));
+
+        nameInput.value = ""; descInput.value = ""; linkInput.value = "";
+
+        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+        
+        currentFilter = newProject.status;
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`tab-${currentFilter}`).classList.add('active');
+        
+        renderProjects();
+    });
+
+    // ЛОГИКА АДМИНКИ: Перенос проекта
+    window.moveProject = function(id, newStatus, newBadge) {
+        const proj = myProjects.find(p => p.id === id);
+        if (proj) {
+            proj.status = newStatus;
+            proj.badgeText = newBadge;
+            localStorage.setItem('savedProjects', JSON.stringify(myProjects));
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+            renderProjects();
+        }
+    }
+
+    // ЛОГИКА АДМИНКИ: Удаление проекта
+    window.deleteProject = function(id) {
+        myProjects = myProjects.filter(p => p.id !== id);
+        localStorage.setItem('savedProjects', JSON.stringify(myProjects));
+        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
+        renderProjects();
+    }
+
+    // Отрисовка списка карточек
+    function renderProjects() {
+        const container = document.getElementById('projectsContainer');
+        container.innerHTML = "";
+
+        const filtered = myProjects.filter(p => p.status === currentFilter);
+
+        if (filtered.length === 0) {
+            container.innerHTML = `<div class="empty-text">Здесь пока ничего нет... 📁</div>`;
+            return;
+        }
+
+        filtered.forEach(project => {
+            const card = document.createElement('div');
+            card.className = 'project-card';
+
+            let linkHTML = project.link ? `<a href="#" class="project-link" data-url="${project.link}">Открыть →</a>` : '';
+            
+            let adminHTML = '';
+            if (isOwner) {
+                adminHTML = `
+                    <div class="admin-controls">
+                        <span class="project-id">ID: ${project.id}</span>
+                        <div style="display: flex; gap: 4px; margin-left: auto;">
+                            ${project.status !== 'current' ? `<button class="admin-btn" onclick="moveProject(${project.id}, 'current', 'Запущен')">В 'Есть'</button>` : ''}
+                            ${project.status !== 'planned' ? `<button class="admin-btn" onclick="moveProject(${project.id}, 'planned', 'В разработке')">В 'Планы'</button>` : ''}
+                            ${project.status !== 'finished' ? `<button class="admin-btn" onclick="moveProject(${project.id}, 'finished', 'Архив')">В 'Завершенные'</button>` : ''}
+                            <button class="admin-btn delete" onclick="deleteProject(${project.id})">❌ Удалить</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            card.innerHTML = `
+                <div class="project-card-header">
+                    <span class="project-name">${project.name}</span>
+                    <span class="badge ${project.status}">${project.badgeText}</span>
+                </div>
+                <div class="project-desc">${project.desc}</div>
+                ${linkHTML}
+                ${adminHTML}
+            `;
+
+            if (project.link) {
+                card.querySelector('.project-link').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    openLink(e.currentTarget.getAttribute('data-url'));
+                });
+            }
+
+            container.appendChild(card);
+        });
+    }
+
+    setupTabs();
+</script>
+</body>
+</html>
