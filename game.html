@@ -10,16 +10,17 @@
         :root {
             --bg-color: #02040a;
             --text-color: #f1f5f9;
-            --card-bg: rgba(11, 19, 43, 0.75); /* Космическое темное стекло */
+            --card-bg: rgba(7, 15, 36, 0.75); /* Глубокое космическое стекло */
             --neon-cyan: #00f2fe;
             --neon-blue: #0072ff;
             --neon-space: rgba(0, 242, 254, 0.25);
             --glass-border: rgba(0, 242, 254, 0.16);
-            /* Цвета редкостей для NFT ящиков */
-            --rarity-common: #94a3b8;   /* Обычный */
-            --rarity-rare: #3b82f6;     /* Редкий */
-            --rarity-epic: #a855f7;     /* Эпический */
-            --rarity-mythic: #ef4444;   /* Мифический */
+            /* Градиенты редкостей NFT */
+            --rarity-common: #94a3b8;   
+            --rarity-rare: #3b82f6;     
+            --rarity-epic: #a855f7;     
+            --rarity-mythic: #ef4444;   
+            --rarity-secret: linear-gradient(90deg, #ff007f, #7928ca, #ff007f); /* Секретный неон */
         }
 
         @keyframes spaceGradient {
@@ -30,7 +31,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(-45deg, #02040a, #0b1329, #1c2541, #030712);
+            background: linear-gradient(-45deg, #020617, #0b1329, #1c2541, #030712);
             background-size: 300% 300%;
             animation: spaceGradient 12s ease infinite;
             background-attachment: fixed;
@@ -45,23 +46,30 @@
             background: var(--card-bg); border: 1px solid var(--glass-border);
             padding: 14px 28px; border-radius: 24px; font-size: 26px; font-weight: 900;
             color: var(--neon-cyan); text-shadow: 0 0 12px rgba(0, 242, 254, 0.5);
-            margin: 15px 0 20px 0; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            margin: 10px 0 20px 0; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             box-shadow: 0 8px 25px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 10px;
         }
 
         /* --- КНОПКА ТАПА (КЛИКЕР-ПЛАНЕТА) --- */
         .planet-clicker {
-            width: 150px; height: 150px; border-radius: 50%;
+            width: 145px; height: 145px; border-radius: 50%;
             background: radial-gradient(circle, #00f2fe 0%, #0052d4 60%, #02040a 100%);
             border: 4px solid rgba(255, 255, 255, 0.15); margin: 5px auto 25px;
             cursor: pointer; display: flex; align-items: center; justify-content: center;
-            font-size: 60px; box-shadow: 0 0 35px rgba(0, 242, 254, 0.6), inset 0 0 20px rgba(255,255,255,0.3);
-            transition: transform 0.05s ease; user-select: none; -webkit-user-select: none;
+            font-size: 58px; box-shadow: 0 0 35px rgba(0, 242, 254, 0.6), inset 0 0 20px rgba(255,255,255,0.3);
+            transition: transform 0.05s ease, opacity 0.2s; user-select: none; -webkit-user-select: none;
+            position: relative;
         }
-        .planet-clicker:active { transform: scale(0.92); box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
+        .planet-clicker:active { transform: scale(0.92); }
+        
+        /* Кулдаун-эффект (когда кнопка заблокирована на задержку) */
+        .planet-clicker.disabled {
+            opacity: 0.4; pointer-events: none;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1), inset 0 0 20px rgba(0,0,0,0.8);
+            filter: grayscale(0.8);
+        }
 
-        /* Всплывающие циферки +0.005 при тапе */
-        .floating-click-text {
+        .click-floating-text {
             position: absolute; color: #00f2fe; font-weight: 900; font-size: 18px;
             pointer-events: none; animation: flyUpFade 0.6s ease-out forwards;
             text-shadow: 0 0 8px rgba(0, 242, 254, 0.6); z-index: 999;
@@ -71,126 +79,123 @@
             100% { transform: translateY(-70px) scale(0.8); opacity: 0; }
         }
 
-        /* --- СТИЛИ ДЛЯ СПИСКА ЯЩИКОВ --- */
-        .section-title { font-size: 18px; font-weight: 800; align-self: flex-start; margin: 15px 0 10px 5px; color: #7dd3fc; letter-spacing: 0.5px; text-transform: uppercase; }
-        .cases-grid { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 400px; margin-bottom: 25px; }
+        /* --- УЛУЧШЕННЫЙ ДИЗАЙН КЕЙСОВ-КАПСУЛ --- */
+        .section-title { font-size: 16px; font-weight: 850; align-self: flex-start; margin: 15px 0 10px 5px; color: #7dd3fc; letter-spacing: 1px; text-transform: uppercase; display: flex; justify-content: space-between; width: 100%; max-width: 400px; }
+        .item-counter { font-size: 13px; color: #94a3b8; font-weight: 600; text-transform: none; letter-spacing: 0; }
         
+        .cases-grid { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 400px; margin-bottom: 25px; }
         .case-card {
             background: var(--card-bg); border: 1px solid var(--glass-border);
-            padding: 16px; border-radius: 22px; display: flex; align-items: center; justify-content: space-between;
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            padding: 18px; border-radius: 26px; display: flex; align-items: center; justify-content: space-between;
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; overflow: hidden;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
-        .case-info { display: flex; align-items: center; gap: 14px; }
-        .case-icon { font-size: 36px; }
-        .case-details { display: flex; flex-direction: column; gap: 2px; text-align: left; }
-        .case-name { font-weight: 800; font-size: 15px; }
-        .case-cost { font-size: 12px; color: var(--neon-cyan); font-weight: 700; opacity: 0.9; }
+        /* Внутреннее неоновое свечение в зависимости от типа ящика */
+        .case-card.bronze-glow { border-color: rgba(180, 83, 9, 0.3); box-shadow: inset 0 0 15px rgba(180, 83, 9, 0.15); }
+        .case-card.silver-glow { border-color: rgba(148, 163, 184, 0.3); box-shadow: inset 0 0 15px rgba(148, 163, 184, 0.15); }
+        .case-card.gold-glow { border-color: rgba(234, 179, 8, 0.35); box-shadow: inset 0 0 20px rgba(234, 179, 8, 0.2); }
+
+        .case-info { display: flex; align-items: center; gap: 16px; }
+        .case-icon { font-size: 42px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); transition: transform 0.3s; }
+        .case-card:hover .case-icon { transform: scale(1.08) rotate(5deg); }
+        
+        .case-details { display: flex; flex-direction: column; gap: 3px; text-align: left; }
+        .case-name { font-weight: 900; font-size: 16px; letter-spacing: -0.2px; }
+        .case-cost { font-size: 13px; color: var(--neon-cyan); font-weight: 800; text-shadow: 0 0 8px rgba(0,242,254,0.3); }
         
         .case-actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
         .game-btn {
             background: linear-gradient(135deg, #0284c7, var(--neon-blue)); color: white;
-            border: none; padding: 10px 16px; border-radius: 12px; font-size: 13px; font-weight: 700;
-            cursor: pointer; box-shadow: 0 4px 12px rgba(0, 114, 255, 0.3); transition: transform 0.1s;
+            border: none; padding: 11px 18px; border-radius: 14px; font-size: 13px; font-weight: 800;
+            cursor: pointer; box-shadow: 0 4px 14px rgba(0, 114, 255, 0.4); transition: all 0.1s;
         }
         .game-btn:active { transform: scale(0.95); }
-        .view-chances-link { font-size: 11px; color: #7dd3fc; text-decoration: underline; cursor: pointer; opacity: 0.7; }
+        .game-btn.disabled { opacity: 0.5; pointer-events: none; background: #334155; box-shadow: none; }
+        .view-chances-link { font-size: 11px; color: #7dd3fc; text-decoration: none; font-weight: 700; cursor: pointer; opacity: 0.6; transition: opacity 0.2s; }
+        .view-chances-link:hover { opacity: 1; text-decoration: underline; }
 
-        /* --- СТИЛИ ИНВЕНТАРЯ (ГРИД-СЕТКА ДЛЯ NFT) --- */
-        .inventory-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-            width: 100%; max-width: 400px; margin-bottom: 30px;
-        }
+        /* --- ИНВЕНТАРЬ (ГРИД С ЛЕНТОЙ РЕДКОСТИ) --- */
+        .inventory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; max-width: 400px; margin-bottom: 30px; }
         .inventory-item {
-            background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 16px; padding: 12px 6px; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; gap: 4px; position: relative;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 18px; padding: 14px 8px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 5px; position: relative;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2); transition: transform 0.2s;
         }
-        .item-rarity-line {
-            position: absolute; top: 0; left: 0; width: 100%; height: 4px;
-            border-top-left-radius: 16px; border-top-right-radius: 16px;
-        }
-        .item-icon { font-size: 28px; margin-top: 4px; }
-        .item-name { font-size: 11px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90%; }
-        .item-count {
-            position: absolute; bottom: 4px; right: 6px; background: rgba(0,0,0,0.4);
-            font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 8px; opacity: 0.8;
-        }
+        .inventory-item:hover { transform: translateY(-3px); }
+        .item-rarity-line { position: absolute; top: 0; left: 0; width: 100%; height: 5px; border-top-left-radius: 18px; border-top-right-radius: 18px; }
+        .item-icon { font-size: 32px; margin-top: 4px; }
+        .item-name { font-size: 11px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 92%; }
+        .item-count { position: absolute; bottom: 5px; right: 8px; background: rgba(0,0,0,0.5); font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 9px; border: 1px solid rgba(255,255,255,0.05); }
 
-        /* Окна модалок для игры */
-        .game-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 4, 10, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; z-index: 2000;
-        }
+        /* Модальные окна */
+        .game-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 4, 10, 0.65); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; z-index: 2000; }
         .game-modal.active { opacity: 1; pointer-events: auto; }
-        .g-modal-content {
-            background: rgba(11, 19, 43, 0.95); border: 1px solid rgba(0, 242, 254, 0.2);
-            padding: 24px; border-radius: 24px; width: 85%; max-width: 340px; text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .chance-row { display: flex; justify-content: space-between; font-size: 13px; margin: 8px 0; padding-bottom: 4px; border-bottom: 1px dashed rgba(255,255,255,0.06); }
+        .g-modal-content { background: rgba(11, 19, 43, 0.96); border: 1px solid rgba(0, 242, 254, 0.25); padding: 26px; border-radius: 26px; width: 85%; max-width: 340px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
+        .chance-row { display: flex; justify-content: space-between; font-size: 13px; margin: 9px 0; padding-bottom: 5px; border-bottom: 1px dashed rgba(255,255,255,0.06); }
     </style>
 </head>
 <body>
 
-    <!-- ВЕРХНЯЯ КНОПКА ВОЗВРАТА В ХАБ -->
-    <a href="index.html" style="align-self: flex-start; color: #7dd3fc; text-decoration: none; font-size: 14px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 4px;">← В главное меню</a>
+    <a href="index.html" style="align-self: flex-start; color: #7dd3fc; text-decoration: none; font-size: 14px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 5px;">← В главное меню</a>
 
-    <!-- БАЛАНС И ПЛАНЕТА КЛИКЕРА -->
     <div class="balance-box">🪙 <span id="balanceDisplay">0.000</span></div>
     <div class="planet-clicker" id="planetBtn">🪐</div>
 
-    <!-- РАЗДЕЛ КОСМИЧЕСКИХ ЯЩИКОВ -->
-    <div class="section-title">📦 Космические Ящики</div>
+    <!-- КОСМИЧЕСКИЕ ЯЩИКИ (ОБНОВЛЕННЫЕ ЦЕНЫ И ДИЗАЙН) -->
+    <div class="section-title">📦 Капсулы Снаряжения</div>
     <div class="cases-grid">
         <!-- Бронзовый ящик -->
-        <div class="case-card">
+        <div class="case-card bronze-glow">
             <div class="case-info">
                 <div class="case-icon">🟫</div>
                 <div class="case-details">
-                    <div class="case-name">Бронзовый Ящик</div>
-                    <div class="case-cost">Цена: 0.100 🪙</div>
-                </div>
-            </div>
-            <div class="case-actions">
-                <button class="game-btn" onclick="openCase('bronze', 0.1)">Открыть</button>
-                <div class="view-chances-link" onclick="showChances('bronze')">Шансы дропа</div>
-            </div>
-        </div>
-        <!-- Серебряный ящик -->
-        <div class="case-card">
-            <div class="case-info">
-                <div class="case-icon">⬜</div>
-                <div class="case-details">
-                    <div class="case-name">Серебряный Ящик</div>
+                    <div class="case-name">Бронзовая Капсула</div>
                     <div class="case-cost">Цена: 0.500 🪙</div>
                 </div>
             </div>
             <div class="case-actions">
-                <button class="game-btn" onclick="openCase('silver', 0.5)">Открыть</button>
+                <button class="game-btn case-open-btn" onclick="openCase('bronze', 0.5)">Открыть</button>
+                <div class="view-chances-link" onclick="showChances('bronze')">Шансы дропа</div>
+            </div>
+        </div>
+        <!-- Серебряный ящик -->
+        <div class="case-card silver-glow">
+            <div class="case-info">
+                <div class="case-icon">⬜</div>
+                <div class="case-details">
+                    <div class="case-name">Серебряная Капсула</div>
+                    <div class="case-cost">Цена: 2.500 🪙</div>
+                </div>
+            </div>
+            <div class="case-actions">
+                <button class="game-btn case-open-btn" onclick="openCase('silver', 2.5)">Открыть</button>
                 <div class="view-chances-link" onclick="showChances('silver')">Шансы дропа</div>
             </div>
         </div>
 
         <!-- Золотой ящик -->
-        <div class="case-card">
+        <div class="case-card gold-glow">
             <div class="case-info">
                 <div class="case-icon">🟨</div>
                 <div class="case-details">
-                    <div class="case-name">Золотой Ящик</div>
-                    <div class="case-cost">Цена: 2.000 🪙</div>
+                    <div class="case-name">Золотая Капсула</div>
+                    <div class="case-cost">Цена: 10.000 🪙</div>
                 </div>
             </div>
             <div class="case-actions">
-                <button class="game-btn" onclick="openCase('gold', 2.0)">Открыть</button>
+                <button class="game-btn case-open-btn" onclick="openCase('gold', 10.0)">Открыть</button>
                 <div class="view-chances-link" onclick="showChances('gold')">Шансы дропа</div>
             </div>
         </div>
     </div>
 
-    <!-- ИНВЕНТАРЬ ИГРОКА -->
-    <div class="section-title">🎒 Твой NFT Инвентарь</div>
+    <!-- ИНВЕНТАРЬ И СЧЕТЧИК ПРЕДМЕТОВ -->
+    <div class="section-title">
+        <span>🎒 Твой NFT Инвентарь</span>
+        <span class="item-counter" id="itemCounterDisplay">Собрано: 0 / 12</span>
+    </div>
     <div class="inventory-grid" id="inventoryGrid"></div>
 
     <!-- МОДАЛКА 1: ПРОСМОТР ШАНСОВ -->
@@ -204,18 +209,18 @@
 
     <!-- МОДАЛКА 2: ОКНО ВЫИГРЫША NFT -->
     <div class="game-modal" id="rewardModal">
-        <div class="g-modal-content" style="border-color: var(--neon-cyan); box-shadow: 0 0 30px rgba(0,242,254,0.3);">
-            <h2 style="margin-top:0; color:#ffffff; font-size:20px;">🎉 ТВОЙ ДРОП!</h2>
-            <div id="rewardIcon" style="font-size:65px; margin: 15px 0;">🎁</div>
-            <div id="rewardName" style="font-size:18px; font-weight:900; margin-bottom:4px;">Название Предмета</div>
-            <div id="rewardRarity" style="font-size:11px; font-weight:800; text-transform:uppercase; margin-bottom:20px;">Редкость</div>
+        <div class="g-modal-content" id="rewardBorder" style="border-width: 2px;">
+            <h2 style="margin-top:0; color:#ffffff; font-size:20px; letter-spacing:1px;">🎉 РЕЛИКВИЯ НАЙДЕНА!</h2>
+            <div id="rewardIcon" style="font-size:70px; margin: 15px 0;">🎁</div>
+            <div id="rewardName" style="font-size:19px; font-weight:900; margin-bottom:4px;">Название Предмета</div>
+            <div id="rewardRarity" style="font-size:12px; font-weight:800; text-transform:uppercase; margin-bottom:20px;">Редкость</div>
             <button class="game-btn" style="width:100%;" onclick="closeModal('rewardModal')">Забрать в инвентарь</button>
         </div>
     </div>
 
 <script>
     // =========================================================================
-    // 🌌 БАЗА ДАННЫХ NFT ПРЕДМЕТОВ И НАСТРОЙКА ИГРЫ
+    // 🌌 БАЗА ДАННЫХ ПРЕДМЕТОВ С УЛЬТРА-СЕКРЕТНЫМ NFT СТАТУСОМ
     // =========================================================================
     const nftItems = {
         common: [
@@ -236,54 +241,69 @@
         mythic: [
             { id: "m1", name: "👑 Корона GORM", icon: "👑" },
             { id: "m2", name: "🔥 NFT РАКЕТА 3D", icon: "🚀" }
+        ],
+        secret: [
+            { id: "s1", name: "✨ ТАЙНЫЙ АРТЕФАКТ БОГА", icon: "🌌" } // Тот самый ультра-секретный предмет
         ]
     };
 
-    // Шансы для каждого типа ящика (в сумме должно быть 100)
+    // Настройка общего количества предметов в игре для счетчика (3+3+3+2+1 = 12 предметов)
+    const TOTAL_UNIQUE_ITEMS = 12;
+
+    // Сбалансированные шансы выпадения предметов для каждого кейса (в сумме строго 1000 для точности до 0.1%)
     const caseChances = {
-        bronze: { common: 75, rare: 20, epic: 5, mythic: 0 },
-        silver: { common: 40, rare: 45, epic: 13, mythic: 2 },
-        gold:   { common: 10, rare: 35, epic: 40, mythic: 15 }
+        bronze: { common: 795, rare: 160, epic: 40, mythic: 5, secret: 0 },       // Секретный предмет недоступен здесь
+        silver: { common: 350, rare: 480, epic: 140, mythic: 28, secret: 2 },    // 0.2% шанс на секретку
+        gold:   { common: 80, rare: 300, epic: 450, mythic: 160, secret: 10 }    // 1% шанс на секретку в золоте
     };
 
-    const rarityNames = { common: "Обычный", rare: "Редкий", epic: "Эпический", mythic: "Мифический" };
-    const rarityColors = { common: "#94a3b8", rare: "#3b82f6", epic: "#a855f7", mythic: "#ef4444" };
+    const rarityNames = { common: "Обычный", rare: "Редкий", epic: "Эпический", mythic: "Мифический", secret: "СЕКРЕТНЫЙ" };
+    const rarityColors = { common: "#94a3b8", rare: "#3b82f6", epic: "#a855f7", mythic: "#ef4444", secret: "#ff007f" };
     // =========================================================================
-    // ⚙️ СИСТЕМНАЯ ЛОГИКА ИГРЫ (КЛИКЕР, КЕЙСЫ И ИНВЕНТАРЬ)
+    // ⚙️ СИСТЕМНАЯ ЛОГИКА ИГРЫ (ЗАДЕРЖКА КЛИКОВ, МАТЕМАТИКА КЕЙСОВ И СЧЕТЧИК)
     // =========================================================================
     let userBalance = parseFloat(localStorage.getItem('game_balance')) || 0.0;
     let userInventory = JSON.parse(localStorage.getItem('game_inventory')) || {};
+    let canClick = true; // Триггер кулдауна кликов
 
     const tg = window.Telegram?.WebApp;
     if (tg) { tg.ready(); tg.expand(); }
 
-    // Обновление баланса на экране
     function updateBalanceDisplay() {
         document.getElementById('balanceDisplay').innerText = userBalance.toFixed(3);
         localStorage.setItem('game_balance', userBalance);
     }
 
-    // Логика клика (Тапер на +0.005)
+    // ЛОГИКА ТАПА С ЗАДЕРЖКОЙ (КУЛДАУН 120 МС ДЛЯ ЗАЩИТЫ ОТ АВТОКЛИКЕРОВ)
     document.getElementById('planetBtn').addEventListener('click', (e) => {
+        if (!canClick) return; // Если задержка активна — клик не засчитывается
+
+        canClick = false;
+        const planet = document.getElementById('planetBtn');
+        planet.classList.add('disabled'); // Визуально тушим планету
+
         userBalance += 0.005;
         updateBalanceDisplay();
 
         if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
 
-        // Создаем всплывающий текст +0.005 на месте клика
+        // Создаем всплывающий текст +0.005 строго под пальцем
         const floatText = document.createElement('div');
         floatText.className = 'click-floating-text';
         floatText.innerText = '+0.005';
-        
-        // Позиционируем циферку строго под пальцем/курсором
         floatText.style.left = `${e.clientX - 25}px`;
         floatText.style.top = `${e.clientY - 15}px`;
-        
         document.body.appendChild(floatText);
         setTimeout(() => floatText.remove(), 600);
+
+        // Снимаем блокировку клика ровно через 120 миллисекунд
+        setTimeout(() => {
+            canClick = true;
+            planet.classList.remove('disabled');
+        }, 1200);
     });
 
-    // Функция открытия космического ящика
+    // АЛГОРИТМ ОТКРЫТИЯ КЕЙСОВ (МАТЕМАТИКА НА 1000 БАЛЛОВ)
     window.openCase = function(caseType, cost) {
         if (userBalance < cost) {
             if (tg && tg.showAlert) tg.showAlert("Недостаточно монет! Продолжай тапать по планете 🪐");
@@ -291,31 +311,35 @@
             return;
         }
 
+        // Временно блокируем кнопки открытия кейсов на время анимации дропа
+        document.querySelectorAll('.case-open-btn').forEach(btn => btn.classList.add('disabled'));
+
         userBalance -= cost;
         updateBalanceDisplay();
 
         if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
 
-        // Алгоритм рандома на основе шансов кейса
         const chances = caseChances[caseType];
-        const randomNum = Math.floor(Math.random() * 100) + 1; // Число от 1 до 100
+        const randomNum = Math.floor(Math.random() * 1000) + 1; // Случайное число от 1 до 1000
         let selectedRarity = "common";
 
+        // Пошагово проверяем веса редкостей
         if (randomNum <= chances.common) {
             selectedRarity = "common";
         } else if (randomNum <= chances.common + chances.rare) {
             selectedRarity = "rare";
         } else if (randomNum <= chances.common + chances.rare + chances.epic) {
             selectedRarity = "epic";
-        } else {
+        } else if (randomNum <= chances.common + chances.rare + chances.epic + chances.mythic) {
             selectedRarity = "mythic";
+        } else {
+            selectedRarity = "secret"; // Выпал ультра-редкий Секретный предмет!
         }
 
-        // Выбираем случайный предмет из выпавшей редкости
         const itemsList = nftItems[selectedRarity];
         const randomItem = itemsList[Math.floor(Math.random() * itemsList.length)];
 
-        // Добавляем предмет в инвентарь игрока
+        // Сохранение в инвентарь
         if (userInventory[randomItem.id]) {
             userInventory[randomItem.id].count += 1;
         } else {
@@ -328,55 +352,74 @@
         }
         localStorage.setItem('game_inventory', JSON.stringify(userInventory));
 
-        // Выводим красивое окно с выигрышем
+        // Настройка модалки выигрыша
         const rewardModal = document.getElementById('rewardModal');
+        const rewardBorder = document.getElementById('rewardBorder');
         document.getElementById('rewardIcon').innerText = randomItem.icon;
         document.getElementById('rewardName').innerText = randomItem.name;
         
         const rarityText = document.getElementById('rewardRarity');
         rarityText.innerText = rarityNames[selectedRarity];
-        rarityText.style.color = rarityColors[selectedRarity];
+        
+        // Кастомные неоновые стили контура под каждую редкость
+        if (selectedRarity === 'secret') {
+            rarityText.style.color = "#ff007f";
+            rewardBorder.style.borderColor = "#ff007f";
+            rewardBorder.style.boxShadow = "0 0 35px rgba(255, 0, 127, 0.6)";
+        } else {
+            rarityText.style.color = rarityColors[selectedRarity];
+            rewardBorder.style.borderColor = rarityColors[selectedRarity];
+            rewardBorder.style.boxShadow = `0 0 25px ${rarityColors[selectedRarity]}40`;
+        }
 
         rewardModal.classList.add('active');
         renderInventory();
+
+        // Разблокируем кнопки ящиков обратно
+        document.querySelectorAll('.case-open-btn').forEach(btn => btn.classList.remove('disabled'));
     }
 
-    // Показ шансов дропа в ящике
     window.showChances = function(caseType) {
         if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-        
         const chances = caseChances[caseType];
-        const titleMap = { bronze: "Бронзовый ящик", silver: "Серебряный ящик", gold: "Золотой ящик" };
+        const titleMap = { bronze: "Бронзовая Капсула", silver: "Серебряная Капсула", gold: "Золотая Капсула" };
         
         document.getElementById('chancesTitle').innerText = `Шансы: ${titleMap[caseType]}`;
         
         let html = "";
         Object.keys(chances).forEach(rarity => {
-            html += `
-                <div class="chance-row">
-                    <span style="font-weight:700; color:${rarityColors[rarity]}">${rarityNames[rarity]}</span>
-                    <span style="font-weight:800;">${chances[rarity]}%</span>
-                </div>
-            `;
+            // Переводим 1000-балльную шкалу в проценты (например, 5 баллов = 0.5%)
+            let percentDisplay = (chances[rarity] / 10).toFixed(1);
+            if (chances[rarity] > 0) {
+                html += `
+                    <div class="chance-row">
+                        <span style="font-weight:800; color:${rarityColors[rarity]}">${rarityNames[rarity]}</span>
+                        <span style="font-weight:900;">${percentDisplay}%</span>
+                    </div>
+                `;
+            }
         });
-        
         document.getElementById('chancesBody').innerHTML = html;
         document.getElementById('chancesModal').classList.add('active');
     }
 
-    // Закрытие окон
     window.closeModal = function(modalId) {
         document.getElementById(modalId).classList.remove('active');
     }
 
-    // Отрисовка инвентаря на экране
+    // ОТРИСОВКА ИНВЕНТАРЯ И РАСЧЕТ УНИКАЛЬНЫХ ПРЕДМЕТОВ
     function renderInventory() {
         const grid = document.getElementById('inventoryGrid');
         grid.innerHTML = "";
 
         const keys = Object.keys(userInventory);
-        if (keys.length === 0) {
-            grid.innerHTML = `<div style="grid-column: span 3; opacity: 0.4; font-size: 13px; padding: 15px;">Твой инвентарь пуст. Открой свой первый ящик! 📦</div>`;
+        
+        // Считаем количество именно УНИКАЛЬНЫХ типов предметов в коллекции
+        const uniqueCollected = keys.length;
+        document.getElementById('itemCounterDisplay').innerText = `Собрано: ${uniqueCollected} / ${TOTAL_UNIQUE_ITEMS}`;
+
+        if (uniqueCollected === 0) {
+            grid.innerHTML = `<div style="grid-column: span 3; opacity: 0.4; font-size: 13px; padding: 25px;">Твой инвентарь пуст. Накопи монет и открой свою первую Капсулу! 📦</div>`;
             return;
         }
 
@@ -385,8 +428,11 @@
             const card = document.createElement('div');
             card.className = 'inventory-item';
             
+            // Если предмет Секретный — делаем ему уникальную переливающуюся неоновую полоску
+            let lineBackground = item.rarity === 'secret' ? 'linear-gradient(90deg, #ff007f, #7928ca, #ff007f)' : rarityColors[item.rarity];
+            
             card.innerHTML = `
-                <div class="item-rarity-line" style="background: ${rarityColors[item.rarity]}"></div>
+                <div class="item-rarity-line" style="background: ${lineBackground}"></div>
                 <div class="item-icon">${item.icon}</div>
                 <div class="item-name">${item.name}</div>
                 <div class="item-count">x${item.count}</div>
@@ -395,7 +441,6 @@
         });
     }
 
-    // Первичный запуск при открытии страницы
     updateBalanceDisplay();
     renderInventory();
 </script>
