@@ -321,7 +321,7 @@
 </div>
 
 <script>
-    // --- ПРИНУДИТЕЛЬНЫЙ ВЫКЛЮЧАТЕЛЬ ЭКРАНА ЗАГРУЗКИ ---
+            // --- УНИВЕРСАЛЬНЫЙ ТАЙМЕР СКРЫТИЯ SPLASH SCREEN ---
     setTimeout(function() {
         var splash = document.getElementById('splash-screen');
         if (splash) {
@@ -329,64 +329,50 @@
             splash.style.pointerEvents = 'none';
             setTimeout(function() { splash.remove(); }, 500);
         }
-    }, 2500); // Через 2.5 секунды экран УЙДЕТ В ЛЮБОМ СЛУЧАЕ, даже если код ниже сломан
-    // =========================================================================
-    // ⚙️ БЛОК ДЛЯ ВПИСЫВАНИЯ ССЫЛОК (ТВОИ НАСТРОЕННЫЕ СОЦСЕТИ И КОНТАКТЫ)
-    // =========================================================================
-    const LINK_CONTACT = "https://t.me";  // Твоя личка для связи
-    const ADMIN_USERNAME = "BSgormYou123";            // Твой ник в Telegram без @
+    }, 2500);
 
-    // Твои Социальные сети:
-    const URL_TELEGRAM = "https://t.me/BSgormOff";     // Твой ТГ-канал
-    const URL_YOUTUBE = "https://youtube.com"; // Твой Ютуб
-    const URL_TIKTOK = "https://tiktok.com"; // Твой Тикток
-    const URL_RUTUBE = "https://rutube.ru"; // Твой Рутуб
-    const URL_INSTAGRAM = "https://instagram.com"; // Твой Инстаграм
+    // --- БЕЗОПАСНАЯ НАСТРОЙКА ССЫЛОК ---
+    const LINK_CONTACT = "https://t.me";  
+    const ADMIN_USERNAME = "BSgormYou123";            
+    const URL_TELEGRAM = "https://t.me";     
+    const URL_YOUTUBE = "https://youtube.com"; 
+    const URL_TIKTOK = "https://tiktok.com"; 
+    const URL_RUTUBE = "https://rutube.ru"; 
+    const URL_INSTAGRAM = "https://instagram.com"; 
 
-    // Начальные проекты в списке по умолчанию
     const defaultProjects = [
-        { id: 1718000000001, name: "🤖 Направлятор Mini App", status: "current", badgeText: "Запущен", desc: "Текущее интерактивное приложение-визитка для удобной и быстрой навигации.", link: "" },
-        { id: 1718000000002, name: "🎮 AQUAPHOBIA: Escape", status: "planned", badgeText: "В разработке", desc: "Моя будущая игра в Roblox. Приготовься встретиться со своими страхами и найти выход!", link: "" }
+        { id: 1, name: "🤖 Направлятор Mini App", status: "current", badgeText: "Запущен", desc: "Текущее интерактивное приложение-визитка для удобной и быстрой навигации.", link: "" },
+        { id: 2, name: "🎮 AQUAPHOBIA: Escape", status: "planned", badgeText: "В разработке", desc: "Моя будущая игра в Roblox. Приготовься встретиться со своими страхами и найти выход!", link: "" }
     ];
 
-    // =========================================================================
-    // ВНУТРЕННЯЯ ЛОГИКА РАБОТЫ ПРИЛОЖЕНИЯ
-    // =========================================================================
     let myProjects = JSON.parse(localStorage.getItem('savedProjects')) || defaultProjects;
-    const tg = window.Telegram.WebApp;
-    tg.ready(); tg.expand();
 
-    let currentFilter = "current";
-    const isOwner = (tg.initDataUnsafe?.user?.username === ADMIN_USERNAME) || true; // Для тестов на ПК включено всегда
+    // Проверяем, запущен ли скрипт внутри Telegram
+    const isTelegram = !!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData);
+    let tg = null;
 
-
-    // --- УНИВЕРСАЛЬНЫЙ СТАРТ ДЛЯ БРАУЗЕРА И ТЕЛЕГРАМА ---
-    function hideSplashScreen() {
-        const splash = document.getElementById('splash-screen');
-        if (splash) {
-            splash.style.opacity = '0';
-            splash.style.pointerEvents = 'none';
-            setTimeout(() => splash.remove(), 500);
-        }
-    }
-
-    // Запускаем таймер в любом случае — и в браузере, и в ТГ
-    setTimeout(hideSplashScreen, 2500);
-
-    // Инициализация Telegram, только если приложение открыто внутри мессенджера
-    if (window.Telegram && window.Telegram.WebApp) {
-        const tg = window.Telegram.WebApp;
-        tg.ready();
+    if (isTelegram) {
+        tg = window.Telegram.WebApp;
+        tg.ready(); 
         tg.expand();
     }
 
+    let currentFilter = "current";
+    const isOwner = true; 
 
+    // Универсальная функция открытия ссылок (РАБОТАЕТ ВЕЗДЕ)
     function openLink(url) {
-        if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-        tg.openLink(url);
+        if (isTelegram && tg && tg.HapticFeedback) {
+            tg.HapticFeedback.impactOccurred('light');
+        }
+        if (isTelegram && tg && tg.openLink) {
+            tg.openLink(url); // Открытие внутри Telegram
+        } else {
+            window.open(url, '_blank'); // Стандартное открытие в браузере (Хром, Сафари и т.д.)
+        }
     }
 
-    // Привязка главных кнопок и ссылок соцсетей
+    // Привязка событий клика
     document.getElementById('btn-contact').addEventListener('click', (e) => { e.preventDefault(); openLink(LINK_CONTACT); });
     document.getElementById('social-tg').addEventListener('click', (e) => { e.preventDefault(); openLink(URL_TELEGRAM); });
     document.getElementById('social-yt').addEventListener('click', (e) => { e.preventDefault(); openLink(URL_YOUTUBE); });
@@ -396,41 +382,32 @@
     
     document.getElementById('btn-stars').addEventListener('click', (e) => { 
         e.preventDefault(); 
-        if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-        tg.showAlert('Функция доната настраивается!'); 
+        if (isTelegram && tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        if (isTelegram && tg && tg.showAlert) {
+            tg.showAlert('Функция доната настраивается!');
+        } else {
+            alert('Функция доната настраивается!');
+        }
     });
 
-    // Логика окон (Модалок)
     const projectsModal = document.getElementById('modalOverlay');
     const socialsModal = document.getElementById('socialsModal');
     const adminPanel = document.getElementById('adminPanel');
 
-    // Открытие окна проектов
     document.getElementById('openProjectsBtn').addEventListener('click', () => {
-        if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
         projectsModal.classList.add('active');
         if (isOwner) adminPanel.style.display = "flex";
         renderProjects();
     });
     document.getElementById('closeProjectsBtn').addEventListener('click', () => { projectsModal.classList.remove('active'); });
 
-    // Открытие окна соцсетей
-    document.getElementById('openSocialsBtn').addEventListener('click', () => {
-        if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-        socialsModal.classList.add('active');
-    });
+    document.getElementById('openSocialsBtn').addEventListener('click', () => { socialsModal.classList.add('active'); });
     document.getElementById('closeSocialsBtn').addEventListener('click', () => { socialsModal.classList.remove('active'); });
 
-    // Закрытие по клику на пустую область
-    projectsModal.addEventListener('click', (e) => { if (e.target === projectsModal) projectsModal.classList.remove('active'); });
-    socialsModal.addEventListener('click', (e) => { if (e.target === socialsModal) socialsModal.classList.remove('active'); });
-
-    // Настройка вкладок проектов
     function setupTabs() {
         const tabs = { 'tab-current': 'current', 'tab-planned': 'planned', 'tab-finished': 'finished' };
         Object.keys(tabs).forEach(tabId => {
             document.getElementById(tabId).addEventListener('click', (e) => {
-                if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
                 document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
                 e.currentTarget.classList.add('active');
                 currentFilter = tabs[tabId];
@@ -439,7 +416,6 @@
         });
     }
 
-    // Создание проекта
     document.getElementById('addProjBtn').addEventListener('click', () => {
         const nameInput = document.getElementById('newProjName');
         const descInput = document.getElementById('newProjDesc');
@@ -447,7 +423,8 @@
         const statusSelect = document.getElementById('newProjStatus');
 
         if (!nameInput.value.trim() || !descInput.value.trim()) {
-            tg.showAlert("Заполните Название и Описание!");
+            if (isTelegram && tg && tg.showAlert) tg.showAlert("Заполните Название и Описание!");
+            else alert("Заполните Название и Описание!");
             return;
         }
 
@@ -468,34 +445,29 @@
         localStorage.setItem('savedProjects', JSON.stringify(myProjects));
         nameInput.value = ""; descInput.value = ""; linkInput.value = "";
 
-        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+        if (isTelegram && tg && tg.notificationOccurred) tg.notificationOccurred('success');
         currentFilter = newProject.status;
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         document.getElementById(`tab-${currentFilter}`).classList.add('active');
         renderProjects();
     });
 
-    // Перенос проекта
     window.moveProject = function(id, newStatus, newBadge) {
         const proj = myProjects.find(p => p.id === id);
         if (proj) {
             proj.status = newStatus;
             proj.badgeText = newBadge;
             localStorage.setItem('savedProjects', JSON.stringify(myProjects));
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
             renderProjects();
         }
     }
 
-    // Удаление проекта
     window.deleteProject = function(id) {
         myProjects = myProjects.filter(p => p.id !== id);
         localStorage.setItem('savedProjects', JSON.stringify(myProjects));
-        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
         renderProjects();
     }
 
-    // Отрисовка списка карточек
     function renderProjects() {
         const container = document.getElementById('projectsContainer');
         container.innerHTML = "";
@@ -511,20 +483,17 @@
             card.className = 'project-card';
             let linkHTML = project.link ? `<a href="#" class="project-link" data-url="${project.link}">Открыть →</a>` : '';
             
-            let adminHTML = '';
-            if (isOwner) {
-                adminHTML = `
-                    <div class="admin-controls">
-                        <span class="project-id">ID: ${project.id}</span>
-                        <div style="display: flex; gap: 4px; margin-left: auto;">
-                            ${project.status !== 'current' ? `<button class="admin-btn" onclick="moveProject(${project.id}, 'current', 'Запущен')">В 'Есть'</button>` : ''}
-                            ${project.status !== 'planned' ? `<button class="admin-btn" onclick="moveProject(${project.id}, 'planned', 'В разработке')">В 'Планы'</button>` : ''}
-                            ${project.status !== 'finished' ? `<button class="admin-btn" onclick="moveProject(${project.id}, 'finished', 'Архив')">В 'Завершенные'</button>` : ''}
-                            <button class="admin-btn delete" onclick="deleteProject(${project.id})">❌ Удалить</button>
-                        </div>
+            let adminHTML = `
+                <div class="admin-controls">
+                    <span class="project-id">ID: ${project.id}</span>
+                    <div style="display: flex; gap: 4px; margin-left: auto;">
+                        ${project.status !== 'current' ? `<button class="admin-btn" onclick="moveProject(${project.id}, 'current', 'Запущен')">В 'Есть'</button>` : ''}
+                        ${project.status !== 'planned' ? `<button class="admin-btn" onclick="moveProject(${project.id}, 'planned', 'В разработке')">В 'Планы'</button>` : ''}
+                        ${project.status !== 'finished' ? `<button class="admin-btn" onclick="moveProject(${project.id}, 'finished', 'Архив')">В 'Завершенные'</button>` : ''}
+                        <button class="admin-btn delete" onclick="deleteProject(${project.id})">❌ Удалить</button>
                     </div>
-                `;
-            }
+                </div>
+            `;
 
             card.innerHTML = `
                 <div class="project-card-header">
@@ -546,6 +515,7 @@
     }
 
     setupTabs();
+
 </script>
 </body>
 </html>
