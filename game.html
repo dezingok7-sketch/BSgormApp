@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TheBSgorm Clicker NFT & Craft</title>
+    <title>TheBSgorm NFT Clicker & Titles</title>
     <!-- Официальный скрипт Telegram Web App -->
     <script src="https://telegram.org"></script>
     <style>
@@ -41,6 +41,14 @@
             min-height: 100vh; box-sizing: border-box; overflow-x: hidden;
         }
 
+        /* --- БЛОК ОТОБРАЖЕНИЯ ТИТУЛА НАД БАЛАНСОМ --- */
+        .user-title-badge {
+            font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
+            padding: 4px 12px; border-radius: 10px; margin-bottom: -4px; z-index: 10;
+            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); color: #94a3b8; transition: all 0.3s;
+        }
+
         /* --- БЛОК БАЛАНСА МОНЕТ --- */
         .balance-box {
             background: var(--card-bg); border: 1px solid var(--glass-border);
@@ -50,7 +58,7 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 10px;
         }
 
-        /* --- КНОПКА ТАПА (КЛИКЕР-ПЛАНЕТА) С КД 500 МС --- */
+        /* --- КНОПКА ТАПА (КЛИКЕР-ПЛАНЕТА) --- */
         .planet-clicker {
             width: 145px; height: 145px; border-radius: 50%;
             background: radial-gradient(circle, #00f2fe 0%, #0052d4 60%, #02040a 100%);
@@ -70,12 +78,11 @@
             100% { transform: translateY(-60px) scale(0.8); opacity: 0; }
         }
 
-        /* ИГРОВЫЕ ВКЛАДКИ (ИНВЕНТАРЬ / КОНТРАКТЫ) */
-        .game-tabs { display: flex; gap: 8px; width: 100%; max-width: 400px; background: rgba(0, 0, 0, 0.3); padding: 5px; border-radius: 16px; margin-bottom: 15px; }
-        .g-tab-btn { flex: 1; background: none; border: none; color: #94a3b8; padding: 12px; font-size: 14px; font-weight: 800; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+        /* ИГРОВЫЕ ВКЛАДКИ (ИНВЕНТАРЬ / РУЛЕТКА / ТИТУЛЫ) */
+        .game-tabs { display: flex; gap: 6px; width: 100%; max-width: 400px; background: rgba(0, 0, 0, 0.3); padding: 5px; border-radius: 16px; margin-bottom: 15px; }
+        .g-tab-btn { flex: 1; background: none; border: none; color: #94a3b8; padding: 11px 2px; font-size: 12px; font-weight: 800; border-radius: 12px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
         .g-tab-btn.active { background: var(--card-bg); color: var(--neon-cyan); border: 1px solid var(--glass-border); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-
-        .section-title { font-size: 16px; font-weight: 850; align-self: flex-start; margin: 15px 0 10px 5px; color: #7dd3fc; letter-spacing: 1px; text-transform: uppercase; display: flex; justify-content: space-between; width: 100%; max-width: 400px; }
+.section-title { font-size: 16px; font-weight: 850; align-self: flex-start; margin: 15px 0 10px 5px; color: #7dd3fc; letter-spacing: 1px; text-transform: uppercase; display: flex; justify-content: space-between; width: 100%; max-width: 400px; }
         .item-counter { font-size: 13px; color: #94a3b8; font-weight: 600; text-transform: none; letter-spacing: 0; }
         
         .cases-grid { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 400px; margin-bottom: 25px; }
@@ -85,12 +92,12 @@
             backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
             box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; overflow: hidden;
         }
-        .case-card.bronze-glow { border-color: rgba(180, 83, 9, 0.3); box-shadow: inset 0 0 15px rgba(180, 83, 9, 0.15); }
-        .case-card.silver-glow { border-color: rgba(148, 163, 184, 0.3); box-shadow: inset 0 0 15px rgba(148, 163, 184, 0.15); }
-        .case-card.gold-glow { border-color: rgba(234, 179, 8, 0.35); box-shadow: inset 0 0 20px rgba(234, 179, 8, 0.2); }
+        .case-card.bronze-glow { border-color: rgba(180, 83, 9, 0.3); }
+        .case-card.silver-glow { border-color: rgba(148, 163, 184, 0.3); }
+        .case-card.gold-glow { border-color: rgba(234, 179, 8, 0.35); }
 
         .case-info { display: flex; align-items: center; gap: 16px; }
-        .case-icon { font-size: 42px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
+        .case-icon { font-size: 42px; }
         .case-details { display: flex; flex-direction: column; gap: 3px; text-align: left; }
         .case-name { font-weight: 900; font-size: 16px; }
         .case-cost { font-size: 13px; color: var(--neon-cyan); font-weight: 800; }
@@ -111,29 +118,29 @@
             border: 1px solid var(--glass-border); padding: 20px; border-radius: 26px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.4); flex-direction: column; gap: 15px; margin-bottom: 25px;
         }
-        
-        /* Ползунок шанса (Прогресс-бар) */
         .chance-progress-wrapper { width: 100%; text-align: center; margin-bottom: 5px; }
-        .chance-text { font-size: 20px; font-weight: 900; color: #10b981; text-shadow: 0 0 10px rgba(16, 185, 129, 0.4); margin-bottom: 8px; }
-        .chance-bar-outer { width: 100%; height: 12px; background: rgba(255,255,255,0.08); border-radius: 99px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .chance-text { font-size: 20px; font-weight: 900; color: #10b981; margin-bottom: 8px; }
+        .chance-bar-outer { width: 100%; height: 12px; background: rgba(255,255,255,0.08); border-radius: 99px; overflow: hidden; }
         .chance-bar-inner { width: 0%; height: 100%; background: linear-gradient(90deg, #00f2fe, #10b981); transition: width 0.3s ease; }
-
-        /* Элемент выбора предметов в контракт */
         .selected-slots-row { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 16px; min-height: 50px; }
         .slot-pill { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 20px; display: flex; align-items: center; gap: 4px; }
         .slot-pill .remove-x { color: #ef4444; margin-left: 4px; cursor: pointer; font-weight: 900; }
 
-        /* --- ИНВЕНТАРЬ И NFT КАРТОЧКИ --- */
+        /* --- СТИЛИ ДЛЯ МАГАЗИНА ТИТУЛОВ ВНУТРИ ВЕБА --- */
+        .titles-zone { display: none; width: 100%; max-width: 400px; flex-direction: column; gap: 12px; margin-bottom: 25px; }
+        .title-card { background: var(--card-bg); border: 1px solid var(--glass-border); padding: 16px; border-radius: 22px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 8px 20px rgba(0,0,0,0.2); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+        .title-info { display: flex; flex-direction: column; gap: 2px; text-align: left; }
+        .title-badge { font-weight: 900; font-size: 14px; color: #ffffff; padding: 3px 10px; border-radius: 10px; width: fit-content; }
+        .title-desc { font-size: 11px; color: #94a3b8; font-weight: 600; margin-top: 3px; line-height: 1.3; }
+        .buy-btn { background: linear-gradient(135deg, #0284c7, var(--neon-blue)); color: white; border: none; padding: 11px 18px; border-radius: 14px; font-size: 13px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(0, 114, 255, 0.4); }
+        .buy-btn.purchased { background: #10b981; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3); pointer-events: none; }
+
+        /* --- ИНВЕНТАРЬ --- */
         .inventory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; max-width: 400px; margin-bottom: 30px; }
-        .inventory-item {
-            background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 18px; padding: 14px 8px; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; gap: 5px; position: relative;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2); transition: transform 0.2s; cursor: pointer;
-        }
+        .inventory-item { rgba(15, 23, 42, 0.55); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px; padding: 14px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; position: relative; box-shadow: 0 6px 15px rgba(0,0,0,0.2); transition: transform 0.2s; cursor: pointer; }
         .inventory-item.selected-for-craft { border-color: #10b981 !important; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4) !important; transform: scale(0.96); }
         .item-rarity-line { position: absolute; top: 0; left: 0; width: 100%; height: 5px; border-top-left-radius: 18px; border-top-right-radius: 18px; }
-        .item-icon { font-size: 32px; margin-top: 4px; }
+                .item-icon { font-size: 32px; margin-top: 4px; }
         .item-name { font-size: 11px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 92%; }
         .item-count { position: absolute; bottom: 5px; right: 8px; background: rgba(0,0,0,0.5); font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 9px; }
 
@@ -147,23 +154,26 @@
     </style>
 </head>
 <body>
-<a href="index.html" style="align-self: flex-start; color: #7dd3fc; text-decoration: none; font-size: 14px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 5px;">← В главное меню</a>
 
-    <!-- ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМОВ (ВКЛАДКИ) -->
+    <a href="index.html" style="align-self: flex-start; color: #7dd3fc; text-decoration: none; font-size: 14px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 5px;">← В главное меню</a>
+
+    <!-- ТРЕХКНОПОЧНЫЕ ВКЛАДКИ -->
     <div class="game-tabs">
-        <button class="g-tab-btn active" id="modeClickerBtn" onclick="switchMode('clicker')">🎒 Кликер и Кейсы</button>
-        <button class="g-tab-btn" id="modeContractBtn" onclick="switchMode('contract')">🔬 Контракт Рулетка</button>
+        <button class="g-tab-btn active" id="modeClickerBtn" onclick="switchMode('clicker')">🪐 Кликер</button>
+        <button class="g-tab-btn" id="modeContractBtn" onclick="switchMode('contract')">🔬 Рулетка</button>
+        <button class="g-tab-btn" id="modeTitlesBtn" onclick="switchMode('titles')">🎖️ Магазин Титулов</button>
     </div>
 
-    <!-- ОКНО БАЛАНСА И КЛИКЕР -->
+    <!-- КЛИКЕР И КАПСУЛЫ -->
     <div id="clickerZone">
+        <!-- СВЕТЯЩАЯСЯ ПЛАШКА КУПЛЕННОГО ТИТУЛА -->
+        <div class="user-title-badge" id="userTitleBadge">🛰️ Космический рекрут</div>
+        
         <div class="balance-box">🪙 <span id="balanceDisplay">0.000</span></div>
         <div class="planet-clicker" id="planetBtn">🪐</div>
 
-        <!-- КАПСУЛЫ СНАРЯЖЕНИЯ -->
         <div class="section-title">📦 Капсулы Снаряжения</div>
         <div class="cases-grid">
-            <!-- Бронзовый ящик -->
             <div class="case-card bronze-glow">
                 <div class="case-info">
                     <div class="case-icon">🟫</div>
@@ -178,7 +188,6 @@
                 </div>
             </div>
 
-            <!-- Серебряный ящик -->
             <div class="case-card silver-glow">
                 <div class="case-info">
                     <div class="case-icon">⬜</div>
@@ -193,7 +202,6 @@
                 </div>
             </div>
 
-            <!-- Золотой ящик -->
             <div class="case-card gold-glow">
                 <div class="case-info">
                     <div class="case-icon">🟨</div>
@@ -209,56 +217,33 @@
             </div>
         </div>
     </div>
-
-    <!-- РАБОЧАЯ ПАНЕЛЬ КОНТРАКТОВ И РУЛЕТКИ -->
+<!-- РАБОЧАЯ ПАНЕЛЬ КОНТРАКТОВ И РУЛЕТКИ -->
     <div class="contract-workspace" id="contractZone">
         <div class="chance-progress-wrapper">
             <div class="chance-text"><span id="chanceValue">0</span>% шанс крафта</div>
-            <div class="chance-bar-outer">
-                <div class="chance-bar-inner" id="chanceBar"></div>
-            </div>
+            <div class="chance-bar-outer"><div class="chance-bar-inner" id="chanceBar"></div></div>
             <div style="font-size: 11px; opacity: 0.6; margin-top: 6px;">Выберите от 3 до 10 NFT любой редкости для расчёта шанса.</div>
         </div>
-        
-        <div class="selected-slots-row" id="selectedSlots">
-            <span style="opacity: 0.4; font-size: 12px; padding: 5px;">Слоты контракта пусты... Нажмите на скины ниже ⬇️</span>
-        </div>
-        
+        <div class="selected-slots-row" id="selectedSlots"><span style="opacity: 0.4; font-size: 12px; padding: 5px;">Слоты контракта пусты... Нажмите на скины ниже ⬇️</span></div>
         <button class="game-btn disabled" id="startContractBtn" style="background: linear-gradient(135deg, #10b981, #059669); padding: 14px;" onclick="runContract()">💥 Запустить Контракт Рулетку</button>
     </div>
-        <!-- ИНВЕНТАРЬ И СЧЕТЧИК ПРЕДМЕТОВ -->
-    <div class="section-title">
-        <span id="inventoryTitle">🎒 Твой NFT Инвентарь</span>
-        <span class="item-counter" id="itemCounterDisplay">Собрано: 0 / 12</span>
+
+    <!-- ВНУТРЕННИЙ ВЕБ-МАГАЗИН ТИТУЛОВ -->
+    <div class="titles-zone" id="titlesZone">
+        <div class="balance-box" style="margin-top:0;">🪙 <span id="balanceDisplayTitles">0.000</span></div>
+        <div class="title-card"><div class="title-info"><div class="title-badge" style="background:#3b82f6;">👨‍🚀 Звёздный Рядовой</div><div class="title-desc">Добавит статус пилота над твоим балансом в игре.</div></div><button class="buy-btn" id="btn-t1" onclick="buyTitle('t1', 5.0, '👨‍🚀 Звёздный Рядовой', '#3b82f6')">5.000 🪙</button></div>
+        <div class="title-card"><div class="title-info"><div class="title-badge" style="background:#a855f7;">🛸 Капитан Крейсера</div><div class="title-desc">Премиальный статус офицера космофлота.</div></div><button class="buy-btn" id="btn-t2" onclick="buyTitle('t2', 25.0, '🛸 Капитан Крейсера', '#a855f7')">25.000 🪙</button></div>
+        <div class="title-card"><div class="title-info"><div class="title-badge" style="background: linear-gradient(90deg, #ff007f, #7928ca);">👑 Лорд Галактики</div><div class="title-desc">Ультра-ранг. Твоя плашка засияет ярким неоном!</div></div><button class="buy-btn" id="btn-t3" onclick="buyTitle('t3', 100.0, '👑 Лорд Галактики', 'linear-gradient(90deg, #ff007f, #7928ca)')">100.000 🪙</button></div>
     </div>
+
+    <div class="section-title"><span id="inventoryTitle">🎒 Твой NFT Инвентарь</span><span class="item-counter" id="itemCounterDisplay">Собрано: 0 / 12</span></div>
     <div class="inventory-grid" id="inventoryGrid"></div>
 
     <!-- МОДАЛКА ШАНСОВ -->
-    <div class="game-modal" id="chancesModal">
-        <div class="g-modal-content">
-            <h3 style="margin-top:0; color:#7dd3fc;" id="chancesTitle">Шансы дропа</h3>
-            <div id="chancesBody"></div>
-            <button class="game-btn" style="margin-top:15px; width:100%;" onclick="closeModal('chancesModal')">Понятно</button>
-        </div>
-    </div>
+    <div class="game-modal" id="chancesModal"><div class="g-modal-content"><h3 style="margin-top:0; color:#7dd3fc;" id="chancesTitle">Шансы дропа</h3><div id="chancesBody"></div><button class="game-btn" style="margin-top:15px; width:100%;" onclick="closeModal('chancesModal')">Понятно</button></div></div>
 
     <!-- МОДАЛКА ВЫИГРЫША И ПРОСМОТРА NFT -->
-    <div class="game-modal" id="rewardModal">
-        <div class="g-modal-content" id="rewardBorder" style="border-width: 2px;">
-            <h2 id="rewardModalTitle" style="margin-top:0; color:#ffffff; font-size:18px; letter-spacing:1px;">🎉 РЕЛИКВИЯ НАЙДЕНА!</h2>
-            <div id="rewardIcon" style="font-size:68px; margin: 10px 0;">🎁</div>
-            <div id="rewardName" style="font-size:18px; font-weight:900; margin-bottom:4px;">Название Предмета</div>
-            <div id="rewardRarity" style="font-size:11px; font-weight:800; text-transform:uppercase; margin-bottom:10px;">Редкость</div>
-            
-            <div class="market-info-box">
-                <div class="market-line">Мировой тираж: <span class="market-val" id="marketTotal">0 шт.</span></div>
-                <div class="market-line">У вас в коллекции: <span class="market-val" id="marketOwned">0 шт.</span></div>
-                <div class="market-line">Рыночная цена: <span class="market-val" id="marketPrice" style="color:#00f2fe">0.000 🪙</span></div>
-            </div>
-            
-            <button class="game-btn" style="width:100%;" onclick="closeModal('rewardModal')">Закрыть окно</button>
-        </div>
-    </div>
+    <div class="game-modal" id="rewardModal"><div class="g-modal-content" id="rewardBorder" style="border-width: 2px;"><h2 id="rewardModalTitle" style="margin-top:0; color:#ffffff; font-size:18px; letter-spacing:1px;">🎉 РЕЛИКВИЯ НАЙДЕНА!</h2><div id="rewardIcon" style="font-size:68px; margin: 10px 0;">🎁</div><div id="rewardName" style="font-size:18px; font-weight:900; margin-bottom:4px;">Название Предмета</div><div id="rewardRarity" style="font-size:11px; font-weight:800; text-transform:uppercase; margin-bottom:10px;">Редкость</div><div class="market-info-box"><div class="market-line">Мировой тираж: <span class="market-val" id="marketTotal">0 шт.</span></div><div class="market-line">У вас в коллекции: <span class="market-val" id="marketOwned">0 шт.</span></div><div class="market-line">Рыночная цена: <span class="market-val" id="marketPrice" style="color:#00f2fe">0.000 🪙</span></div></div><button class="game-btn" style="width:100%;" onclick="closeModal('rewardModal')">Закрыть окно</button></div></div>
 
 <script>
     // =========================================================================
@@ -288,12 +273,7 @@
             { id: "s1", name: "✨ ТАЙНЫЙ АРТЕФАКТ БОГА", icon: "🌌", basePrice: 500.0 }
         ]
     };
-
-    const TOTAL_UNIQUE_ITEMS = 12;
-    const caseChances = {
-        bronze: { common: 795, rare: 160, epic: 40, mythic: 5, secret: 0 },
-        silver: { common: 350, rare: 480, epic: 140, mythic: 28, secret: 2 },
-        gold:   { common: 80, rare: 300, epic: 450, mythic: 160, secret: 10 }
+    : 300, epic: 450, mythic: 160, secret: 10 }
     };
 
     const rarityNames = { common: "Обычный", rare: "Редкий", epic: "Эпический", mythic: "Мифический", secret: "СЕКРЕТНЫЙ" };
@@ -313,26 +293,64 @@
 
     function updateBalanceDisplay() {
         document.getElementById('balanceDisplay').innerText = userBalance.toFixed(3);
+        document.getElementById('balanceDisplayTitles').innerText = userBalance.toFixed(3);
         localStorage.setItem('game_balance', userBalance);
     }
-window.switchMode = function(mode) {
+
+    // УПРАВЛЕНИЕ ТРЕХКНОПОЧНЫМИ ВКЛАДКАМИ
+    window.switchMode = function(mode) {
         currentMode = mode;
         selectedCraftItems = []; 
         
         document.getElementById('modeClickerBtn').classList.toggle('active', mode === 'clicker');
         document.getElementById('modeContractBtn').classList.toggle('active', mode === 'contract');
+        document.getElementById('modeTitlesBtn').classList.toggle('active', mode === 'titles');
         
         document.getElementById('clickerZone').style.display = mode === 'clicker' ? 'block' : 'none';
         document.getElementById('contractZone').style.display = mode === 'contract' ? 'flex' : 'none';
+        document.getElementById('titlesZone').style.display = mode === 'titles' ? 'flex' : 'none';
         
         const title = document.getElementById('inventoryTitle');
-        title.innerText = mode === 'clicker' ? '🎒 Твой NFT Инвентарь' : '🧪 Выберите скины в Контракт';
+        if (mode === 'clicker') title.innerText = '🎒 Твой NFT Инвентарь';
+        else if (mode === 'contract') title.innerText = '🧪 Выберите скины в Контракт';
+        else title.innerText = '📜 Твоя коллекция NFT (Магазин выше)';
         
         updateContractUI();
         renderInventory();
     }
 
-    // РАСЧЁТ РЫНОЧНОЙ СТОИМОСТИ НА ОСНОВЕ ДЕФИЦИТА
+    // ТАПЕР С КУЛДАУНОМ В 500 МС И ЭФФЕКТОМ ЗАТЕМНЕНИЯ ПЛАНЕТЫ
+    document.getElementById('planetBtn').addEventListener('click', (e) => {
+        if (!canClick) return;
+
+        canClick = false;
+        const planet = document.getElementById('planetBtn');
+        
+        planet.style.pointerEvents = 'none';
+        planet.style.filter = 'grayscale(0.9) brightness(0.4)';
+        planet.style.transform = 'scale(0.92)';
+
+        userBalance += 0.005;
+        updateBalanceDisplay();
+
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+
+        const floatText = document.createElement('div');
+        floatText.className = 'click-floating-text';
+        floatText.innerText = '+0.005';
+        floatText.style.left = `${e.clientX - 25}px`;
+        floatText.style.top = `${e.clientY - 15}px`;
+        document.body.appendChild(floatText);
+        setTimeout(() => floatText.remove(), 500);
+
+        setTimeout(() => {
+            canClick = true;
+            planet.style.pointerEvents = 'auto';
+            planet.style.filter = 'none';
+            planet.style.transform = 'none';
+        }, 500);
+    });
+        // РАСЧЁТ РЫНОЧНОЙ СТОИМОСТИ НА ОСНОВЕ ДЕФИЦИТА
     function calculateMarketStats(itemId, rarity, basePrice, countInInventory) {
         let rarityModifiers = { common: 8.5, rare: 2.1, epic: 0.6, mythic: 0.08, secret: 0.003 };
         let simulatedWorldTotal = Math.floor((globalOpenCount + 150) * rarityModifiers[rarity]) + 1;
@@ -346,49 +364,11 @@ window.switchMode = function(mode) {
         return { worldTotal: simulatedWorldTotal, price: basePrice * scarcityMultiplier };
     }
 
-        // ТАПЕР С КУЛДАУНОМ В 500 МС И ЭФФЕКТОМ ЗАТЕМНЕНИЯ ПЛАНЕТЫ
-    document.getElementById('planetBtn').addEventListener('click', (e) => {
-        if (!canClick) return; // Если кулдаун активен — клик игнорируется
-
-        canClick = false;
-        const planet = document.getElementById('planetBtn');
-        
-        // Визуальная блокировка на полсекунды (эффект заморозки)
-        planet.style.pointerEvents = 'none';
-        planet.style.filter = 'grayscale(0.9) brightness(0.4)';
-        planet.style.transform = 'scale(0.92)';
-
-        // Начисляем монеты на баланс
-        userBalance += 0.005;
-        updateBalanceDisplay();
-
-        // Телефонная вибрация (если запущено внутри Telegram)
-        if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-
-        // Создаем вылетающий текст +0.005 строго в точке нажатия
-        const floatText = document.createElement('div');
-        floatText.className = 'click-floating-text';
-        floatText.innerText = '+0.005';
-        floatText.style.left = `${e.clientX - 25}px`;
-        floatText.style.top = `${e.clientY - 15}px`;
-        document.body.appendChild(floatText);
-        setTimeout(() => floatText.remove(), 500);
-
-        // Возвращаем планету в рабочее состояние ровно через 500 мс
-        setTimeout(() => {
-            canClick = true;
-            planet.style.pointerEvents = 'auto';
-            planet.style.filter = 'none';
-            planet.style.transform = 'none';
-        }, 500);
-    });
-
-
     // ОТКРЫТИЕ КЕЙСОВ
     window.openCase = function(caseType, cost) {
         if (userBalance < cost) {
             if (tg && tg.showAlert) tg.showAlert("Недостаточно монет! Продолжай тапать по планете 🪐");
-            else alert("Недостаточно монет! Продолжай тапать по планете 🪐");
+            else alert("Недостаточно монет!");
             return;
         }
         userBalance -= cost;
@@ -411,7 +391,8 @@ window.switchMode = function(mode) {
 
         addAndShowItem(randomItem, selectedRarity, "🎉 РЕЛИКВИЯ НАЙДЕНА!");
     }
-        function addAndShowItem(item, rarity, titleText) {
+
+    function addAndShowItem(item, rarity, titleText) {
         if (userInventory[item.id]) {
             userInventory[item.id].count += 1;
         } else {
@@ -446,9 +427,9 @@ window.switchMode = function(mode) {
         renderInventory();
     }
 
-    // УПРАВЛЕНИЕ ЛОГИКОЙ КОНТРАКТОВ (ЛЮБЫЕ РЕДКОСТИ)
+    // ЛОГИКА ДОБАВЛЕНИЯ ПРЕДМЕТОВ В КОНТРАКТ-МИКСЕР (ЛЮБЫЕ РЕДКОСТИ)
     window.toggleItemToCraft = function(id) {
-        if (currentMode === 'clicker') {
+        if (currentMode !== 'contract') {
             const item = userInventory[id];
             if (item) {
                 let stats = calculateMarketStats(id, item.rarity, item.basePrice, item.count);
@@ -490,7 +471,6 @@ window.switchMode = function(mode) {
         updateContractUI();
         renderInventory();
     }
-
     window.removeSlotByIndex = function(index) {
         selectedCraftItems.splice(index, 1);
         if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
@@ -511,6 +491,7 @@ window.switchMode = function(mode) {
             startBtn.classList.add('disabled');
             return;
         }
+
         slotsRow.innerHTML = "";
         selectedCraftItems.forEach((id, index) => {
             const item = userInventory[id];
@@ -529,7 +510,7 @@ window.switchMode = function(mode) {
         else startBtn.classList.add('disabled');
     }
 
-    // МАТЕМАТИКА КОНТРАКТА-МИКСЕРА (РУЛЕТКА ВСЕХ РЕДКОСТЕЙ)
+    // МАТЕМАТИКА РУЛЕТКИ-МИКСЕРА КОНТРАКТОВ
     window.runContract = function() {
         if (selectedCraftItems.length < 3) return;
 
@@ -567,6 +548,51 @@ window.switchMode = function(mode) {
         selectedCraftItems = []; 
         updateContractUI();
         renderInventory();
+    }
+
+    // --- СИСТЕМА ПОКУПКИ ТИТУЛОВ И ОТОБРАЖЕНИЯ В ВЕБЕ ---
+    window.buyTitle = function(titleId, cost, titleName, badgeStyle) {
+        if (userBalance < cost) {
+            if (tg && tg.showAlert) tg.showAlert("Недостаточно монет! Продолжай тапать по планете 🪐");
+            else alert("Недостаточно монет!");
+            return;
+        }
+
+        userBalance -= cost;
+        updateBalanceDisplay();
+
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+
+        localStorage.setItem('user_active_title_name', titleName);
+        localStorage.setItem('user_active_title_style', badgeStyle);
+
+        const btn = document.getElementById(`btn-${titleId}`);
+        btn.innerText = "Активен ✓";
+        btn.className = "buy-btn purchased";
+
+        loadSavedTitle();
+        
+        if (tg && tg.showAlert) tg.showAlert(`Вы успешно приобрели титул: ${titleName}! ✨`);
+    }
+
+    function loadSavedTitle() {
+        const savedName = localStorage.getItem('user_active_title_name') || "🛰️ Космический рекрут";
+        const savedStyle = localStorage.getItem('user_active_title_style') || "rgba(255, 255, 255, 0.08)";
+        
+        const badge = document.getElementById('userTitleBadge');
+        badge.innerText = savedName;
+        
+        if (savedStyle.includes('gradient')) {
+            badge.style.background = savedStyle;
+            badge.style.borderColor = "#ff007f";
+            badge.style.boxShadow = "0 0 15px rgba(255, 0, 127, 0.4)";
+            badge.style.color = "#ffffff";
+        } else {
+            badge.style.background = savedStyle;
+            badge.style.borderColor = "rgba(255,255,255,0.1)";
+            badge.style.boxShadow = "0 4px 10px rgba(0,0,0,0.2)";
+            badge.style.color = "#ffffff";
+        }
     }
 
     window.showChances = function(caseType) {
@@ -621,6 +647,7 @@ window.switchMode = function(mode) {
     }
 
     updateBalanceDisplay();
+    loadSavedTitle();
     renderInventory();
 </script>
 </body>
