@@ -342,7 +342,7 @@
     }, 2500);
 
     // --- БЛОК ССЫЛОК И КОНТАКТОВ (ТВОИ ОФИЦИАЛЬНЫЕ КАНАЛЫ) ---
-    const LINK_CONTACT = "https://t.me";  
+    const LINK_CONTACT = "https://t.me/BSgormYou123";  
     const ADMIN_USERNAME = "BSgormYou123";            
     const URL_TELEGRAM = "https://t.me/BSgormOff";     
     const URL_YOUTUBE = "https://www.youtube.com/@TheBS_gorm"; 
@@ -367,7 +367,18 @@
     }
 
     let currentFilter = "current";
-    const isOwner = true; 
+    // Твой уникальный ник в Telegram (без собачки @)
+const MY_TELEGRAM_USERNAME = "BSgormYou123"; 
+
+// Проверяем, совпадает ли ник зашедшего человека с твоим
+let isOwner = false;
+if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
+    const currentUser = window.Telegram.WebApp.initDataUnsafe.user.username;
+    if (currentUser === MY_TELEGRAM_USERNAME) {
+        isOwner = true; // Админка откроется ТОЛЬКО ТЕБЕ
+    }
+}
+
 
     // Универсальная функция открытия ссылок (РАБОТАЕТ И В БРАУЗЕРЕ, И В ТГ)
     function openLink(url) {
