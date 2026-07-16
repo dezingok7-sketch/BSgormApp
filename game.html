@@ -521,7 +521,77 @@
             return;
         }
 
-        // Рендерим плашки выбранных предметов в зоне контракта
+    // --- ОБНОВЛЕННОЕ СВОБОДНОЕ ДОБАВЛЕНИЕ ПРЕДМЕТОВ ЛЮБОЙ РЕДКОСТИ В КОНТРАКТ ---
+    window.toggleItemToCraft = function(id) {
+        if (currentMode === 'clicker') {
+            const item = userInventory[id];
+            if (item) {
+                let stats = calculateMarketStats(id, item.rarity, item.basePrice, item.count);
+                document.getElementById('rewardModalTitle').innerText = "📊 ИНФО-КАРТОЧКА NFT";
+                document.getElementById('rewardIcon').innerText = item.icon;
+                document.getElementById('rewardName').innerText = item.name;
+                const rText = document.getElementById('rewardRarity');
+                rText.innerText = rarityNames[item.rarity]; rText.style.color = rarityColors[item.rarity];
+                document.getElementById('marketTotal').innerText = `${stats.worldTotal} шт.`;
+                document.getElementById('marketOwned').innerText = `${item.count} шт.`;
+                document.getElementById('marketPrice').innerText = `${stats.price.toFixed(3)} 🪙`;
+                document.getElementById('rewardModal').classList.add('active');
+            }
+            return;
+        }
+
+        const item = userInventory[id];
+        if (!item) return;
+
+        // Проверяем, сколько штук ЭТОГО предмета уже лежит в контракте
+        let alreadyAddedCount = selectedCraftItems.filter(itemId => itemId === id).length;
+        if (alreadyAddedCount >= item.count) {
+            if (tg && tg.showAlert) tg.showAlert("У вас больше нет свободных копий этого предмета!");
+            return;
+        }
+
+        // Максимум 10 предметов в рулетке
+        if (selectedCraftItems.length >= 10) {
+            if (tg && tg.showAlert) tg.showAlert("В контракт нельзя положить больше 10 предметов!");
+            return;
+        }
+
+        // Запрещаем совать секретные артефакты (они финальные, их нельзя крафтить дальше)
+        if (item.rarity === 'secret') {
+            if (tg && tg.showAlert) tg.showAlert("Секретные предметы нельзя использовать в контракте!");
+            return;
+        }
+
+        // ТЕПЕРЬ НЕТ ПРОВЕРКИ НА ОДИНАКОВУЮ РЕДКОСТЬ! МОЖНО СМЕШИВАТЬ ВСЁ!
+        selectedCraftItems.push(id);
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        
+        updateContractUI();
+        renderInventory();
+    }
+
+    window.removeSlotByIndex = function(index) {
+        selectedCraftItems.splice(index, 1);
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        updateContractUI();
+        renderInventory();
+    }
+
+    // ДИНАМИЧЕСКИЙ РАСЧЕТ ЖИВЫХ ШАНСОВ МИКСЕРА
+    function updateContractUI() {
+        const slotsRow = document.getElementById('selectedSlots');
+        const startBtn = document.getElementById('startContractBtn');
+        const chanceValue = document.getElementById('chanceValue');
+        const chanceBar = document.getElementById('chanceBar');
+
+        if (selectedCraftItems.length === 0) {
+            slotsRow.innerHTML = `<span style="opacity: 0.4; font-size: 12px; padding: 5px;">Слоты контракта пусты... Нажмите на скины ниже ⬇️</span>`;
+            chanceValue.innerText = "0";
+            chanceBar.style.width = "0%";
+            startBtn.classList.add('disabled');
+            return;
+        }
+
         slotsRow.innerHTML = "";
         selectedCraftItems.forEach((id, index) => {
             const item = userInventory[id];
@@ -532,31 +602,57 @@
             slotsRow.appendChild(pill);
         });
 
-        // Формула рулетки: Каждый скин дает +10% шанса на успех. 10 скинов = 100% шанс!
-        let calculatedChance = selectedCraftItems.length * 10;
-        chanceValue.innerText = calculatedChance;
-        chanceBar.style.width = `${calculatedChance}%`;
+        // Считаем общий шанс: 1 скин = 10% заполнения шкалы рулетки
+        let totalFillChance = selectedCraftItems.length * 10;
+        chanceValue.innerText = totalFillChance;
+        chanceBar.style.width = `${totalFillChance}%`;
 
-        // Кнопка становится активной, если добавлено от 3 предметов
+        // Минимальный крафт доступен от 3 любых предметов
         if (selectedCraftItems.length >= 3) {
             startBtn.classList.remove('disabled');
         } else {
             startBtn.classList.add('disabled');
         }
-        }
-        // ЗАПУСК КОНТРАКТ-РУЛЕТКИ
+    }
+    // --- УМНАЯ МАТЕМАТИКА КОНТРАКТА-МИКСЕРА (РУЛЕТКА ВСЕХ РЕДКОСТЕЙ) ---
     window.runContract = function() {
         if (selectedCraftItems.length < 3) return;
 
-        const firstItemId = selectedCraftItems[0];
-        const craftRarity = userInventory[firstItemId].rarity;
-        const targetRarity = nextRarityMap[craftRarity];
+        // Общая шкала успеха (1 скин = 10%)
+        let totalWinChance = selectedCraftItems.length * 10; 
+        let randomRoll = Math.floor(Math.random() * 100) + 1; // Ролл от 1 до 100
 
-        // Высчитываем итоговый шанс успеха (каждый скин = 10%)
-        let winChance = selectedCraftItems.length * 10; 
-        let randomRoll = Math.floor(Math.random() * 100) + 1; // Число от 1 до 100
+        if (randomRoll > totalWinChance) {
+            // КРАХ! Общий ролл рулетки попал в пустую зону (не повезло со шкалой)
+            burnContractItems();
+            const garbageItem = nftItems.common[0]; 
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+            addAndShowItem(garbageItem, "common", "❌ КОНТРАКТ ПРОВАЛЕН (СЛИВ!)");
+            if (tg && tg.showAlert) tg.showAlert("Рулетка остановилась на пустом секторе! Скины сгорели, вы получили мусор 🪨");
+            return;
+        }
 
-        // 1. «Сжигаем» все добавленные предметы из инвентаря
+        // ПОБЕДНЫЙ СЦЕНАРИЙ: Выбираем, какая именно редкость из закинутых превратится в апгрейд!
+        // Выбираем случайный предмет из тех, что игрок закинул в контракт
+        let randomLuckyId = selectedCraftItems[Math.floor(Math.random() * selectedCraftItems.length)];
+        let luckyItemRarity = userInventory[randomLuckyId].rarity;
+        
+        // Целевая награда — на один тираж выше, чем у случайно выбранного предмета
+        let targetRarity = nextRarityMap[luckyItemRarity];
+
+        // «Сжигаем» все добавленные предметы из инвентаря
+        burnContractItems();
+
+        // Выдаем случайный предмет повышенной редкости
+        const pool = nftItems[targetRarity];
+        const craftedItem = pool[Math.floor(Math.random() * pool.length)];
+        
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+        addAndShowItem(craftedItem, targetRarity, "🔬 КОНТРАКТ УСПЕШЕН (МИКСЕР!)");
+    }
+
+    // Вспомогательная функция очистки инвентаря от сожженных вещей
+    function burnContractItems() {
         selectedCraftItems.forEach(id => {
             if (userInventory[id]) {
                 userInventory[id].count -= 1;
@@ -565,30 +661,12 @@
                 }
             }
         });
-
-        selectedCraftItems = []; // Полностью очищаем контракт
-
-        // 2. Крутим колесо фортуны (Рулетка)
-        if (randomRoll <= winChance) {
-            // ПОБЕДА! Выдаем случайный предмет СЛЕДУЮЩЕГО уровня редкости
-            const pool = nftItems[targetRarity];
-            const craftedItem = pool[Math.floor(Math.random() * pool.length)];
-            
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-            addAndShowItem(craftedItem, targetRarity, "🔬 КОНТРАКТ УСПЕШЕН (UPGRADE!)");
-        } else {
-            // КРАХ! Скины сгорели, рулетка выдала дешевый Космический Мусор
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
-            const garbageItem = nftItems.common[0]; // Наш Космический Мусор
-            
-            addAndShowItem(garbageItem, "common", "❌ КОНТРАКТ ПРОВАЛЕН (СЛИВ!)");
-            if (tg && tg.showAlert) tg.showAlert("Рулетка остановилась на неудачном секторе! Скины сгорели, вы получили утешительный мусор 🪨");
-        }
-
+        selectedCraftItems = []; // Очищаем рабочий стол контракта
         updateContractUI();
         renderInventory();
     }
 
+        
     window.showChances = function(caseType) {
         const chances = caseChances[caseType];
         const titleMap = { bronze: "Бронзовая Капсула", silver: "Серебряная Капсула", gold: "Золотая Капсула" };
