@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TheBSgorm Title Shop</title>
+    <!-- Официальный скрипт Telegram Web App -->
+    <script src="https://telegram.org"></script>
+    <style>
+        :root {
+            --bg-color: #02040a;
+            --text-color: #f1f5f9;
+            --card-bg: rgba(7, 15, 36, 0.75);
+            --neon-cyan: #00f2fe;
+            --neon-blue: #0072ff;
+            --glass-border: rgba(0, 242, 254, 0.16);
+        }
+
+        @keyframes spaceGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(-45deg, #020617, #0b1329, #1c2541, #030712);
+            background-size: 300% 300%;
+            animation: spaceGradient 12s ease infinite;
+            background-attachment: fixed;
+            color: var(--text-color);
+            margin: 0; padding: 15px;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; box-sizing: border-box;
+        }
+
+        .balance-box {
+            background: var(--card-bg); border: 1px solid var(--glass-border);
+            padding: 14px 28px; border-radius: 24px; font-size: 26px; font-weight: 900;
+            color: var(--neon-cyan); text-shadow: 0 0 12px rgba(0, 242, 254, 0.5);
+            margin: 15px 0 25px 0; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 10px;
+        }
+
+        .section-title { font-size: 16px; font-weight: 850; align-self: flex-start; margin: 10px 0 15px 5px; color: #7dd3fc; letter-spacing: 1px; text-transform: uppercase; }
+        .titles-container { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 400px; }
+        
+        .title-card {
+            background: var(--card-bg); border: 1px solid var(--glass-border);
+            padding: 18px; border-radius: 24px; display: flex; align-items: center;
+            justify-content: space-between; box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        }
+        .title-info { display: flex; flex-direction: column; gap: 4px; text-align: left; }
+        .title-badge { font-weight: 900; font-size: 14px; color: #ffffff; padding: 3px 10px; border-radius: 10px; width: fit-content; }
+        .title-desc { font-size: 11px; color: #94a3b8; font-weight: 600; line-height: 1.3; max-width: 200px; }
+        
+        .buy-btn {
+            background: linear-gradient(135deg, #0284c7, var(--neon-blue)); color: white;
+            border: none; padding: 12px 18px; border-radius: 14px; font-size: 13px; font-weight: 800;
+            cursor: pointer; box-shadow: 0 4px 14px rgba(0, 114, 255, 0.4); transition: transform 0.1s;
+        }
+        .buy-btn:active { transform: scale(0.95); }
+        .buy-btn.purchased { background: #10b981; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3); cursor: default; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+    <a href="game.html" style="align-self: flex-start; color: #7dd3fc; text-decoration: none; font-size: 14px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 5px;">← Назад в игру</a>
+
+    <div class="balance-box">🪙 <span id="balanceDisplay">0.000</span></div>
+
+    <div class="section-title">🎖️ Премиум Титулы чата</div>
+    <div class="titles-container">
+        <!-- Титул 1 -->
+        <div class="title-card">
+            <div class="title-info">
+                <div class="title-badge" style="background: #3b82f6;">👨‍🚀 Звёздный Рядовой</div>
+                <div class="title-desc">Начальное звание. Добавит статус пилота рядом с твоим ником.</div>
+            </div>
+            <button class="buy-btn" id="btn-t1" onclick="buyTitle('t1', 5.0, '👨‍🚀 Звёздный Рядовой')">5.000 🪙</button>
+        </div>
+
+        <!-- Титул 2 -->
+        <div class="title-card">
+            <div class="title-info">
+                <div class="title-badge" style="background: #a855f7;">🛸 Капитан Крейсера</div>
+                <div class="title-desc">Офицерский статус. Выделяйся среди обычных участников чата.</div>
+            </div>
+            <button class="buy-btn" id="btn-t2" onclick="buyTitle('t2', 25.0, '🛸 Капитан Крейсера')">25.000 🪙</button>
+        </div>
+
+        <!-- Титул 3 -->
+        <div class="title-card">
+            <div class="title-info">
+                <div class="title-badge" style="background: linear-gradient(90deg, #ff007f, #7928ca);">👑 Лорд Галактики</div>
+                <div class="title-desc">Высший Web3 ранг. Полное доминирование в беседах!</div>
+            </div>
+            <button class="buy-btn" id="btn-t3" onclick="buyTitle('t3', 100.0, '👑 Лорд Галактики')">100.000 🪙</button>
+        </div>
+    </div>
+
+<script>
+    let userBalance = parseFloat(localStorage.getItem('game_balance')) || 0.0;
+    const tg = window.Telegram?.WebApp;
+    if (tg) { tg.ready(); tg.expand(); }
+
+    function updateBalance() {
+        document.getElementById('balanceDisplay').innerText = userBalance.toFixed(3);
+        localStorage.setItem('game_balance', userBalance);
+    }
+
+    // ЛОГИКА ПОКУПКИ И ОТПРАВКИ ДАННЫХ В БОТА
+    window.buyTitle = function(titleId, cost, titleName) {
+        if (userBalance < cost) {
+            if (tg && tg.showAlert) tg.showAlert("Недостаточно монет! Продолжай тапать по планете в игре 🪐");
+            else alert("Недостаточно монет!");
+            return;
+        }
+
+        userBalance -= cost;
+        updateBalance();
+
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+
+        // Отмечаем кнопку как купленную
+        const btn = document.getElementById(`btn-${titleId}`);
+        btn.innerText = "Куплено ✓";
+        btn.className = "buy-btn purchased";
+
+        // КРИТИЧЕСКИЙ ШАГ: Передаем информацию о купленном титуле в Python-бота!
+        if (tg && tg.sendData) {
+            // Формируем строку данных для серверного обработчика (например: "buy_title:👑 Лорд Галактики")
+            tg.sendData(`buy_title:${titleName}`);
+            setTimeout(() => { tg.close(); }, 500); // Закрываем Mini App, отправляя данные
+        } else {
+            alert(`Успешно куплено: ${titleName}! (Запустите в Telegram для синхронизации в чатах)`);
+        }
+    }
+
+    // Проверяем, какие титулы уже покупались ранее, чтобы заблокировать повторную покупку
+    updateBalance();
+</script>
+</body>
+</html>
