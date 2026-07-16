@@ -142,142 +142,7 @@
         .item-rarity-line { position: absolute; top: 0; left: 0; width: 100%; height: 5px; border-top-left-radius: 18px; border-top-right-radius: 18px; }
         .item-icon { font-size: 32px; margin-top: 4px; }
         .item-name { font-size: 11px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 92%; }
-        .item-count { position: absolute; bottom: 5px; right: 8px; background: rgba(0,0,0,0.5); font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 9px; }
-
-        .game-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 4, 10, 0.65); backdrop-filter: blur(15px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; z-index: 2000; }
-        .game-modal.active { opacity: 1; pointer-events: auto; }
-        .g-modal-content { background: rgba(11, 19, 43, 0.96); border: 1px solid rgba(0, 242, 254, 0.25); padding: 26px; border-radius: 26px; width: 85%; max-width: 340px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
-        .chance-row { display: flex; justify-content: space-between; font-size: 13px; margin: 9px 0; padding-bottom: 5px; border-bottom: 1px dashed rgba(255,255,255,0.06); }
-        .market-info-box { background: rgba(0, 0, 0, 0.25); border-radius: 14px; padding: 10px 14px; margin: 15px 0; display: flex; flex-direction: column; gap: 6px; text-align: left; }
-        .market-line { display: flex; justify-content: space-between; font-size: 12px; color: #94a3b8; font-weight: 600; }
-        .market-val { color: #ffffff; font-weight: 800; }
-    </style>
-</head>
-<body>
-
-    <a href="index.html" style="align-self: flex-start; color: #7dd3fc; text-decoration: none; font-size: 14px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 5px;">← В главное меню</a>
-
-    <!-- ТРЕХКНОПОЧНЫЕ ВКЛАДКИ -->
-    <div class="game-tabs">
-        <button class="g-tab-btn active" id="modeClickerBtn" onclick="switchMode('clicker')">🪐 Кликер</button>
-        <button class="g-tab-btn" id="modeContractBtn" onclick="switchMode('contract')">🔬 Рулетка</button>
-        <button class="g-tab-btn" id="modeTitlesBtn" onclick="switchMode('titles')">🎖️ Магазин Титулов</button>
-    </div>
-
-    <!-- КЛИКЕР И КАПСУЛЫ -->
-    <div id="clickerZone">
-        <!-- СВЕТЯЩАЯСЯ ПЛАШКА КУПЛЕННОГО ТИТУЛА -->
-        <div class="user-title-badge" id="userTitleBadge">🛰️ Космический рекрут</div>
-        
-        <div class="balance-box">🪙 <span id="balanceDisplay">0.000</span></div>
-        <div class="planet-clicker" id="planetBtn">🪐</div>
-
-        <div class="section-title">📦 Капсулы Снаряжения</div>
-        <div class="cases-grid">
-            <div class="case-card bronze-glow">
-                <div class="case-info">
-                    <div class="case-icon">🟫</div>
-                    <div class="case-details">
-                        <div class="case-name">Бронзовая Капсула</div>
-                        <div class="case-cost">Цена: 0.500 🪙</div>
-                    </div>
-                </div>
-                <div class="case-actions">
-                    <button class="game-btn case-open-btn" onclick="openCase('bronze', 0.5)">Открыть</button>
-                    <div class="view-chances-link" onclick="showChances('bronze')">Шансы дропа</div>
-                </div>
-            </div>
-
-            <div class="case-card silver-glow">
-                <div class="case-info">
-                    <div class="case-icon">⬜</div>
-                    <div class="case-details">
-                        <div class="case-name">Серебряная Капсула</div>
-                        <div class="case-cost">Цена: 2.500 🪙</div>
-                    </div>
-                </div>
-                <div class="case-actions">
-                    <button class="game-btn case-open-btn" onclick="openCase('silver', 2.5)">Открыть</button>
-                    <div class="view-chances-link" onclick="showChances('silver')">Шансы дропа</div>
-                </div>
-            </div>
-
-            <div class="case-card gold-glow">
-                <div class="case-info">
-                    <div class="case-icon">🟨</div>
-                    <div class="case-details">
-                        <div class="case-name">Золотая Капсула</div>
-                        <div class="case-cost">Цена: 10.000 🪙</div>
-                    </div>
-                </div>
-                <div class="case-actions">
-                    <button class="game-btn case-open-btn" onclick="openCase('gold', 10.0)">Открыть</button>
-                    <div class="view-chances-link" onclick="showChances('gold')">Шансы дропа</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- РАБОЧАЯ ПАНЕЛЬ КОНТРАКТОВ И РУЛЕТКИ -->
-    <div class="contract-workspace" id="contractZone">
-        <div class="chance-progress-wrapper">
-            <div class="chance-text"><span id="chanceValue">0</span>% шанс крафта</div>
-            <div class="chance-bar-outer"><div class="chance-bar-inner" id="chanceBar"></div></div>
-            <div style="font-size: 11px; opacity: 0.6; margin-top: 6px;">Выберите от 3 до 10 NFT любой редкости для расчёта шанса.</div>
-        </div>
-        <div class="selected-slots-row" id="selectedSlots"><span style="opacity: 0.4; font-size: 12px; padding: 5px;">Слоты контракта пусты... Нажмите на скины ниже ⬇️</span></div>
-        <button class="game-btn disabled" id="startContractBtn" style="background: linear-gradient(135deg, #10b981, #059669); padding: 14px;" onclick="runContract()">💥 Запустить Контракт Рулетку</button>
-    </div>
-
-    <!-- ВНУТРЕННИЙ ВЕБ-МАГАЗИН ТИТУЛОВ -->
-    <div class="titles-zone" id="titlesZone">
-        <div class="balance-box" style="margin-top:0;">🪙 <span id="balanceDisplayTitles">0.000</span></div>
-        <div class="title-card"><div class="title-info"><div class="title-badge" style="background:#3b82f6;">👨‍🚀 Звёздный Рядовой</div><div class="title-desc">Добавит статус пилота над твоим балансом в игре.</div></div><button class="buy-btn" id="btn-t1" onclick="buyTitle('t1', 5.0, '👨‍🚀 Звёздный Рядовой', '#3b82f6')">5.000 🪙</button></div>
-        <div class="title-card"><div class="title-info"><div class="title-badge" style="background:#a855f7;">🛸 Капитан Крейсера</div><div class="title-desc">Премиальный статус офицера космофлота.</div></div><button class="buy-btn" id="btn-t2" onclick="buyTitle('t2', 25.0, '🛸 Капитан Крейсера', '#a855f7')">25.000 🪙</button></div>
-        <div class="title-card"><div class="title-info"><div class="title-badge" style="background: linear-gradient(90deg, #ff007f, #7928ca);">👑 Лорд Галактики</div><div class="title-desc">Ультра-ранг. Твоя плашка засияет ярким неоном!</div></div><button class="buy-btn" id="btn-t3" onclick="buyTitle('t3', 100.0, '👑 Лорд Галактики', 'linear-gradient(90deg, #ff007f, #7928ca)')">100.000 🪙</button></div>
-    </div>
-
-    <div class="section-title"><span id="inventoryTitle">🎒 Твой NFT Инвентарь</span><span class="item-counter" id="itemCounterDisplay">Собрано: 0 / 12</span></div>
-    <div class="inventory-grid" id="inventoryGrid"></div>
-
-    <!-- МОДАЛКА ШАНСОВ -->
-    <div class="game-modal" id="chancesModal"><div class="g-modal-content"><h3 style="margin-top:0; color:#7dd3fc;" id="chancesTitle">Шансы дропа</h3><div id="chancesBody"></div><button class="game-btn" style="margin-top:15px; width:100%;" onclick="closeModal('chancesModal')">Понятно</button></div></div>
-
-    <!-- МОДАЛКА ВЫИГРЫША И ПРОСМОТРА NFT -->
-    <div class="game-modal" id="rewardModal"><div class="g-modal-content" id="rewardBorder" style="border-width: 2px;"><h2 id="rewardModalTitle" style="margin-top:0; color:#ffffff; font-size:18px; letter-spacing:1px;">🎉 РЕЛИКВИЯ НАЙДЕНА!</h2><div id="rewardIcon" style="font-size:68px; margin: 10px 0;">🎁</div><div id="rewardName" style="font-size:18px; font-weight:900; margin-bottom:4px;">Название Предмета</div><div id="rewardRarity" style="font-size:11px; font-weight:800; text-transform:uppercase; margin-bottom:10px;">Редкость</div><div class="market-info-box"><div class="market-line">Мировой тираж: <span class="market-val" id="marketTotal">0 шт.</span></div><div class="market-line">У вас в коллекции: <span class="market-val" id="marketOwned">0 шт.</span></div><div class="market-line">Рыночная цена: <span class="market-val" id="marketPrice" style="color:#00f2fe">0.000 🪙</span></div></div><button class="game-btn" style="width:100%;" onclick="closeModal('rewardModal')">Закрыть окно</button></div></div>
-
-<script>
-
-        // =========================================================================
-    // ⚙️ СИСТЕМНАЯ ЛОГИКА ИГРЫ (МАТЕМАТИКА КЛИКЕРА, БИРЖИ И КОНТРАКТ-РУЛЕТКИ)
-    // =========================================================================
-    const nftItems = {
-        common: [
-            { id: "c1", name: "Космический Мусор", icon: "🪨", basePrice: 0.1 },
-            { id: "c2", name: "Старый Спутник", icon: "🛰️", basePrice: 0.2 },
-            { id: "c3", name: "Обломок Ракеты", icon: "🚀", basePrice: 0.3 }
-        ],
-        rare: [
-            { id: "r1", name: "Лазерный Меч", icon: "⚔️", basePrice: 1.5 },
-            { id: "r2", name: "Плазменная Сфера", icon: "🔮", basePrice: 2.2 },
-            { id: "r3", name: "Марсоход TheBS", icon: "🚜", basePrice: 3.0 }
-        ],
-        epic: [
-            { id: "e1", name: "Кибер-Шлем", icon: "🦱", basePrice: 8.0 },
-            { id: "e2", name: "Скин AQUAPHOBIA", icon: "🎭", basePrice: 12.5 },
-            { id: "e3", name: "Космический Трон", icon: "💺", basePrice: 15.0 }
-        ],
-        mythic: [
-            { id: "m1", name: "👑 Корона GORM", icon: "👑", basePrice: 50.0 },
-            { id: "m2", name: "🔥 NFT РАКЕТА 3D", icon: "🚀", basePrice: 75.0 }
-        ],
-        secret: [
-            { id: "s1", name: "✨ ТАЙНЫЙ АРТЕФАКТ БОГА", icon: "🌌", basePrice: 500.0 }
-        ]
-    };
-
-    const TOTAL_UNIQUE_ITEMS = 12;
-    const caseChances = {
-        bronze: { common: 795, rare: 160, epic: 40, mythic: 5, secret: 0 },
+        .item-count { position: absolute; bottom: 5p, mythic: 5, secret: 0 },
         silver: { common: 350, rare: 480, epic: 140, mythic: 28, secret: 2 },
         gold:   { common: 80, rare: 300, epic: 450, mythic: 160, secret: 10 }
     };
@@ -303,7 +168,7 @@
         localStorage.setItem('game_balance', userBalance);
     }
 
-    // ТАПЕР С КУЛДАУНОМ В 500 МС И ЭФФЕКТОМ ЗАТЕМНЕНИЯ ПЛАНЕТЫ
+        // УМНЫЙ ТАПЕР С КУЛДАУНОМ 500 МС, СИЛОЙ КЛИКА И МЕГА-КРИТОМ +20.000
     document.getElementById('planetBtn').addEventListener('click', (e) => {
         if (!canClick) return;
 
@@ -314,14 +179,51 @@
         planet.style.filter = 'grayscale(0.9) brightness(0.4)';
         planet.style.transform = 'scale(0.92)';
 
-        userBalance += 0.005;
+        // 1. Динамически считываем текущую силу клика (по умолчанию +0.005)
+        let clickPower = parseFloat(localStorage.getItem('game_click_power')) || 0.005;
+        let amountAdded = clickPower;
+        let isMegaCrit = false;
+
+        // 2. Проверяем, куплена ли технология Мега-Крита
+        let hasCrit = localStorage.getItem('game_has_crit') === 'true';
+        if (hasCrit) {
+            let currentClicks = parseInt(localStorage.getItem('game_current_click_count')) || 0;
+            let targetClicks = parseInt(localStorage.getItem('game_crit_target')) || 6;
+
+            currentClicks += 1;
+
+            if (currentClicks >= targetClicks) {
+                // БУМ! Сработал Мега-Крит раз в 5-7 нажатий
+                amountAdded = 20.000;
+                isMegaCrit = true;
+
+                // Сбрасываем счетчик и генерируем новое случайное число от 5 до 7 для следующего крита
+                currentClicks = 0;
+                let nextTarget = Math.floor(Math.random() * (7 - 5 + 1)) + 5;
+                localStorage.setItem('game_crit_target', nextTarget);
+            }
+            localStorage.setItem('game_current_click_count', currentClicks);
+        }
+
+        userBalance += amountAdded;
         updateBalanceDisplay();
 
-        if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        if (tg && tg.HapticFeedback) {
+            if (isMegaCrit) tg.HapticFeedback.notificationOccurred('success');
+            else tg.HapticFeedback.impactOccurred('medium');
+        }
 
+        // Вылетающий текст (+0.005 или ЗОЛОТОЙ +20.000!)
         const floatText = document.createElement('div');
         floatText.className = 'click-floating-text';
-        floatText.innerText = '+0.005';
+        floatText.innerText = `+${amountAdded.toFixed(3)}`;
+        
+        if (isMegaCrit) {
+            floatText.style.color = '#eab308';
+            floatText.style.fontSize = '26px';
+            floatText.style.textShadow = '0 0 15px #eab308';
+        }
+        
         floatText.style.left = `${e.clientX - 25}px`;
         floatText.style.top = `${e.clientY - 15}px`;
         document.body.appendChild(floatText);
@@ -334,7 +236,8 @@
             planet.style.transform = 'none';
         }, 500);
     });
-// УПРАВЛЕНИЕ ТРЕХКНОПОЧНЫМИ ВКЛАДКАМИ
+
+            
     window.switchMode = function(mode) {
         currentMode = mode;
         selectedCraftItems = []; 
