@@ -282,7 +282,7 @@
         <a href="#" class="nav-button primary-btn" id="btn-contact"><span class="icon">💬</span> <span>Связь с TheBSgorm</span> <span class="arrow">▶</span></a>
         <button class="nav-button socials-trigger-btn" id="openSocialsBtn"><span class="icon">🌐</span> <span>Социальные сети</span> <span class="arrow">▼</span></button>
         <button class="nav-button projects-trigger-btn" id="openProjectsBtn"><span class="icon">📂</span> <span>Посмотреть проекты</span> <span class="arrow">▼</span></button>
-        <a href="#" class="nav-button stars-btn" id="btn-stars"><span class="icon">⭐</span> <span>Поддержать (Донат Stars)</span> <span class="arrow">▶</span></a>
+        <a href="game.html" class="nav-button stars-btn" style="border-color: rgba(0, 242, 254, 0.4); background: rgba(0, 242, 254, 0.05); --neon-space: rgba(0, 242, 254, 0.25);"><span class="icon">🎮</span> <span>Играть в Clicker NFT</span> <span class="arrow">▶</span></a>
     </div>
 </div>
 
@@ -388,16 +388,6 @@
     document.getElementById('social-tt').addEventListener('click', (e) => { e.preventDefault(); openLink(URL_TIKTOK); });
     document.getElementById('social-rt').addEventListener('click', (e) => { e.preventDefault(); openLink(URL_RUTUBE); });
     document.getElementById('social-inst').addEventListener('click', (e) => { e.preventDefault(); openLink(URL_INSTAGRAM); });
-    
-    document.getElementById('btn-stars').addEventListener('click', (e) => { 
-        e.preventDefault(); 
-        if (isTelegram && tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-        if (isTelegram && tg && tg.showAlert) {
-            tg.showAlert('Функция доната настраивается!');
-        } else {
-            alert('Функция доната настраивается!');
-        }
-    });
 
     const projectsModal = document.getElementById('modalOverlay');
     const socialsModal = document.getElementById('socialsModal');
