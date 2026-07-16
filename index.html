@@ -350,7 +350,8 @@
     let currentFilter = "current";
     const isOwner = (tg.initDataUnsafe?.user?.username === ADMIN_USERNAME) || true; // Для тестов на ПК включено всегда
 
-    // --- УЛЬТРА-НАДЕЖНЫЙ СТАРТ ДЛЯ TELEGRAM (БЕЗ ЗАВИСАНИЙ) ---
+
+    // --- УНИВЕРСАЛЬНЫЙ СТАРТ ДЛЯ БРАУЗЕРА И ТЕЛЕГРАМА ---
     function hideSplashScreen() {
         const splash = document.getElementById('splash-screen');
         if (splash) {
@@ -360,10 +361,15 @@
         }
     }
 
-    // Звезды летят 2.5 секунды, но мы дублируем скрытие через WebApp ready
+    // Запускаем таймер в любом случае — и в браузере, и в ТГ
     setTimeout(hideSplashScreen, 2500);
-    tg.ready(); 
-    tg.expand();
+
+    // Инициализация Telegram, только если приложение открыто внутри мессенджера
+    if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+    }
 
 
     function openLink(url) {
