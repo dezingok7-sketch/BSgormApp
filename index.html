@@ -8,20 +8,19 @@
     <script src="https://telegram.org"></script>
     <style>
         :root {
-            --bg-color: #02040a;
-            --text-color: #f1f5f9;
-            --btn-bg: #38bdf8;
+            --bg-color: #030712;
+            --text-color: #ffffff;
+            --btn-bg: #00d2ff;
             --btn-text: #ffffff;
-            --card-bg: rgba(11, 19, 43, 0.75); /* Космическое темное стекло */
-            --soft-blue: #7dd3fc;  
-            --sky-blue: #38bdf8;   
-            --deep-blue: #0052d4;  
-            --neon-glow: rgba(56, 189, 248, 0.25);
-            --glass-border: rgba(56, 189, 248, 0.18); /* Лазурный контур */
+            --card-bg: rgba(7, 15, 36, 0.65); /* Плотное матовое стекло в цвет космоса */
+            --neon-cyan: #00f2fe;
+            --neon-blue: #0072ff;
+            --neon-space: rgba(0, 242, 254, 0.25); /* Лазурное свечение */
+            --glass-border: rgba(0, 242, 254, 0.16); /* Неоновый лазерный контур */
         }
 
-        /* Анимация перелива глубокого космоса */
-        @keyframes spaceGradient {
+        /* Быстрая анимация перелива чисто синей туманности */
+        @keyframes blueLiquidGradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
@@ -29,27 +28,33 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(-45deg, #02040a, #0b1329, #1c2541, #030712);
+            /* Насыщенная палитра из глубоких и электрических синих оттенков */
+            background: linear-gradient(-45deg, #020617, #070a1e, #1e3a8a, #0369a1, #0072ff, #020617);
             background-size: 300% 300%;
-            animation: spaceGradient 14s ease infinite;
+            animation: blueLiquidGradient 8s ease infinite; /* Динамичный перелив туманности */
             background-attachment: fixed;
             color: var(--text-color);
-            margin: 0; padding: 20px;
-            display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; box-sizing: border-box; overflow-x: hidden;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            overflow-x: hidden;
         }
 
         /* --- СТИЛИ КОСМИЧЕСКОГО ЗАГРУЗЧИКА (SPLASH SCREEN) --- */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #020208; z-index: 9999;
+            background-color: #010105; z-index: 9999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             transition: opacity 0.5s ease, pointer-events 0.5s ease; overflow: hidden;
         }
         
         .space-glow {
             position: absolute; width: 350px; height: 350px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.2) 0%, transparent 70%);
             top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1;
         }
 
@@ -69,9 +74,9 @@
         
         .rocket-splash {
             width: 85px; height: 85px; border-radius: 50%;
-            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
             display: flex; align-items: center; justify-content: center; font-size: 40px;
-            border: 3px solid rgba(255, 255, 255, 0.25); box-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
+            border: 3px solid rgba(255, 255, 255, 0.25); box-shadow: 0 0 30px rgba(0, 242, 254, 0.6);
             animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) both, rocketFly 2.2s ease-in-out infinite 0.8s;
         }
 
@@ -80,7 +85,7 @@
 
         .splash-title {
             font-size: 38px; font-weight: 900; color: #ffffff; margin: 14px 0 0 0; letter-spacing: 3px; text-transform: uppercase;
-            text-shadow: 0 2px 12px rgba(0,0,0,0.9), 0 0 20px rgba(56, 189, 248, 0.5);
+            text-shadow: 0 2px 12px rgba(0,0,0,0.9), 0 0 20px rgba(0, 242, 254, 0.5);
             animation: fadeInText 1s ease-out 0.4s both; font-family: 'Arial Black', sans-serif;
         }
         .splash-sub {
@@ -95,50 +100,52 @@
         
         /* Пульсирующий неоновый контур у кнопок («Дыхание») */
         @keyframes космическийПульс {
-            0% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 0 0px var(--neon-glow); }
-            50% { transform: scale(1.02); box-shadow: 0 8px 25px rgba(0,0,0,0.4), 0 0 15px var(--neon-glow); border-color: var(--soft-blue); }
-            100% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 0 0px var(--neon-glow); }
+            0% { transform: scale(1); box-shadow: 0 8px 20px rgba(0,0,0,0.3), 0 0 0px var(--neon-space); }
+            50% { transform: scale(1.02); box-shadow: 0 12px 30px rgba(0,0,0,0.4), 0 0 20px var(--neon-space); border-color: var(--neon-cyan); }
+            100% { transform: scale(1); box-shadow: 0 8px 20px rgba(0,0,0,0.3), 0 0 0px var(--neon-space); }
         }
 
         .container { width: 100%; max-width: 400px; text-align: center; animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
 
         .avatar {
             width: 95px; height: 95px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--soft-blue), var(--sky-blue));
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
             margin: 25px auto 18px; display: flex; align-items: center; justify-content: center; font-size: 40px;
-            border: 3px solid rgba(255, 255, 255, 0.15); box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
+            border: 3px solid rgba(255, 255, 255, 0.2); box-shadow: 0 0 30px rgba(0, 242, 254, 0.6);
             animation: rocketFly 3s infinite ease-in-out; transition: transform 0.3s;
         }
 
-        h1 { font-size: 25px; margin: 0 0 6px 0; font-weight: 800; letter-spacing: -0.5px; text-shadow: 0 2px 10px rgba(0,0,0,0.4); }
-        .subtitle { font-size: 14px; opacity: 0.7; margin-bottom: 35px; font-weight: 500; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+        h1 { font-size: 26px; margin: 0 0 6px 0; font-weight: 900; letter-spacing: -0.8px; text-shadow: 0 2px 12px rgba(0,0,0,0.6); }
+        .subtitle { font-size: 14px; opacity: 0.8; margin-bottom: 35px; font-weight: 600; text-shadow: 0 1px 6px rgba(0,0,0,0.5); }
 
         .nav-buttons-block { display: flex; flex-direction: column; gap: 14px; width: 100%; }
         
+        /* Лазурно-космические кнопки хаба */
         .nav-button {
             background: var(--card-bg); color: var(--text-color);
             border: 1px solid var(--glass-border); padding: 18px 22px; border-radius: 22px;
-            font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: space-between;
-            cursor: pointer; text-decoration: none; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; text-decoration: none; backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             animation: космическийПульс 4s infinite ease-in-out; transition: border-color 0.2s, box-shadow 0.2s;
         }
-        .nav-button:active { 
+.nav-button:active { 
             animation: none !important;
             transform: scale(0.95) !important; 
-            border-color: var(--soft-blue) !important;
-            box-shadow: 0 0 15px rgba(125, 211, 252, 0.3) !important;
+            border-color: var(--neon-cyan) !important;
+            box-shadow: 0 0 20px var(--neon-cyan) !important;
         }
         
         .primary-btn { 
-            background: linear-gradient(135deg, #0284c7, #0369a1); 
+            background: linear-gradient(135deg, #0284c7, var(--neon-blue)); 
             color: #ffffff; border: none;
             animation: космическийПульс 4s infinite ease-in-out 0.5s;
         }
+        .primary-btn:active { box-shadow: 0 0 25px rgba(0, 114, 255, 0.5) !important; }
 
         .stars-btn { 
-            border: 1px solid rgba(255, 205, 0, 0.3); 
-            background: rgba(255, 205, 0, 0.03);
-            --neon-glow: rgba(255, 205, 0, 0.15);
+            border: 1px solid rgba(255, 205, 0, 0.4); 
+            background: rgba(255, 205, 0, 0.05);
+            --neon-space: rgba(255, 205, 0, 0.2);
             animation: космическийПульс 4s infinite ease-in-out 1s;
         }
         .stars-btn:active { border-color: #ffcd00 !important; box-shadow: 0 0 20px rgba(255, 205, 0, 0.4) !important; }
@@ -146,26 +153,28 @@
         .socials-trigger-btn { 
             background: linear-gradient(135deg, #0d9488, #0ea5e9); 
             color: #ffffff; border: none; 
-            --neon-glow: rgba(14, 165, 233, 0.2);
+            --neon-space: rgba(14, 165, 233, 0.25);
             animation: космическийПульс 4s infinite ease-in-out 1.5s;
         }
+        .socials-trigger-btn:active { box-shadow: 0 0 25px rgba(14, 165, 233, 0.5) !important; }
 
         .projects-trigger-btn { 
-            background: linear-gradient(135deg, var(--sky-blue), #025aa5); 
+            background: linear-gradient(135deg, var(--neon-cyan), #0052d4); 
             color: #ffffff; border: none; margin-top: 4px; 
-            --neon-glow: rgba(56, 189, 248, 0.35);
+            --neon-space: rgba(0, 242, 254, 0.35);
             animation: космическийПульс 3.5s infinite ease-in-out;
         }
+        .projects-trigger-btn:active { box-shadow: 0 0 25px rgba(0, 242, 254, 0.5) !important; }
 
         .icon { font-size: 22px; transition: transform 0.2s ease; }
-        .nav-button:active .icon { transform: scale(1.18); }
-        .arrow { opacity: 0.5; font-size: 14px; transition: transform 0.2s ease; }
-        .nav-button:active .arrow { transform: translateX(3px); }
+        .nav-button:active .icon { transform: scale(1.2); }
+        .arrow { opacity: 0.6; font-size: 14px; transition: transform 0.2s ease; }
+        .nav-button:active .arrow { transform: translateX(4px); }
 
         /* --- СТИЛИ ОКНА МЕНЮ (КОСМИЧЕСКИЙ БОРТОВОЙ КОМПЬЮТЕР) --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 4, 10, 0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            background: rgba(2, 4, 10, 0.55); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             display: flex; align-items: flex-end; justify-content: center;
             opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 1000;
         }
@@ -173,19 +182,19 @@
 
         .modal-content {
             width: 100%; max-width: 450px; 
-            background: rgba(11, 19, 43, 0.92); 
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            background: rgba(7, 15, 36, 0.94); /* Плотное контрастное синее стекло */
+            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
             border-top-left-radius: 28px; border-top-right-radius: 28px;
             padding: 24px; box-sizing: border-box;
             transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
             max-height: 85vh; display: flex; flex-direction: column;
-            border-top: 1px solid rgba(56, 189, 248, 0.25);
+            border-top: 1px solid rgba(0, 242, 254, 0.25);
             box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
         }
         .modal-overlay.active .modal-content { transform: translateY(0); }
 
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
-        .modal-title { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; color: #7dd3fc; }
+        .modal-title { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0, 242, 254, 0.3); }
         .close-btn { 
             background: rgba(255, 255, 255, 0.06); border: 1px solid var(--glass-border); 
             color: var(--text-color); font-size: 13px; font-weight: 700; padding: 8px 14px; 
@@ -194,25 +203,25 @@
         .close-btn:active { background: rgba(255, 255, 255, 0.12); }
 
         /* Вкладки для проектов */
-        .tabs { display: flex; gap: 6px; background: rgba(0, 0, 0, 0.3); padding: 5px; border-radius: 14px; margin-bottom: 18px; flex-shrink: 0; }
+        .tabs { display: flex; gap: 6px; background: rgba(0, 0, 0, 0.35); padding: 5px; border-radius: 14px; margin-bottom: 18px; flex-shrink: 0; }
         .tab-btn {
             flex: 1; background: none; border: none; color: var(--text-color); padding: 11px 5px;
             font-size: 14px; font-weight: 700; border-radius: 10px; cursor: pointer; opacity: 0.5; transition: all 0.25s;
         }
-        .tab-btn.active { background: var(--card-bg); opacity: 1; border: 1px solid var(--glass-border); box-shadow: 0 4px 10px rgba(0,0,0,0.2); color: #7dd3fc; }
+        .tab-btn.active { background: rgba(15, 23, 42, 0.8); opacity: 1; border: 1px solid var(--glass-border); box-shadow: 0 4px 12px rgba(0,0,0,0.3); color: var(--neon-cyan); }
 
         .projects-scroll-container { overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 14px; padding-bottom: 15px; }
-        .project-card {
-            background: rgba(15, 23, 42, 0.6); border: 1px solid var(--glass-border);
+                .project-card {
+            background: rgba(15, 23, 42, 0.65); border: 1px solid var(--glass-border);
             padding: 16px; border-radius: 20px; display: flex; flex-direction: column; gap: 8px; text-align: left;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15); animation: fadeInUp 0.4s ease both;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: fadeInUp 0.4s ease both;
         }
         .project-card-header { display: flex; justify-content: space-between; align-items: center; }
         .project-name { font-weight: 800; font-size: 16px; }
         .project-id { font-size: 10px; opacity: 0.3; font-family: monospace; }
         
         .badge { font-size: 10px; font-weight: 800; padding: 5px 10px; border-radius: 20px; text-transform: uppercase; }
-        .badge.current { background: rgba(56, 189, 248, 0.15); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.3); }
+        .badge.current { background: rgba(0, 242, 254, 0.15); color: #7dd3fc; border: 1px solid rgba(0, 242, 254, 0.3); }
         .badge.planned { background: rgba(234, 179, 8, 0.15); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.3); }
         .badge.finished { background: rgba(148, 163, 184, 0.15); color: #e2e8f0; border: 1px solid rgba(148, 163, 184, 0.3); }
         
@@ -222,20 +231,21 @@
 
         /* Админ-панель */
         .admin-panel {
-            display: none; background: rgba(0, 0, 0, 0.2); border: 1px dashed rgba(125, 211, 252, 0.2);
+            display: none; background: rgba(0, 0, 0, 0.3); border: 1px dashed rgba(0, 242, 254, 0.2);
             border-radius: 20px; padding: 14px; margin-bottom: 18px; flex-direction: column; gap: 10px; flex-shrink: 0;
         }
         .admin-input, .admin-select {
-            background: #0f172a; border: 1px solid rgba(255,255,255,0.08); color: var(--text-color);
+            background: #070e24; border: 1px solid rgba(255,255,255,0.08); color: var(--text-color);
             padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none;
         }
         .admin-panel-btn {
-            background: linear-gradient(135deg, #0284c7, #0369a1); color: white; border: none;
+            background: linear-gradient(135deg, #0284c7, var(--neon-blue)); color: white; border: none;
             padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 114, 255, 0.3);
         }
         .admin-controls { display: flex; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); justify-content: flex-end; }
-        .admin-btn { background: #334155; border: none; color: white; padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
-        .admin-btn.delete { background: #ef4444; }
+        .admin-btn { background: #1e293b; border: 1px solid var(--glass-border); color: white; padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
+        .admin-btn.delete { background: #ef4444; border: none; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2); }
     </style>
 </head>
 <body>
@@ -284,11 +294,11 @@
             <button class="close-btn" id="closeSocialsBtn">Закрыть</button>
         </div>
         <div class="projects-scroll-container">
-            <a href="#" class="nav-button" id="social-tg" style="background: rgba(14, 165, 233, 0.1); border-color: rgba(14, 165, 233, 0.3); animation: none;"><span class="icon">📢</span> <span>Telegram Канал</span> <span class="arrow">▶</span></a>
-            <a href="#" class="nav-button" id="social-yt" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); animation: none;"><span class="icon">📹</span> <span>YouTube Канал</span> <span class="arrow">▶</span></a>
-            <a href="#" class="nav-button" id="social-tt" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.15); animation: none;"><span class="icon">🎵</span> <span>TikTok Профиль</span> <span class="arrow">▶</span></a>
-            <a href="#" class="nav-button" id="social-rt" style="background: rgba(249, 115, 22, 0.1); border-color: rgba(249, 115, 22, 0.3); animation: none;"><span class="icon">🍊</span> <span>RuTube Канал</span> <span class="arrow">▶</span></a>
-            <a href="#" class="nav-button" id="social-inst" style="background: rgba(236, 72, 153, 0.1); border-color: rgba(236, 72, 153, 0.3); animation: none;"><span class="icon">📸</span> <span>Instagram</span> <span class="arrow">▶</span></a>
+            <a href="#" class="nav-button" id="social-tg" style="background: rgba(0, 114, 255, 0.15); border-color: rgba(0, 242, 254, 0.3); animation: none;"><span class="icon">📢</span> <span>Telegram Канал</span> <span class="arrow">▶</span></a>
+            <a href="#" class="nav-button" id="social-yt" style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.35); animation: none;"><span class="icon">📹</span> <span>YouTube Канал</span> <span class="arrow">▶</span></a>
+            <a href="#" class="nav-button" id="social-tt" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2); animation: none;"><span class="icon">🎵</span> <span>TikTok Профиль</span> <span class="arrow">▶</span></a>
+            <a href="#" class="nav-button" id="social-rt" style="background: rgba(249, 115, 22, 0.15); border-color: rgba(249, 115, 22, 0.35); animation: none;"><span class="icon">🍊</span> <span>RuTube Канал</span> <span class="arrow">▶</span></a>
+            <a href="#" class="nav-button" id="social-inst" style="background: rgba(236, 72, 153, 0.15); border-color: rgba(236, 72, 153, 0.35); animation: none;"><span class="icon">📸</span> <span>Instagram</span> <span class="arrow">▶</span></a>
         </div>
     </div>
 </div>
@@ -321,7 +331,7 @@
 </div>
 
 <script>
-            // --- УНИВЕРСАЛЬНЫЙ ТАЙМЕР СКРЫТИЯ SPLASH SCREEN ---
+    // --- ПРИНУДИТЕЛЬНЫЙ ВЫКЛЮЧАТЕЛЬ ЭКРАНА ЗАГРУЗКИ ---
     setTimeout(function() {
         var splash = document.getElementById('splash-screen');
         if (splash) {
@@ -331,7 +341,7 @@
         }
     }, 2500);
 
-    // --- БЕЗОПАСНАЯ НАСТРОЙКА ССЫЛОК ---
+    // --- БЛОК ССЫЛОК И КОНТАКТОВ (ТВОИ ОФИЦИАЛЬНЫЕ КАНАЛЫ) ---
     const LINK_CONTACT = "https://t.me";  
     const ADMIN_USERNAME = "BSgormYou123";            
     const URL_TELEGRAM = "https://t.me";     
@@ -347,28 +357,27 @@
 
     let myProjects = JSON.parse(localStorage.getItem('savedProjects')) || defaultProjects;
 
-    // Проверяем, запущен ли скрипт внутри Telegram
+    // Проверяем среду выполнения (Telegram или Браузер)
     const isTelegram = !!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData);
     let tg = null;
 
     if (isTelegram) {
         tg = window.Telegram.WebApp;
-        tg.ready(); 
-        tg.expand();
+        tg.ready(); tg.expand();
     }
 
     let currentFilter = "current";
     const isOwner = true; 
 
-    // Универсальная функция открытия ссылок (РАБОТАЕТ ВЕЗДЕ)
+    // Универсальная функция открытия ссылок (РАБОТАЕТ И В БРАУЗЕРЕ, И В ТГ)
     function openLink(url) {
         if (isTelegram && tg && tg.HapticFeedback) {
             tg.HapticFeedback.impactOccurred('light');
         }
         if (isTelegram && tg && tg.openLink) {
-            tg.openLink(url); // Открытие внутри Telegram
+            tg.openLink(url); 
         } else {
-            window.open(url, '_blank'); // Стандартное открытие в браузере (Хром, Сафари и т.д.)
+            window.open(url, '_blank'); 
         }
     }
 
@@ -445,7 +454,6 @@
         localStorage.setItem('savedProjects', JSON.stringify(myProjects));
         nameInput.value = ""; descInput.value = ""; linkInput.value = "";
 
-        if (isTelegram && tg && tg.notificationOccurred) tg.notificationOccurred('success');
         currentFilter = newProject.status;
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         document.getElementById(`tab-${currentFilter}`).classList.add('active');
@@ -515,7 +523,6 @@
     }
 
     setupTabs();
-
 </script>
 </body>
 </html>
