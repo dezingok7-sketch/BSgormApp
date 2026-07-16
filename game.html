@@ -20,7 +20,7 @@
             --rarity-rare: #3b82f6;     
             --rarity-epic: #a855f7;     
             --rarity-mythic: #ef4444;   
-            --rarity-secret: linear-gradient(90deg, #ff007f, #7928ca, #ff007f); /* Секретный неон */
+            --rarity-secret: linear-gradient(90deg, #ff007f, #7928ca, #ff007f); 
         }
 
         @keyframes spaceGradient {
@@ -57,26 +57,20 @@
             border: 4px solid rgba(255, 255, 255, 0.15); margin: 5px auto 25px;
             cursor: pointer; display: flex; align-items: center; justify-content: center;
             font-size: 58px; box-shadow: 0 0 35px rgba(0, 242, 254, 0.6), inset 0 0 20px rgba(255,255,255,0.3);
-            transition: transform 0.05s ease, opacity 0.2s; user-select: none; -webkit-user-select: none;
-            position: relative;
+            transition: transform 0.04s ease; user-select: none; -webkit-user-select: none;
         }
-        .planet-clicker:active { transform: scale(0.92); }
+        .planet-clicker:active { transform: scale(0.95); }
         
-        /* Кулдаун-эффект (когда кнопка заблокирована на задержку) */
-        .planet-clicker.disabled {
-            opacity: 0.4; pointer-events: none;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1), inset 0 0 20px rgba(0,0,0,0.8);
-            filter: grayscale(0.8);
-        }
+        .planet-clicker.disabled { opacity: 0.7; pointer-events: none; }
 
         .click-floating-text {
             position: absolute; color: #00f2fe; font-weight: 900; font-size: 18px;
-            pointer-events: none; animation: flyUpFade 0.6s ease-out forwards;
+            pointer-events: none; animation: flyUpFade 0.5s ease-out forwards;
             text-shadow: 0 0 8px rgba(0, 242, 254, 0.6); z-index: 999;
         }
         @keyframes flyUpFade {
             0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-70px) scale(0.8); opacity: 0; }
+            100% { transform: translateY(-60px) scale(0.8); opacity: 0; }
         }
 
         /* --- УЛУЧШЕННЫЙ ДИЗАЙН КЕЙСОВ-КАПСУЛ --- */
@@ -91,7 +85,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; overflow: hidden;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
-        /* Внутреннее неоновое свечение в зависимости от типа ящика */
         .case-card.bronze-glow { border-color: rgba(180, 83, 9, 0.3); box-shadow: inset 0 0 15px rgba(180, 83, 9, 0.15); }
         .case-card.silver-glow { border-color: rgba(148, 163, 184, 0.3); box-shadow: inset 0 0 15px rgba(148, 163, 184, 0.15); }
         .case-card.gold-glow { border-color: rgba(234, 179, 8, 0.35); box-shadow: inset 0 0 20px rgba(234, 179, 8, 0.2); }
@@ -115,15 +108,15 @@
         .view-chances-link { font-size: 11px; color: #7dd3fc; text-decoration: none; font-weight: 700; cursor: pointer; opacity: 0.6; transition: opacity 0.2s; }
         .view-chances-link:hover { opacity: 1; text-decoration: underline; }
 
-        /* --- ИНВЕНТАРЬ (ГРИД С ЛЕНТОЙ РЕДКОСТИ) --- */
+        /* --- ИНВЕНТАРЬ И NFT СТАТИСТИКА --- */
         .inventory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; max-width: 400px; margin-bottom: 30px; }
         .inventory-item {
             background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(255,255,255,0.05);
             border-radius: 18px; padding: 14px 8px; display: flex; flex-direction: column;
             align-items: center; justify-content: center; gap: 5px; position: relative;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2); transition: transform 0.2s;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2); transition: transform 0.2s; cursor: pointer;
         }
-        .inventory-item:hover { transform: translateY(-3px); }
+        .inventory-item:hover { transform: translateY(-3px); border-color: rgba(0, 242, 254, 0.3); }
         .item-rarity-line { position: absolute; top: 0; left: 0; width: 100%; height: 5px; border-top-left-radius: 18px; border-top-right-radius: 18px; }
         .item-icon { font-size: 32px; margin-top: 4px; }
         .item-name { font-size: 11px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 92%; }
@@ -134,16 +127,20 @@
         .game-modal.active { opacity: 1; pointer-events: auto; }
         .g-modal-content { background: rgba(11, 19, 43, 0.96); border: 1px solid rgba(0, 242, 254, 0.25); padding: 26px; border-radius: 26px; width: 85%; max-width: 340px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
         .chance-row { display: flex; justify-content: space-between; font-size: 13px; margin: 9px 0; padding-bottom: 5px; border-bottom: 1px dashed rgba(255,255,255,0.06); }
+        
+        /* Стили для строк инфо-выигрыша */
+        .market-info-box { background: rgba(0, 0, 0, 0.25); border-radius: 14px; padding: 10px 14px; margin: 15px 0; display: flex; flex-direction: column; gap: 6px; text-align: left; }
+        .market-line { display: flex; justify-content: space-between; font-size: 12px; color: #94a3b8; font-weight: 600; }
+        .market-val { color: #ffffff; font-weight: 800; }
     </style>
 </head>
 <body>
-
     <a href="index.html" style="align-self: flex-start; color: #7dd3fc; text-decoration: none; font-size: 14px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 5px;">← В главное меню</a>
 
     <div class="balance-box">🪙 <span id="balanceDisplay">0.000</span></div>
     <div class="planet-clicker" id="planetBtn">🪐</div>
 
-    <!-- КОСМИЧЕСКИЕ ЯЩИКИ (ОБНОВЛЕННЫЕ ЦЕНЫ И ДИЗАЙН) -->
+    <!-- КОСМИЧЕСКИЕ ЯЩИКИ -->
     <div class="section-title">📦 Капсулы Снаряжения</div>
     <div class="cases-grid">
         <!-- Бронзовый ящик -->
@@ -160,6 +157,7 @@
                 <div class="view-chances-link" onclick="showChances('bronze')">Шансы дропа</div>
             </div>
         </div>
+
         <!-- Серебряный ящик -->
         <div class="case-card silver-glow">
             <div class="case-info">
@@ -191,7 +189,7 @@
         </div>
     </div>
 
-    <!-- ИНВЕНТАРЬ И СЧЕТЧИК ПРЕДМЕТОВ -->
+    <!-- ИНВЕНТАРЬ С КОМПАКТНЫМ СЧЕТЧИКОМ -->
     <div class="section-title">
         <span>🎒 Твой NFT Инвентарь</span>
         <span class="item-counter" id="itemCounterDisplay">Собрано: 0 / 12</span>
@@ -207,64 +205,68 @@
         </div>
     </div>
 
-    <!-- МОДАЛКА 2: ОКНО ВЫИГРЫША NFT -->
+    <!-- МОДАЛКА 2: ИНФОРМАЦИЯ И ВЫИГРЫШ NFT (ДИНАМИЧЕСКИЙ РЫНОК) -->
     <div class="game-modal" id="rewardModal">
         <div class="g-modal-content" id="rewardBorder" style="border-width: 2px;">
-            <h2 style="margin-top:0; color:#ffffff; font-size:20px; letter-spacing:1px;">🎉 РЕЛИКВИЯ НАЙДЕНА!</h2>
-            <div id="rewardIcon" style="font-size:70px; margin: 15px 0;">🎁</div>
-            <div id="rewardName" style="font-size:19px; font-weight:900; margin-bottom:4px;">Название Предмета</div>
-            <div id="rewardRarity" style="font-size:12px; font-weight:800; text-transform:uppercase; margin-bottom:20px;">Редкость</div>
-            <button class="game-btn" style="width:100%;" onclick="closeModal('rewardModal')">Забрать в инвентарь</button>
+            <h2 id="rewardModalTitle" style="margin-top:0; color:#ffffff; font-size:18px; letter-spacing:1px;">🎉 РЕЛИКВИЯ НАЙДЕНА!</h2>
+            <div id="rewardIcon" style="font-size:68px; margin: 10px 0;">🎁</div>
+            <div id="rewardName" style="font-size:18px; font-weight:900; margin-bottom:4px;">Название Предмета</div>
+            <div id="rewardRarity" style="font-size:11px; font-weight:800; text-transform:uppercase; margin-bottom:10px;">Редкость</div>
+            
+            <!-- Web3 Биржа параметров предмета -->
+            <div class="market-info-box">
+                <div class="market-line">Мировой тираж: <span class="market-val" id="marketTotal">0 шт.</span></div>
+                <div class="market-line">У вас в коллекции: <span class="market-val" id="marketOwned">0 шт.</span></div>
+                <div class="market-line">Рыночная цена: <span class="market-val" id="marketPrice" style="color:#00f2fe">0.000 🪙</span></div>
+            </div>
+            
+            <button class="game-btn" style="width:100%;" onclick="closeModal('rewardModal')">Закрыть окно</button>
         </div>
     </div>
 
 <script>
     // =========================================================================
-    // 🌌 БАЗА ДАННЫХ ПРЕДМЕТОВ С УЛЬТРА-СЕКРЕТНЫМ NFT СТАТУСОМ
+    // ⚙️ СИСТЕМНАЯ ЛОГИКА ИГРЫ (БАЗА ПРЕДМЕТОВ И СКОРОСТНОЙ ТАП)
     // =========================================================================
     const nftItems = {
         common: [
-            { id: "c1", name: "Космический Мусор", icon: "🪨" },
-            { id: "c2", name: "Старый Спутник", icon: "🛰️" },
-            { id: "c3", name: "Обломок Ракеты", icon: "🚀" }
+            { id: "c1", name: "Космический Мусор", icon: "🪨", basePrice: 0.1 },
+            { id: "c2", name: "Старый Спутник", icon: "🛰️", basePrice: 0.2 },
+            { id: "c3", name: "Обломок Ракеты", icon: "🚀", basePrice: 0.3 }
         ],
         rare: [
-            { id: "r1", name: "Лазерный Меч", icon: "⚔️" },
-            { id: "r2", name: "Плазменная Сфера", icon: "🔮" },
-            { id: "r3", name: "Марсоход TheBS", icon: "🚜" }
+            { id: "r1", name: "Лазерный Меч", icon: "⚔️", basePrice: 1.5 },
+            { id: "r2", name: "Плазменная Сфера", icon: "🔮", basePrice: 2.2 },
+            { id: "r3", name: "Марсоход TheBS", icon: "🚜", basePrice: 3.0 }
         ],
         epic: [
-            { id: "e1", name: "Кибер-Шлем", icon: "🦱" },
-            { id: "e2", name: "Скин AQUAPHOBIA", icon: "🎭" },
-            { id: "e3", name: "Космический Трон", icon: "💺" }
+            { id: "e1", name: "Кибер-Шлем", icon: "🦱", basePrice: 8.0 },
+            { id: "e2", name: "Скин AQUAPHOBIA", icon: "🎭", basePrice: 12.5 },
+            { id: "e3", name: "Космический Трон", icon: "💺", basePrice: 15.0 }
         ],
         mythic: [
-            { id: "m1", name: "👑 Корона GORM", icon: "👑" },
-            { id: "m2", name: "🔥 NFT РАКЕТА 3D", icon: "🚀" }
+            { id: "m1", name: "👑 Корона GORM", icon: "👑", basePrice: 50.0 },
+            { id: "m2", name: "🔥 NFT РАКЕТА 3D", icon: "🚀", basePrice: 75.0 }
         ],
         secret: [
-            { id: "s1", name: "✨ ТАЙНЫЙ АРТЕФАКТ БОГА", icon: "🌌" } // Тот самый ультра-секретный предмет
+            { id: "s1", name: "✨ ТАЙНЫЙ АРТЕФАКТ БОГА", icon: "🌌", basePrice: 500.0 }
         ]
     };
 
-    // Настройка общего количества предметов в игре для счетчика (3+3+3+2+1 = 12 предметов)
     const TOTAL_UNIQUE_ITEMS = 12;
-
-    // Сбалансированные шансы выпадения предметов для каждого кейса (в сумме строго 1000 для точности до 0.1%)
     const caseChances = {
-        bronze: { common: 795, rare: 160, epic: 40, mythic: 5, secret: 0 },       // Секретный предмет недоступен здесь
-        silver: { common: 350, rare: 480, epic: 140, mythic: 28, secret: 2 },    // 0.2% шанс на секретку
-        gold:   { common: 80, rare: 300, epic: 450, mythic: 160, secret: 10 }    // 1% шанс на секретку в золоте
+        bronze: { common: 795, rare: 160, epic: 40, mythic: 5, secret: 0 },
+        silver: { common: 350, rare: 480, epic: 140, mythic: 28, secret: 2 },
+        gold:   { common: 80, rare: 300, epic: 450, mythic: 160, secret: 10 }
     };
 
     const rarityNames = { common: "Обычный", rare: "Редкий", epic: "Эпический", mythic: "Мифический", secret: "СЕКРЕТНЫЙ" };
     const rarityColors = { common: "#94a3b8", rare: "#3b82f6", epic: "#a855f7", mythic: "#ef4444", secret: "#ff007f" };
-    // =========================================================================
-    // ⚙️ СИСТЕМНАЯ ЛОГИКА ИГРЫ (ЗАДЕРЖКА КЛИКОВ, МАТЕМАТИКА КЕЙСОВ И СЧЕТЧИК)
-    // =========================================================================
+
     let userBalance = parseFloat(localStorage.getItem('game_balance')) || 0.0;
     let userInventory = JSON.parse(localStorage.getItem('game_inventory')) || {};
-    let canClick = true; // Триггер кулдауна кликов
+    let globalOpenCount = parseInt(localStorage.getItem('game_global_opens')) || 0;
+    let canClick = true;
 
     const tg = window.Telegram?.WebApp;
     if (tg) { tg.ready(); tg.expand(); }
@@ -274,36 +276,43 @@
         localStorage.setItem('game_balance', userBalance);
     }
 
-    // ЛОГИКА ТАПА С ЗАДЕРЖКОЙ (КУЛДАУН 120 МС ДЛЯ ЗАЩИТЫ ОТ АВТОКЛИКЕРОВ)
+    // УЛЬТРА-БЫСТРЫЙ КЛИК С КУЛДАУНОМ ВСЕГО 50 МС ДЛЯ СКОРОСТНОГО ТАПА
     document.getElementById('planetBtn').addEventListener('click', (e) => {
-        if (!canClick) return; // Если задержка активна — клик не засчитывается
+        if (!canClick) return;
 
         canClick = false;
-        const planet = document.getElementById('planetBtn');
-        planet.classList.add('disabled'); // Визуально тушим планету
-
         userBalance += 0.005;
         updateBalanceDisplay();
 
         if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
 
-        // Создаем всплывающий текст +0.005 строго под пальцем
         const floatText = document.createElement('div');
         floatText.className = 'click-floating-text';
         floatText.innerText = '+0.005';
         floatText.style.left = `${e.clientX - 25}px`;
         floatText.style.top = `${e.clientY - 15}px`;
         document.body.appendChild(floatText);
-        setTimeout(() => floatText.remove(), 600);
+        setTimeout(() => floatText.remove(), 500);
 
-        // Снимаем блокировку клика ровно через 120 миллисекунд
-        setTimeout(() => {
-            canClick = true;
-            planet.classList.remove('disabled');
-        }, 1200);
+        setTimeout(() => { canClick = true; }, 50);
     });
 
-    // АЛГОРИТМ ОТКРЫТИЯ КЕЙСОВ (МАТЕМАТИКА НА 1000 БАЛЛОВ)
+    // УМНАЯ ДИНАМИЧЕСКАЯ ФОРМУЛА РАСЧЕТА РЫНОЧНОЙ ЦЕНЫ И ТИРАЖА
+    function calculateMarketStats(itemId, rarity, basePrice, countInInventory) {
+        let rarityModifiers = { common: 8.5, rare: 2.1, epic: 0.6, mythic: 0.08, secret: 0.003 };
+        let simulatedWorldTotal = Math.floor((globalOpenCount + 150) * rarityModifiers[rarity]) + 1;
+        
+        let scarcityMultiplier = 1.0;
+        if (countInInventory > 1) {
+            scarcityMultiplier = Math.max(0.4, 1 / Math.log2(countInInventory + 1));
+        } else {
+            scarcityMultiplier = 1.25;
+        }
+
+        let finalMarketPrice = basePrice * scarcityMultiplier;
+        return { worldTotal: simulatedWorldTotal, price: finalMarketPrice };
+    }
+    // --- АЛГОРИТМ ОТКРЫТИЯ КАПСУЛЫ ---
     window.openCase = function(caseType, cost) {
         if (userBalance < cost) {
             if (tg && tg.showAlert) tg.showAlert("Недостаточно монет! Продолжай тапать по планете 🪐");
@@ -311,35 +320,28 @@
             return;
         }
 
-        // Временно блокируем кнопки открытия кейсов на время анимации дропа
         document.querySelectorAll('.case-open-btn').forEach(btn => btn.classList.add('disabled'));
 
         userBalance -= cost;
+        globalOpenCount += 1;
+        localStorage.setItem('game_global_opens', globalOpenCount);
         updateBalanceDisplay();
 
         if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
 
         const chances = caseChances[caseType];
-        const randomNum = Math.floor(Math.random() * 1000) + 1; // Случайное число от 1 до 1000
+        const randomNum = Math.floor(Math.random() * 1000) + 1;
         let selectedRarity = "common";
 
-        // Пошагово проверяем веса редкостей
-        if (randomNum <= chances.common) {
-            selectedRarity = "common";
-        } else if (randomNum <= chances.common + chances.rare) {
-            selectedRarity = "rare";
-        } else if (randomNum <= chances.common + chances.rare + chances.epic) {
-            selectedRarity = "epic";
-        } else if (randomNum <= chances.common + chances.rare + chances.epic + chances.mythic) {
-            selectedRarity = "mythic";
-        } else {
-            selectedRarity = "secret"; // Выпал ультра-редкий Секретный предмет!
-        }
+        if (randomNum <= chances.common) selectedRarity = "common";
+        else if (randomNum <= chances.common + chances.rare) selectedRarity = "rare";
+        else if (randomNum <= chances.common + chances.rare + chances.epic) selectedRarity = "epic";
+        else if (randomNum <= chances.common + chances.rare + chances.epic + chances.mythic) selectedRarity = "mythic";
+        else selectedRarity = "secret";
 
         const itemsList = nftItems[selectedRarity];
         const randomItem = itemsList[Math.floor(Math.random() * itemsList.length)];
 
-        // Сохранение в инвентарь
         if (userInventory[randomItem.id]) {
             userInventory[randomItem.id].count += 1;
         } else {
@@ -347,38 +349,73 @@
                 name: randomItem.name,
                 icon: randomItem.icon,
                 rarity: selectedRarity,
+                basePrice: randomItem.basePrice,
                 count: 1
             };
         }
         localStorage.setItem('game_inventory', JSON.stringify(userInventory));
 
-        // Настройка модалки выигрыша
-        const rewardModal = document.getElementById('rewardModal');
-        const rewardBorder = document.getElementById('rewardBorder');
+        let stats = calculateMarketStats(randomItem.id, selectedRarity, randomItem.basePrice, userInventory[randomItem.id].count);
+
+        document.getElementById('rewardModalTitle').innerText = "🎉 РЕЛИКВИЯ НАЙДЕНА!";
         document.getElementById('rewardIcon').innerText = randomItem.icon;
         document.getElementById('rewardName').innerText = randomItem.name;
         
         const rarityText = document.getElementById('rewardRarity');
         rarityText.innerText = rarityNames[selectedRarity];
-        
-        // Кастомные неоновые стили контура под каждую редкость
+        rarityText.style.color = rarityColors[selectedRarity];
+
+        document.getElementById('marketTotal').innerText = `${stats.worldTotal} шт.`;
+        document.getElementById('marketOwned').innerText = `${userInventory[randomItem.id].count} шт.`;
+        document.getElementById('marketPrice').innerText = `${stats.price.toFixed(3)} 🪙`;
+
+        const rewardBorder = document.getElementById('rewardBorder');
         if (selectedRarity === 'secret') {
-            rarityText.style.color = "#ff007f";
             rewardBorder.style.borderColor = "#ff007f";
             rewardBorder.style.boxShadow = "0 0 35px rgba(255, 0, 127, 0.6)";
         } else {
-            rarityText.style.color = rarityColors[selectedRarity];
             rewardBorder.style.borderColor = rarityColors[selectedRarity];
             rewardBorder.style.boxShadow = `0 0 25px ${rarityColors[selectedRarity]}40`;
         }
 
-        rewardModal.classList.add('active');
+        document.getElementById('rewardModal').classList.add('active');
         renderInventory();
 
-        // Разблокируем кнопки ящиков обратно
         document.querySelectorAll('.case-open-btn').forEach(btn => btn.classList.remove('disabled'));
     }
 
+    // --- ПРОСМОТР СТАТИСТИКИ NFT ПРИ ТАПЕ НА ИНВЕНТАРЬ ---
+    window.viewItemInfo = function(id) {
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        const item = userInventory[id];
+        if (!item) return;
+
+        let stats = calculateMarketStats(id, item.rarity, item.basePrice, item.count);
+
+        document.getElementById('rewardModalTitle').innerText = "📊 ИНФО-КАРТОЧКА NFT";
+        document.getElementById('rewardIcon').innerText = item.icon;
+        document.getElementById('rewardName').innerText = item.name;
+        
+        const rarityText = document.getElementById('rewardRarity');
+        rarityText.innerText = rarityNames[item.rarity];
+        rarityText.style.color = rarityColors[item.rarity];
+
+        document.getElementById('marketTotal').innerText = `${stats.worldTotal} шт.`;
+        document.getElementById('marketOwned').innerText = `${item.count} шт.`;
+        document.getElementById('marketPrice').innerText = `${stats.price.toFixed(3)} 🪙`;
+
+        const rewardBorder = document.getElementById('rewardBorder');
+        if (item.rarity === 'secret') {
+            rewardBorder.style.borderColor = "#ff007f";
+            rewardBorder.style.boxShadow = "0 0 35px rgba(255, 0, 127, 0.6)";
+        } else {
+            rewardBorder.style.borderColor = rarityColors[item.rarity];
+            rewardBorder.style.boxShadow = `0 0 25px ${rarityColors[item.rarity]}40`;
+        }
+
+        document.getElementById('rewardModal').classList.add('active');
+    }
+    // --- ВЫВОД ШАНСОВ ДРОПА В ПРОЦЕНТАХ ---
     window.showChances = function(caseType) {
         if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         const chances = caseChances[caseType];
@@ -388,7 +425,6 @@
         
         let html = "";
         Object.keys(chances).forEach(rarity => {
-            // Переводим 1000-балльную шкалу в проценты (например, 5 баллов = 0.5%)
             let percentDisplay = (chances[rarity] / 10).toFixed(1);
             if (chances[rarity] > 0) {
                 html += `
@@ -407,19 +443,17 @@
         document.getElementById(modalId).classList.remove('active');
     }
 
-    // ОТРИСОВКА ИНВЕНТАРЯ И РАСЧЕТ УНИКАЛЬНЫХ ПРЕДМЕТОВ
+    // --- ОТРИСОВКА ИНВЕНТАРЯ И СЧЕТЧИКА ПРЕДМЕТОВ НА ЭКРАНЕ ---
     function renderInventory() {
         const grid = document.getElementById('inventoryGrid');
         grid.innerHTML = "";
 
         const keys = Object.keys(userInventory);
-        
-        // Считаем количество именно УНИКАЛЬНЫХ типов предметов в коллекции
         const uniqueCollected = keys.length;
         document.getElementById('itemCounterDisplay').innerText = `Собрано: ${uniqueCollected} / ${TOTAL_UNIQUE_ITEMS}`;
 
         if (uniqueCollected === 0) {
-            grid.innerHTML = `<div style="grid-column: span 3; opacity: 0.4; font-size: 13px; padding: 25px;">Твой инвентарь пуст. Накопи монет и открой свою первую Капсулу! 📦</div>`;
+            grid.innerHTML = `<div style="grid-column: span 3; opacity: 0.4; font-size: 13px; padding: 25px;">Твой инвентарь пуст. Накопи монет и открой капсулу! 📦</div>`;
             return;
         }
 
@@ -427,8 +461,8 @@
             const item = userInventory[id];
             const card = document.createElement('div');
             card.className = 'inventory-item';
+            card.setAttribute('onclick', `viewItemInfo('${id}')`);
             
-            // Если предмет Секретный — делаем ему уникальную переливающуюся неоновую полоску
             let lineBackground = item.rarity === 'secret' ? 'linear-gradient(90deg, #ff007f, #7928ca, #ff007f)' : rarityColors[item.rarity];
             
             card.innerHTML = `
@@ -441,6 +475,7 @@
         });
     }
 
+    // Первичный запуск игры при загрузке страницы
     updateBalanceDisplay();
     renderInventory();
 </script>
