@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TheBSgorm Clicker NFT</title>
+    <title>TheBSgorm Clicker NFT & Craft</title>
     <!-- Официальный скрипт Telegram Web App -->
     <script src="https://telegram.org"></script>
     <style>
         :root {
             --bg-color: #02040a;
             --text-color: #f1f5f9;
-            --card-bg: rgba(7, 15, 36, 0.75); /* Глубокое космическое стекло */
+            --card-bg: rgba(7, 15, 36, 0.75); 
             --neon-cyan: #00f2fe;
             --neon-blue: #0072ff;
             --neon-space: rgba(0, 242, 254, 0.25);
@@ -50,18 +50,15 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 10px;
         }
 
-        /* --- КНОПКА ТАПА (КЛИКЕР-ПЛАНЕТА) --- */
+        /* --- КНОПКА ТАПА (КЛИКЕР-ПЛАНЕТА) С КД 500 МС --- */
         .planet-clicker {
             width: 145px; height: 145px; border-radius: 50%;
             background: radial-gradient(circle, #00f2fe 0%, #0052d4 60%, #02040a 100%);
             border: 4px solid rgba(255, 255, 255, 0.15); margin: 5px auto 25px;
             cursor: pointer; display: flex; align-items: center; justify-content: center;
             font-size: 58px; box-shadow: 0 0 35px rgba(0, 242, 254, 0.6), inset 0 0 20px rgba(255,255,255,0.3);
-            transition: transform 0.04s ease; user-select: none; -webkit-user-select: none;
+            transition: all 0.15s ease; user-select: none; -webkit-user-select: none;
         }
-        .planet-clicker:active { transform: scale(0.95); }
-        
-        .planet-clicker.disabled { opacity: 0.7; pointer-events: none; }
 
         .click-floating-text {
             position: absolute; color: #00f2fe; font-weight: 900; font-size: 18px;
@@ -73,7 +70,11 @@
             100% { transform: translateY(-60px) scale(0.8); opacity: 0; }
         }
 
-        /* --- УЛУЧШЕННЫЙ ДИЗАЙН КЕЙСОВ-КАПСУЛ --- */
+        /* ИГРОВЫЕ ВКЛАДКИ (ИНВЕНТАРЬ / КОНТРАКТЫ) */
+        .game-tabs { display: flex; gap: 8px; width: 100%; max-width: 400px; background: rgba(0, 0, 0, 0.3); padding: 5px; border-radius: 16px; margin-bottom: 15px; }
+        .g-tab-btn { flex: 1; background: none; border: none; color: #94a3b8; padding: 12px; font-size: 14px; font-weight: 800; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+        .g-tab-btn.active { background: var(--card-bg); color: var(--neon-cyan); border: 1px solid var(--glass-border); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+
         .section-title { font-size: 16px; font-weight: 850; align-self: flex-start; margin: 15px 0 10px 5px; color: #7dd3fc; letter-spacing: 1px; text-transform: uppercase; display: flex; justify-content: space-between; width: 100%; max-width: 400px; }
         .item-counter { font-size: 13px; color: #94a3b8; font-weight: 600; text-transform: none; letter-spacing: 0; }
         
@@ -83,19 +84,16 @@
             padding: 18px; border-radius: 26px; display: flex; align-items: center; justify-content: space-between;
             backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
             box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; overflow: hidden;
-            transition: border-color 0.3s, box-shadow 0.3s;
         }
         .case-card.bronze-glow { border-color: rgba(180, 83, 9, 0.3); box-shadow: inset 0 0 15px rgba(180, 83, 9, 0.15); }
         .case-card.silver-glow { border-color: rgba(148, 163, 184, 0.3); box-shadow: inset 0 0 15px rgba(148, 163, 184, 0.15); }
         .case-card.gold-glow { border-color: rgba(234, 179, 8, 0.35); box-shadow: inset 0 0 20px rgba(234, 179, 8, 0.2); }
 
         .case-info { display: flex; align-items: center; gap: 16px; }
-        .case-icon { font-size: 42px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); transition: transform 0.3s; }
-        .case-card:hover .case-icon { transform: scale(1.08) rotate(5deg); }
-        
+        .case-icon { font-size: 42px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
         .case-details { display: flex; flex-direction: column; gap: 3px; text-align: left; }
-        .case-name { font-weight: 900; font-size: 16px; letter-spacing: -0.2px; }
-        .case-cost { font-size: 13px; color: var(--neon-cyan); font-weight: 800; text-shadow: 0 0 8px rgba(0,242,254,0.3); }
+        .case-name { font-weight: 900; font-size: 16px; }
+        .case-cost { font-size: 13px; color: var(--neon-cyan); font-weight: 800; }
         
         .case-actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
         .game-btn {
@@ -105,10 +103,27 @@
         }
         .game-btn:active { transform: scale(0.95); }
         .game-btn.disabled { opacity: 0.5; pointer-events: none; background: #334155; box-shadow: none; }
-        .view-chances-link { font-size: 11px; color: #7dd3fc; text-decoration: none; font-weight: 700; cursor: pointer; opacity: 0.6; transition: opacity 0.2s; }
-        .view-chances-link:hover { opacity: 1; text-decoration: underline; }
+        .view-chances-link { font-size: 11px; color: #7dd3fc; text-decoration: none; font-weight: 700; cursor: pointer; opacity: 0.6; }
 
-        /* --- ИНВЕНТАРЬ И NFT СТАТИСТИКА --- */
+        /* --- СТИЛИ ДЛЯ ИНТЕРФЕЙСА КОНТРАКТОВ (РУЛЕТКИ) --- */
+        .contract-workspace {
+            display: none; width: 100%; max-width: 400px; background: var(--card-bg);
+            border: 1px solid var(--glass-border); padding: 20px; border-radius: 26px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4); flex-direction: column; gap: 15px; margin-bottom: 25px;
+        }
+        
+        /* Ползунок шанса (Прогресс-бар) */
+        .chance-progress-wrapper { width: 100%; text-align: center; margin-bottom: 5px; }
+        .chance-text { font-size: 20px; font-weight: 900; color: #10b981; text-shadow: 0 0 10px rgba(16, 185, 129, 0.4); margin-bottom: 8px; }
+        .chance-bar-outer { width: 100%; height: 12px; background: rgba(255,255,255,0.08); border-radius: 99px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .chance-bar-inner { width: 0%; height: 100%; background: linear-gradient(90deg, #00f2fe, #10b981); transition: width 0.3s ease; }
+
+        /* Элемент выбора предметов в контракт */
+        .selected-slots-row { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 16px; min-height: 50px; }
+        .slot-pill { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 20px; display: flex; align-items: center; gap: 4px; }
+        .slot-pill .remove-x { color: #ef4444; margin-left: 4px; cursor: pointer; font-weight: 900; }
+
+        /* --- ИНВЕНТАРЬ И NFT КАРТОЧКИ --- */
         .inventory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; max-width: 400px; margin-bottom: 30px; }
         .inventory-item {
             background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(255,255,255,0.05);
@@ -116,87 +131,110 @@
             align-items: center; justify-content: center; gap: 5px; position: relative;
             box-shadow: 0 6px 15px rgba(0,0,0,0.2); transition: transform 0.2s; cursor: pointer;
         }
-        .inventory-item:hover { transform: translateY(-3px); border-color: rgba(0, 242, 254, 0.3); }
+        .inventory-item.selected-for-craft { border-color: #10b981 !important; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4) !important; transform: scale(0.96); }
         .item-rarity-line { position: absolute; top: 0; left: 0; width: 100%; height: 5px; border-top-left-radius: 18px; border-top-right-radius: 18px; }
         .item-icon { font-size: 32px; margin-top: 4px; }
         .item-name { font-size: 11px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 92%; }
-        .item-count { position: absolute; bottom: 5px; right: 8px; background: rgba(0,0,0,0.5); font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 9px; border: 1px solid rgba(255,255,255,0.05); }
+        .item-count { position: absolute; bottom: 5px; right: 8px; background: rgba(0,0,0,0.5); font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 9px; }
 
-        /* Модальные окна */
-        .game-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 4, 10, 0.65); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; z-index: 2000; }
+        .game-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 4, 10, 0.65); backdrop-filter: blur(15px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; z-index: 2000; }
         .game-modal.active { opacity: 1; pointer-events: auto; }
         .g-modal-content { background: rgba(11, 19, 43, 0.96); border: 1px solid rgba(0, 242, 254, 0.25); padding: 26px; border-radius: 26px; width: 85%; max-width: 340px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
         .chance-row { display: flex; justify-content: space-between; font-size: 13px; margin: 9px 0; padding-bottom: 5px; border-bottom: 1px dashed rgba(255,255,255,0.06); }
-        
-        /* Стили для строк инфо-выигрыша */
         .market-info-box { background: rgba(0, 0, 0, 0.25); border-radius: 14px; padding: 10px 14px; margin: 15px 0; display: flex; flex-direction: column; gap: 6px; text-align: left; }
         .market-line { display: flex; justify-content: space-between; font-size: 12px; color: #94a3b8; font-weight: 600; }
         .market-val { color: #ffffff; font-weight: 800; }
     </style>
 </head>
 <body>
-    <a href="index.html" style="align-self: flex-start; color: #7dd3fc; text-decoration: none; font-size: 14px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 5px;">← В главное меню</a>
+<a href="index.html" style="align-self: flex-start; color: #7dd3fc; text-decoration: none; font-size: 14px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 5px;">← В главное меню</a>
 
-    <div class="balance-box">🪙 <span id="balanceDisplay">0.000</span></div>
-    <div class="planet-clicker" id="planetBtn">🪐</div>
+    <!-- ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМОВ (ВКЛАДКИ) -->
+    <div class="game-tabs">
+        <button class="g-tab-btn active" id="modeClickerBtn" onclick="switchMode('clicker')">🎒 Кликер и Кейсы</button>
+        <button class="g-tab-btn" id="modeContractBtn" onclick="switchMode('contract')">🔬 Контракт Рулетка</button>
+    </div>
 
-    <!-- КОСМИЧЕСКИЕ ЯЩИКИ -->
-    <div class="section-title">📦 Капсулы Снаряжения</div>
-    <div class="cases-grid">
-        <!-- Бронзовый ящик -->
-        <div class="case-card bronze-glow">
-            <div class="case-info">
-                <div class="case-icon">🟫</div>
-                <div class="case-details">
-                    <div class="case-name">Бронзовая Капсула</div>
-                    <div class="case-cost">Цена: 0.500 🪙</div>
+    <!-- ОКНО БАЛАНСА И КЛИКЕР -->
+    <div id="clickerZone">
+        <div class="balance-box">🪙 <span id="balanceDisplay">0.000</span></div>
+        <div class="planet-clicker" id="planetBtn">🪐</div>
+
+        <!-- КАПСУЛЫ СНАРЯЖЕНИЯ -->
+        <div class="section-title">📦 Капсулы Снаряжения</div>
+        <div class="cases-grid">
+            <!-- Бронзовый ящик -->
+            <div class="case-card bronze-glow">
+                <div class="case-info">
+                    <div class="case-icon">🟫</div>
+                    <div class="case-details">
+                        <div class="case-name">Бронзовая Капсула</div>
+                        <div class="case-cost">Цена: 0.500 🪙</div>
+                    </div>
+                </div>
+                <div class="case-actions">
+                    <button class="game-btn case-open-btn" onclick="openCase('bronze', 0.5)">Открыть</button>
+                    <div class="view-chances-link" onclick="showChances('bronze')">Шансы дропа</div>
                 </div>
             </div>
-            <div class="case-actions">
-                <button class="game-btn case-open-btn" onclick="openCase('bronze', 0.5)">Открыть</button>
-                <div class="view-chances-link" onclick="showChances('bronze')">Шансы дропа</div>
-            </div>
-        </div>
 
-        <!-- Серебряный ящик -->
-        <div class="case-card silver-glow">
-            <div class="case-info">
-                <div class="case-icon">⬜</div>
-                <div class="case-details">
-                    <div class="case-name">Серебряная Капсула</div>
-                    <div class="case-cost">Цена: 2.500 🪙</div>
+            <!-- Серебряный ящик -->
+            <div class="case-card silver-glow">
+                <div class="case-info">
+                    <div class="case-icon">⬜</div>
+                    <div class="case-details">
+                        <div class="case-name">Серебряная Капсула</div>
+                        <div class="case-cost">Цена: 2.500 🪙</div>
+                    </div>
+                </div>
+                <div class="case-actions">
+                    <button class="game-btn case-open-btn" onclick="openCase('silver', 2.5)">Открыть</button>
+                    <div class="view-chances-link" onclick="showChances('silver')">Шансы дропа</div>
                 </div>
             </div>
-            <div class="case-actions">
-                <button class="game-btn case-open-btn" onclick="openCase('silver', 2.5)">Открыть</button>
-                <div class="view-chances-link" onclick="showChances('silver')">Шансы дропа</div>
-            </div>
-        </div>
 
-        <!-- Золотой ящик -->
-        <div class="case-card gold-glow">
-            <div class="case-info">
-                <div class="case-icon">🟨</div>
-                <div class="case-details">
-                    <div class="case-name">Золотая Капсула</div>
-                    <div class="case-cost">Цена: 10.000 🪙</div>
+            <!-- Золотой ящик -->
+            <div class="case-card gold-glow">
+                <div class="case-info">
+                    <div class="case-icon">🟨</div>
+                    <div class="case-details">
+                        <div class="case-name">Золотая Капсула</div>
+                        <div class="case-cost">Цена: 10.000 🪙</div>
+                    </div>
                 </div>
-            </div>
-            <div class="case-actions">
-                <button class="game-btn case-open-btn" onclick="openCase('gold', 10.0)">Открыть</button>
-                <div class="view-chances-link" onclick="showChances('gold')">Шансы дропа</div>
+                <div class="case-actions">
+                    <button class="game-btn case-open-btn" onclick="openCase('gold', 10.0)">Открыть</button>
+                    <div class="view-chances-link" onclick="showChances('gold')">Шансы дропа</div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ИНВЕНТАРЬ С КОМПАКТНЫМ СЧЕТЧИКОМ -->
+    <!-- РАБОЧАЯ ПАНЕЛЬ КОНТРАКТОВ И РУЛЕТКИ -->
+    <div class="contract-workspace" id="contractZone">
+        <div class="chance-progress-wrapper">
+            <div class="chance-text"><span id="chanceValue">0</span>% шанс крафта</div>
+            <div class="chance-bar-outer">
+                <div class="chance-bar-inner" id="chanceBar"></div>
+            </div>
+            <div style="font-size: 11px; opacity: 0.6; margin-top: 6px;">Выберите от 3 до 10 NFT одной редкости для расчёта шанса.</div>
+        </div>
+        
+        <div class="selected-slots-row" id="selectedSlots">
+            <span style="opacity: 0.4; font-size: 12px; padding: 5px;">Слоты контракта пусты... Нажмите на скины ниже ⬇️</span>
+        </div>
+        
+        <button class="game-btn disabled" id="startContractBtn" style="background: linear-gradient(135deg, #10b981, #059669); padding: 14px;" onclick="runContract()">💥 Запустить Контракт Рулетку</button>
+    </div>
+
+    <!-- ИНВЕНТАРЬ И СЧЕТЧИК ПРЕДМЕТОВ -->
     <div class="section-title">
-        <span>🎒 Твой NFT Инвентарь</span>
+        <span id="inventoryTitle">🎒 Твой NFT Инвентарь</span>
         <span class="item-counter" id="itemCounterDisplay">Собрано: 0 / 12</span>
     </div>
     <div class="inventory-grid" id="inventoryGrid"></div>
 
-    <!-- МОДАЛКА 1: ПРОСМОТР ШАНСОВ -->
+    <!-- МОДАЛКА ШАНСОВ -->
     <div class="game-modal" id="chancesModal">
         <div class="g-modal-content">
             <h3 style="margin-top:0; color:#7dd3fc;" id="chancesTitle">Шансы дропа</h3>
@@ -205,7 +243,7 @@
         </div>
     </div>
 
-    <!-- МОДАЛКА 2: ИНФОРМАЦИЯ И ВЫИГРЫШ NFT (ДИНАМИЧЕСКИЙ РЫНОК) -->
+    <!-- МОДАЛКА ВЫИГРЫША И ПРОСМОТРА NFT -->
     <div class="game-modal" id="rewardModal">
         <div class="g-modal-content" id="rewardBorder" style="border-width: 2px;">
             <h2 id="rewardModalTitle" style="margin-top:0; color:#ffffff; font-size:18px; letter-spacing:1px;">🎉 РЕЛИКВИЯ НАЙДЕНА!</h2>
@@ -213,7 +251,6 @@
             <div id="rewardName" style="font-size:18px; font-weight:900; margin-bottom:4px;">Название Предмета</div>
             <div id="rewardRarity" style="font-size:11px; font-weight:800; text-transform:uppercase; margin-bottom:10px;">Редкость</div>
             
-            <!-- Web3 Биржа параметров предмета -->
             <div class="market-info-box">
                 <div class="market-line">Мировой тираж: <span class="market-val" id="marketTotal">0 шт.</span></div>
                 <div class="market-line">У вас в коллекции: <span class="market-val" id="marketOwned">0 шт.</span></div>
@@ -226,7 +263,7 @@
 
 <script>
     // =========================================================================
-    // ⚙️ СИСТЕМНАЯ ЛОГИКА ИГРЫ (БАЗА ПРЕДМЕТОВ И СКОРОСТНОЙ ТАП)
+    // ⚙️ СИСТЕМНАЯ ЛОГИКА ИГРЫ (МАТЕМАТИКА КЛИКЕРА, БИРЖИ И КОНТРАКТ-РУЛЕТКИ)
     // =========================================================================
     const nftItems = {
         common: [
@@ -262,11 +299,15 @@
 
     const rarityNames = { common: "Обычный", rare: "Редкий", epic: "Эпический", mythic: "Мифический", secret: "СЕКРЕТНЫЙ" };
     const rarityColors = { common: "#94a3b8", rare: "#3b82f6", epic: "#a855f7", mythic: "#ef4444", secret: "#ff007f" };
+    const nextRarityMap = { common: "rare", rare: "epic", epic: "mythic", mythic: "secret" };
 
     let userBalance = parseFloat(localStorage.getItem('game_balance')) || 0.0;
     let userInventory = JSON.parse(localStorage.getItem('game_inventory')) || {};
     let globalOpenCount = parseInt(localStorage.getItem('game_global_opens')) || 0;
+    
     let canClick = true;
+    let currentMode = "clicker"; 
+    let selectedCraftItems = [];  
 
     const tg = window.Telegram?.WebApp;
     if (tg) { tg.ready(); tg.expand(); }
@@ -276,15 +317,39 @@
         localStorage.setItem('game_balance', userBalance);
     }
 
-    // УЛЬТРА-БЫСТРЫЙ КЛИК С КУЛДАУНОМ ВСЕГО 50 МС ДЛЯ СКОРОСТНОГО ТАПА
+    // ПЕРЕКЛЮЧЕНИЕ РЕЖИМОВ (КЛИКЕР / КОНТРАКТЫ)
+    window.switchMode = function(mode) {
+        currentMode = mode;
+        selectedCraftItems = []; 
+        
+        document.getElementById('modeClickerBtn').classList.toggle('active', mode === 'clicker');
+        document.getElementById('modeContractBtn').classList.toggle('active', mode === 'contract');
+        
+        document.getElementById('clickerZone').style.display = mode === 'clicker' ? 'block' : 'none';
+        document.getElementById('contractZone').style.display = mode === 'contract' ? 'flex' : 'none';
+        
+        const title = document.getElementById('inventoryTitle');
+        title.innerText = mode === 'clicker' ? '🎒 Твой NFT Инвентарь' : '🧪 Выберите скины в Контракт';
+        
+        updateContractUI();
+        renderInventory();
+    }
+
+    // ТАПЕР С СОЛИДНЫМ КУЛДАУНОМ В 500 МС И ЭФФЕКТОМ ЗАТЕМНЕНИЯ
     document.getElementById('planetBtn').addEventListener('click', (e) => {
         if (!canClick) return;
 
         canClick = false;
+        const planet = document.getElementById('planetBtn');
+        
+        planet.style.pointerEvents = 'none';
+        planet.style.filter = 'grayscale(0.9) brightness(0.4)';
+        planet.style.transform = 'scale(0.92)';
+
         userBalance += 0.005;
         updateBalanceDisplay();
 
-        if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
 
         const floatText = document.createElement('div');
         floatText.className = 'click-floating-text';
@@ -294,10 +359,14 @@
         document.body.appendChild(floatText);
         setTimeout(() => floatText.remove(), 500);
 
-        setTimeout(() => { canClick = true; }, 50);
+        setTimeout(() => {
+            canClick = true;
+            planet.style.pointerEvents = 'auto';
+            planet.style.filter = 'none';
+            planet.style.transform = 'none';
+        }, 500);
     });
-
-    // УМНАЯ ДИНАМИЧЕСКАЯ ФОРМУЛА РАСЧЕТА РЫНОЧНОЙ ЦЕНЫ И ТИРАЖА
+    // РАСЧЁТ РЫНОЧНОЙ СТОИМОСТИ НА ОСНОВЕ ДЕФИЦИТА
     function calculateMarketStats(itemId, rarity, basePrice, countInInventory) {
         let rarityModifiers = { common: 8.5, rare: 2.1, epic: 0.6, mythic: 0.08, secret: 0.003 };
         let simulatedWorldTotal = Math.floor((globalOpenCount + 150) * rarityModifiers[rarity]) + 1;
@@ -308,26 +377,20 @@
         } else {
             scarcityMultiplier = 1.25;
         }
-
-        let finalMarketPrice = basePrice * scarcityMultiplier;
-        return { worldTotal: simulatedWorldTotal, price: finalMarketPrice };
+        return { worldTotal: simulatedWorldTotal, price: basePrice * scarcityMultiplier };
     }
-    // --- АЛГОРИТМ ОТКРЫТИЯ КАПСУЛЫ ---
+
+    // ОТКРЫТИЕ КЕЙСОВ
     window.openCase = function(caseType, cost) {
         if (userBalance < cost) {
             if (tg && tg.showAlert) tg.showAlert("Недостаточно монет! Продолжай тапать по планете 🪐");
             else alert("Недостаточно монет! Продолжай тапать по планете 🪐");
             return;
         }
-
-        document.querySelectorAll('.case-open-btn').forEach(btn => btn.classList.add('disabled'));
-
         userBalance -= cost;
         globalOpenCount += 1;
         localStorage.setItem('game_global_opens', globalOpenCount);
         updateBalanceDisplay();
-
-        if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
 
         const chances = caseChances[caseType];
         const randomNum = Math.floor(Math.random() * 1000) + 1;
@@ -342,108 +405,208 @@
         const itemsList = nftItems[selectedRarity];
         const randomItem = itemsList[Math.floor(Math.random() * itemsList.length)];
 
-        if (userInventory[randomItem.id]) {
-            userInventory[randomItem.id].count += 1;
+        addAndShowItem(randomItem, selectedRarity, "🎉 РЕЛИКВИЯ НАЙДЕНА!");
+    }
+
+    function addAndShowItem(item, rarity, titleText) {
+        if (userInventory[item.id]) {
+            userInventory[item.id].count += 1;
         } else {
-            userInventory[randomItem.id] = {
-                name: randomItem.name,
-                icon: randomItem.icon,
-                rarity: selectedRarity,
-                basePrice: randomItem.basePrice,
-                count: 1
-            };
+            userInventory[item.id] = { id: item.id, name: item.name, icon: item.icon, rarity: rarity, basePrice: item.basePrice, count: 1 };
         }
         localStorage.setItem('game_inventory', JSON.stringify(userInventory));
 
-        let stats = calculateMarketStats(randomItem.id, selectedRarity, randomItem.basePrice, userInventory[randomItem.id].count);
+        let stats = calculateMarketStats(item.id, rarity, item.basePrice, userInventory[item.id].count);
 
-        document.getElementById('rewardModalTitle').innerText = "🎉 РЕЛИКВИЯ НАЙДЕНА!";
-        document.getElementById('rewardIcon').innerText = randomItem.icon;
-        document.getElementById('rewardName').innerText = randomItem.name;
-        
-        const rarityText = document.getElementById('rewardRarity');
-        rarityText.innerText = rarityNames[selectedRarity];
-        rarityText.style.color = rarityColors[selectedRarity];
-
-        document.getElementById('marketTotal').innerText = `${stats.worldTotal} шт.`;
-        document.getElementById('marketOwned').innerText = `${userInventory[randomItem.id].count} шт.`;
-        document.getElementById('marketPrice').innerText = `${stats.price.toFixed(3)} 🪙`;
-
-        const rewardBorder = document.getElementById('rewardBorder');
-        if (selectedRarity === 'secret') {
-            rewardBorder.style.borderColor = "#ff007f";
-            rewardBorder.style.boxShadow = "0 0 35px rgba(255, 0, 127, 0.6)";
-        } else {
-            rewardBorder.style.borderColor = rarityColors[selectedRarity];
-            rewardBorder.style.boxShadow = `0 0 25px ${rarityColors[selectedRarity]}40`;
-        }
-
-        document.getElementById('rewardModal').classList.add('active');
-        renderInventory();
-
-        document.querySelectorAll('.case-open-btn').forEach(btn => btn.classList.remove('disabled'));
-    }
-
-    // --- ПРОСМОТР СТАТИСТИКИ NFT ПРИ ТАПЕ НА ИНВЕНТАРЬ ---
-    window.viewItemInfo = function(id) {
-        if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-        const item = userInventory[id];
-        if (!item) return;
-
-        let stats = calculateMarketStats(id, item.rarity, item.basePrice, item.count);
-
-        document.getElementById('rewardModalTitle').innerText = "📊 ИНФО-КАРТОЧКА NFT";
+        document.getElementById('rewardModalTitle').innerText = titleText;
         document.getElementById('rewardIcon').innerText = item.icon;
         document.getElementById('rewardName').innerText = item.name;
         
         const rarityText = document.getElementById('rewardRarity');
-        rarityText.innerText = rarityNames[item.rarity];
-        rarityText.style.color = rarityColors[item.rarity];
+        rarityText.innerText = rarityNames[rarity];
+        rarityText.style.color = rarityColors[rarity];
 
         document.getElementById('marketTotal').innerText = `${stats.worldTotal} шт.`;
-        document.getElementById('marketOwned').innerText = `${item.count} шт.`;
+        document.getElementById('marketOwned').innerText = `${userInventory[item.id].count} шт.`;
         document.getElementById('marketPrice').innerText = `${stats.price.toFixed(3)} 🪙`;
 
         const rewardBorder = document.getElementById('rewardBorder');
-        if (item.rarity === 'secret') {
+        if (rarity === 'secret') {
             rewardBorder.style.borderColor = "#ff007f";
             rewardBorder.style.boxShadow = "0 0 35px rgba(255, 0, 127, 0.6)";
         } else {
-            rewardBorder.style.borderColor = rarityColors[item.rarity];
-            rewardBorder.style.boxShadow = `0 0 25px ${rarityColors[item.rarity]}40`;
+            rewardBorder.style.borderColor = rarityColors[rarity];
+            rewardBorder.style.boxShadow = `0 0 25px ${rarityColors[rarity]}40`;
         }
 
         document.getElementById('rewardModal').classList.add('active');
-    }
-    // --- ВЫВОД ШАНСОВ ДРОПА В ПРОЦЕНТАХ ---
-    window.showChances = function(caseType) {
+        renderInventory();
+    }// УПРАВЛЕНИЕ ЛОГИКОЙ ВЫБОРА ДЛЯ КОНТРАКТОВ
+    window.toggleItemToCraft = function(id) {
+        if (currentMode === 'clicker') {
+            // Если мы в режиме кликера — просто смотрим инфо о предмете
+            const item = userInventory[id];
+            if (item) {
+                let stats = calculateMarketStats(id, item.rarity, item.basePrice, item.count);
+                document.getElementById('rewardModalTitle').innerText = "📊 ИНФО-КАРТОЧКА NFT";
+                document.getElementById('rewardIcon').innerText = item.icon;
+                document.getElementById('rewardName').innerText = item.name;
+                const rText = document.getElementById('rewardRarity');
+                rText.innerText = rarityNames[item.rarity]; rText.style.color = rarityColors[item.rarity];
+                document.getElementById('marketTotal').innerText = `${stats.worldTotal} шт.`;
+                document.getElementById('marketOwned').innerText = `${item.count} шт.`;
+                document.getElementById('marketPrice').innerText = `${stats.price.toFixed(3)} 🪙`;
+                document.getElementById('rewardModal').classList.add('active');
+            }
+            return;
+        }
+
+        // Логика добавления в Контракт
+        const item = userInventory[id];
+        if (!item) return;
+
+        // Ищем, сколько штук ЭТОГО конкретного предмета уже добавлено в контракт
+        let alreadyAddedCount = selectedCraftItems.filter(itemId => itemId === id).length;
+        if (alreadyAddedCount >= item.count) {
+            if (tg && tg.showAlert) tg.showAlert("У вас больше нет свободных копий этого предмета!");
+            return;
+        }
+
+        // Проверяем ограничение на 10 предметов
+        if (selectedCraftItems.length >= 10) {
+            if (tg && tg.showAlert) tg.showAlert("В контракт нельзя положить больше 10 предметов!");
+            return;
+        }
+
+        // Защита: Все предметы в контракте должны быть ОДНОЙ редкости
+        if (selectedCraftItems.length > 0) {
+            const firstItemId = selectedCraftItems[0];
+            const firstItemRarity = userInventory[firstItemId].rarity;
+            if (item.rarity !== firstItemRarity) {
+                if (tg && tg.showAlert) tg.showAlert("Все предметы в контракте должны быть одной редкости!");
+                return;
+            }
+            if (item.rarity === 'secret') {
+                if (tg && tg.showAlert) tg.showAlert("Секретные предметы нельзя использовать в контракте!");
+                return;
+            }
+        }
+
+        selectedCraftItems.push(id);
         if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        
+        updateContractUI();
+        renderInventory();
+    }
+
+    window.removeSlotByIndex = function(index) {
+        selectedCraftItems.splice(index, 1);
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        updateContractUI();
+        renderInventory();
+    }
+
+    // ОБНОВЛЕНИЕ ИНТЕРФЕЙСА РАСЧЁТА ШАНСОВ
+    function updateContractUI() {
+        const slotsRow = document.getElementById('selectedSlots');
+        const startBtn = document.getElementById('startContractBtn');
+        const chanceValue = document.getElementById('chanceValue');
+        const chanceBar = document.getElementById('chanceBar');
+
+        if (selectedCraftItems.length === 0) {
+            slotsRow.innerHTML = `<span style="opacity: 0.4; font-size: 12px; padding: 5px;">Слоты контракта пусты... Нажмите на скины ниже ⬇️</span>`;
+            chanceValue.innerText = "0";
+            chanceBar.style.width = "0%";
+            startBtn.classList.add('disabled');
+            return;
+        }
+
+        // Рендерим плашки выбранных предметов в зоне контракта
+        slotsRow.innerHTML = "";
+        selectedCraftItems.forEach((id, index) => {
+            const item = userInventory[id];
+            const pill = document.createElement('div');
+            pill.className = 'slot-pill';
+            pill.style.borderColor = rarityColors[item.rarity];
+            pill.innerHTML = `${item.icon} ${item.name} <span class="remove-x" onclick="removeSlotByIndex(${index})">×</span>`;
+            slotsRow.appendChild(pill);
+        });
+
+        // Формула рулетки: Каждый скин дает +10% шанса на успех. 10 скинов = 100% шанс!
+        let calculatedChance = selectedCraftItems.length * 10;
+        chanceValue.innerText = calculatedChance;
+        chanceBar.style.width = `${calculatedChance}%`;
+
+        // Кнопка становится активной, если добавлено от 3 предметов
+        if (selectedCraftItems.length >= 3) {
+            startBtn.classList.remove('disabled');
+        } else {
+            startBtn.classList.add('disabled');
+        }
+        }
+        // ЗАПУСК КОНТРАКТ-РУЛЕТКИ
+    window.runContract = function() {
+        if (selectedCraftItems.length < 3) return;
+
+        const firstItemId = selectedCraftItems[0];
+        const craftRarity = userInventory[firstItemId].rarity;
+        const targetRarity = nextRarityMap[craftRarity];
+
+        // Высчитываем итоговый шанс успеха (каждый скин = 10%)
+        let winChance = selectedCraftItems.length * 10; 
+        let randomRoll = Math.floor(Math.random() * 100) + 1; // Число от 1 до 100
+
+        // 1. «Сжигаем» все добавленные предметы из инвентаря
+        selectedCraftItems.forEach(id => {
+            if (userInventory[id]) {
+                userInventory[id].count -= 1;
+                if (userInventory[id].count <= 0) {
+                    delete userInventory[id];
+                }
+            }
+        });
+
+        selectedCraftItems = []; // Полностью очищаем контракт
+
+        // 2. Крутим колесо фортуны (Рулетка)
+        if (randomRoll <= winChance) {
+            // ПОБЕДА! Выдаем случайный предмет СЛЕДУЮЩЕГО уровня редкости
+            const pool = nftItems[targetRarity];
+            const craftedItem = pool[Math.floor(Math.random() * pool.length)];
+            
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            addAndShowItem(craftedItem, targetRarity, "🔬 КОНТРАКТ УСПЕШЕН (UPGRADE!)");
+        } else {
+            // КРАХ! Скины сгорели, рулетка выдала дешевый Космический Мусор
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+            const garbageItem = nftItems.common[0]; // Наш Космический Мусор
+            
+            addAndShowItem(garbageItem, "common", "❌ КОНТРАКТ ПРОВАЛЕН (СЛИВ!)");
+            if (tg && tg.showAlert) tg.showAlert("Рулетка остановилась на неудачном секторе! Скины сгорели, вы получили утешительный мусор 🪨");
+        }
+
+        updateContractUI();
+        renderInventory();
+    }
+
+    window.showChances = function(caseType) {
         const chances = caseChances[caseType];
         const titleMap = { bronze: "Бронзовая Капсула", silver: "Серебряная Капсула", gold: "Золотая Капсула" };
-        
         document.getElementById('chancesTitle').innerText = `Шансы: ${titleMap[caseType]}`;
-        
         let html = "";
         Object.keys(chances).forEach(rarity => {
             let percentDisplay = (chances[rarity] / 10).toFixed(1);
             if (chances[rarity] > 0) {
-                html += `
-                    <div class="chance-row">
-                        <span style="font-weight:800; color:${rarityColors[rarity]}">${rarityNames[rarity]}</span>
-                        <span style="font-weight:900;">${percentDisplay}%</span>
-                    </div>
-                `;
+                html += `<div class="chance-row"><span style="font-weight:800; color:${rarityColors[rarity]}">${rarityNames[rarity]}</span><span style="font-weight:900;">${percentDisplay}%</span></div>`;
             }
         });
         document.getElementById('chancesBody').innerHTML = html;
         document.getElementById('chancesModal').classList.add('active');
     }
 
-    window.closeModal = function(modalId) {
-        document.getElementById(modalId).classList.remove('active');
-    }
+    window.closeModal = function(modalId) { document.getElementById(modalId).classList.remove('active'); }
 
-    // --- ОТРИСОВКА ИНВЕНТАРЯ И СЧЕТЧИКА ПРЕДМЕТОВ НА ЭКРАНЕ ---
+    // ОТРИСОВКА КАРТОЧЕК ИНВЕНТАРЯ И ОБНОВЛЕНИЕ СЧЕТЧИКА
     function renderInventory() {
         const grid = document.getElementById('inventoryGrid');
         grid.innerHTML = "";
@@ -461,8 +624,14 @@
             const item = userInventory[id];
             const card = document.createElement('div');
             card.className = 'inventory-item';
-            card.setAttribute('onclick', `viewItemInfo('${id}')`);
             
+            // Подсвечиваем зеленым, если предмет лежит в контракте
+            let currentInCraftCount = selectedCraftItems.filter(itemId => itemId === id).length;
+            if (currentInCraftCount > 0) {
+                card.classList.add('selected-for-craft');
+            }
+
+            card.setAttribute('onclick', `toggleItemToCraft('${id}')`);
             let lineBackground = item.rarity === 'secret' ? 'linear-gradient(90deg, #ff007f, #7928ca, #ff007f)' : rarityColors[item.rarity];
             
             card.innerHTML = `
@@ -475,7 +644,7 @@
         });
     }
 
-    // Первичный запуск игры при загрузке страницы
+    // Первичный старт
     updateBalanceDisplay();
     renderInventory();
 </script>
