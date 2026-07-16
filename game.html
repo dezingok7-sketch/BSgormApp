@@ -346,6 +346,44 @@ window.switchMode = function(mode) {
         return { worldTotal: simulatedWorldTotal, price: basePrice * scarcityMultiplier };
     }
 
+        // ТАПЕР С КУЛДАУНОМ В 500 МС И ЭФФЕКТОМ ЗАТЕМНЕНИЯ ПЛАНЕТЫ
+    document.getElementById('planetBtn').addEventListener('click', (e) => {
+        if (!canClick) return; // Если кулдаун активен — клик игнорируется
+
+        canClick = false;
+        const planet = document.getElementById('planetBtn');
+        
+        // Визуальная блокировка на полсекунды (эффект заморозки)
+        planet.style.pointerEvents = 'none';
+        planet.style.filter = 'grayscale(0.9) brightness(0.4)';
+        planet.style.transform = 'scale(0.92)';
+
+        // Начисляем монеты на баланс
+        userBalance += 0.005;
+        updateBalanceDisplay();
+
+        // Телефонная вибрация (если запущено внутри Telegram)
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+
+        // Создаем вылетающий текст +0.005 строго в точке нажатия
+        const floatText = document.createElement('div');
+        floatText.className = 'click-floating-text';
+        floatText.innerText = '+0.005';
+        floatText.style.left = `${e.clientX - 25}px`;
+        floatText.style.top = `${e.clientY - 15}px`;
+        document.body.appendChild(floatText);
+        setTimeout(() => floatText.remove(), 500);
+
+        // Возвращаем планету в рабочее состояние ровно через 500 мс
+        setTimeout(() => {
+            canClick = true;
+            planet.style.pointerEvents = 'auto';
+            planet.style.filter = 'none';
+            planet.style.transform = 'none';
+        }, 500);
+    });
+
+
     // ОТКРЫТИЕ КЕЙСОВ
     window.openCase = function(caseType, cost) {
         if (userBalance < cost) {
