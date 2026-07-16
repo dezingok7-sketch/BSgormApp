@@ -246,34 +246,8 @@
     <div class="game-modal" id="rewardModal"><div class="g-modal-content" id="rewardBorder" style="border-width: 2px;"><h2 id="rewardModalTitle" style="margin-top:0; color:#ffffff; font-size:18px; letter-spacing:1px;">🎉 РЕЛИКВИЯ НАЙДЕНА!</h2><div id="rewardIcon" style="font-size:68px; margin: 10px 0;">🎁</div><div id="rewardName" style="font-size:18px; font-weight:900; margin-bottom:4px;">Название Предмета</div><div id="rewardRarity" style="font-size:11px; font-weight:800; text-transform:uppercase; margin-bottom:10px;">Редкость</div><div class="market-info-box"><div class="market-line">Мировой тираж: <span class="market-val" id="marketTotal">0 шт.</span></div><div class="market-line">У вас в коллекции: <span class="market-val" id="marketOwned">0 шт.</span></div><div class="market-line">Рыночная цена: <span class="market-val" id="marketPrice" style="color:#00f2fe">0.000 🪙</span></div></div><button class="game-btn" style="width:100%;" onclick="closeModal('rewardModal')">Закрыть окно</button></div></div>
 
 <script>
-    // =========================================================================
-    // ⚙️ СИСТЕМНАЯ ЛОГИКА ИГРЫ (МАТЕМАТИКА КЛИКЕРА, БИРЖИ И КОНТРАКТ-РУЛЕТКИ)
-    // =========================================================================
-    const nftItems = {
-        common: [
-            { id: "c1", name: "Космический Мусор", icon: "🪨", basePrice: 0.1 },
-            { id: "c2", name: "Старый Спутник", icon: "🛰️", basePrice: 0.2 },
-            { id: "c3", name: "Обломок Ракеты", icon: "🚀", basePrice: 0.3 }
-        ],
-        rare: [
-            { id: "r1", name: "Лазерный Меч", icon: "⚔️", basePrice: 1.5 },
-            { id: "r2", name: "Плазменная Сфера", icon: "🔮", basePrice: 2.2 },
-            { id: "r3", name: "Марсоход TheBS", icon: "🚜", basePrice: 3.0 }
-        ],
-        epic: [
-            { id: "e1", name: "Кибер-Шлем", icon: "🦱", basePrice: 8.0 },
-            { id: "e2", name: "Скин AQUAPHOBIA", icon: "🎭", basePrice: 12.5 },
-            { id: "e3", name: "Космический Трон", icon: "💺", basePrice: 15.0 }
-        ],
-        mythic: [
-            { id: "m1", name: "👑 Корона GORM", icon: "👑", basePrice: 50.0 },
-            { id: "m2", name: "🔥 NFT РАКЕТА 3D", icon: "🚀", basePrice: 75.0 }
-        ],
-        secret: [
-            { id: "s1", name: "✨ ТАЙНЫЙ АРТЕФАКТ БОГА", icon: "🌌", basePrice: 500.0 }
-        ]
-    };
-    // =========================================================================
+
+        // =========================================================================
     // ⚙️ СИСТЕМНАЯ ЛОГИКА ИГРЫ (МАТЕМАТИКА КЛИКЕРА, БИРЖИ И КОНТРАКТ-РУЛЕТКИ)
     // =========================================================================
     const nftItems = {
@@ -328,27 +302,6 @@
         document.getElementById('balanceDisplayTitles').innerText = userBalance.toFixed(3);
         localStorage.setItem('game_balance', userBalance);
     }
-    // УПРАВЛЕНИЕ ТРЕХКНОПОЧНЫМИ ВКЛАДКАМИ
-    window.switchMode = function(mode) {
-        currentMode = mode;
-        selectedCraftItems = []; 
-        
-        document.getElementById('modeClickerBtn').classList.toggle('active', mode === 'clicker');
-        document.getElementById('modeContractBtn').classList.toggle('active', mode === 'contract');
-        document.getElementById('modeTitlesBtn').classList.toggle('active', mode === 'titles');
-        
-        document.getElementById('clickerZone').style.display = mode === 'clicker' ? 'block' : 'none';
-        document.getElementById('contractZone').style.display = mode === 'contract' ? 'flex' : 'none';
-        document.getElementById('titlesZone').style.display = mode === 'titles' ? 'flex' : 'none';
-        
-        const title = document.getElementById('inventoryTitle');
-        if (mode === 'clicker') title.innerText = '🎒 Твой NFT Инвентарь';
-        else if (mode === 'contract') title.innerText = '🧪 Выберите скины в Контракт';
-        else title.innerText = '📜 Твоя коллекция NFT (Магазин выше)';
-        
-        updateContractUI();
-        renderInventory();
-    }
 
     // ТАПЕР С КУЛДАУНОМ В 500 МС И ЭФФЕКТОМ ЗАТЕМНЕНИЯ ПЛАНЕТЫ
     document.getElementById('planetBtn').addEventListener('click', (e) => {
@@ -381,6 +334,27 @@
             planet.style.transform = 'none';
         }, 500);
     });
+// УПРАВЛЕНИЕ ТРЕХКНОПОЧНЫМИ ВКЛАДКАМИ
+    window.switchMode = function(mode) {
+        currentMode = mode;
+        selectedCraftItems = []; 
+        
+        document.getElementById('modeClickerBtn').classList.toggle('active', mode === 'clicker');
+        document.getElementById('modeContractBtn').classList.toggle('active', mode === 'contract');
+        document.getElementById('modeTitlesBtn').classList.toggle('active', mode === 'titles');
+        
+        document.getElementById('clickerZone').style.display = mode === 'clicker' ? 'block' : 'none';
+        document.getElementById('contractZone').style.display = mode === 'contract' ? 'flex' : 'none';
+        document.getElementById('titlesZone').style.display = mode === 'titles' ? 'flex' : 'none';
+        
+        const title = document.getElementById('inventoryTitle');
+        if (mode === 'clicker') title.innerText = '🎒 Твой NFT Инвентарь';
+        else if (mode === 'contract') title.innerText = '🧪 Выберите скины в Контракт';
+        else title.innerText = '📜 Твоя коллекция NFT (Магазин выше)';
+        
+        updateContractUI();
+        renderInventory();
+    }
 
     // РАСЧЁТ РЫНОЧНОЙ СТОИМОСТИ НА ОСНОВЕ ДЕФИЦИТА
     function calculateMarketStats(itemId, rarity, basePrice, countInInventory) {
@@ -395,6 +369,7 @@
         }
         return { worldTotal: simulatedWorldTotal, price: basePrice * scarcityMultiplier };
     }
+
     // ОТКРЫТИЕ КЕЙСОВ
     window.openCase = function(caseType, cost) {
         if (userBalance < cost) {
@@ -422,7 +397,6 @@
 
         addAndShowItem(randomItem, selectedRarity, "🎉 РЕЛИКВИЯ НАЙДЕНА!");
     }
-
     function addAndShowItem(item, rarity, titleText) {
         if (userInventory[item.id]) {
             userInventory[item.id].count += 1;
@@ -501,181 +475,8 @@
         
         updateContractUI();
         renderInventory();
-    }
-    window.removeSlotByIndex = function(index) {
-        selectedCraftItems.splice(index, 1);
-        if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-        updateContractUI();
-        renderInventory();
-    }
-
-    function updateContractUI() {
-        const slotsRow = document.getElementById('selectedSlots');
-        const startBtn = document.getElementById('startContractBtn');
-        const chanceValue = document.getElementById('chanceValue');
-        const chanceBar = document.getElementById('chanceBar');
-
-        if (selectedCraftItems.length === 0) {
-            slotsRow.innerHTML = `<span style="opacity: 0.4; font-size: 12px; padding: 5px;">Слоты контракта пусты... Нажмите на скины ниже ⬇️</span>`;
-            chanceValue.innerText = "0";
-            chanceBar.style.width = "0%";
-            startBtn.classList.add('disabled');
-            return;
-        }
-
-        slotsRow.innerHTML = "";
-        selectedCraftItems.forEach((id, index) => {
-            const item = userInventory[id];
-            const pill = document.createElement('div');
-            pill.className = 'slot-pill';
-            pill.style.borderColor = rarityColors[item.rarity];
-            pill.innerHTML = `${item.icon} ${item.name} <span class="remove-x" onclick="removeSlotByIndex(${index})">×</span>`;
-            slotsRow.appendChild(pill);
-        });
-
-        let totalFillChance = selectedCraftItems.length * 10;
-        chanceValue.innerText = totalFillChance;
-        chanceBar.style.width = `${totalFillChance}%`;
-
-        if (selectedCraftItems.length >= 3) startBtn.classList.remove('disabled');
-        else startBtn.classList.add('disabled');
-    }
-
-    // МАТЕМАТИКА РУЛЕТКИ-МИКСЕРА КОНТРАКТОВ
-    window.runContract = function() {
-        if (selectedCraftItems.length < 3) return;
-
-        let totalWinChance = selectedCraftItems.length * 10; 
-        let randomRoll = Math.floor(Math.random() * 100) + 1; 
-
-        if (randomRoll > totalWinChance) {
-            burnContractItems();
-            const garbageItem = { id: "c1", name: "Космический Мусор", icon: "🪨", basePrice: 0.1 }; 
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
-            addAndShowItem(garbageItem, "common", "❌ КОНТРАКТ ПРОВАЛЕН (СЛИВ!)");
-            return;
-        }
-
-        let randomLuckyId = selectedCraftItems[Math.floor(Math.random() * selectedCraftItems.length)];
-        let luckyItemRarity = userInventory[randomLuckyId].rarity;
-        let targetRarity = nextRarityMap[luckyItemRarity];
-
-        burnContractItems();
-
-        const pool = nftItems[targetRarity];
-        const craftedItem = pool[Math.floor(Math.random() * pool.length)];
-        
-        if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-        addAndShowItem(craftedItem, targetRarity, "🔬 КОНТРАКТ УСПЕШЕН (МИКСЕР!)");
-    }
-
-    function burnContractItems() {
-        selectedCraftItems.forEach(id => {
-            if (userInventory[id]) {
-                userInventory[id].count -= 1;
-                if (userInventory[id].count <= 0) delete userInventory[id];
-            }
-        });
-        selectedCraftItems = []; 
-        updateContractUI();
-        renderInventory();
-    }
-
-    // --- СИСТЕМА ПОКУПКИ ТИТУЛОВ И ОТОБРАЖЕНИЯ В ВЕБЕ ---
-    window.buyTitle = function(titleId, cost, titleName, badgeStyle) {
-        if (userBalance < cost) {
-            if (tg && tg.showAlert) tg.showAlert("Недостаточно монет! Продолжай тапать по планете 🪐");
-            else alert("Недостаточно монет!");
-            return;
-        }
-
-        userBalance -= cost;
-        updateBalanceDisplay();
-
-        if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-
-        localStorage.setItem('user_active_title_name', titleName);
-        localStorage.setItem('user_active_title_style', badgeStyle);
-
         loadSavedTitle();
-        
-        if (tg && tg.showAlert) tg.showAlert(`Вы успешно приобрели титул: ${titleName}! ✨`);
     }
-
-    function loadSavedTitle() {
-        const savedName = localStorage.getItem('user_active_title_name') || "🛰️ Космический рекрут";
-        const savedStyle = localStorage.getItem('user_active_title_style') || "rgba(255, 255, 255, 0.08)";
-        
-        const badge = document.getElementById('userTitleBadge');
-        badge.innerText = savedName;
-        
-        if (savedStyle.includes('gradient')) {
-            badge.style.background = savedStyle;
-            badge.style.borderColor = "#ff007f";
-            badge.style.boxShadow = "0 0 15px rgba(255, 0, 127, 0.4)";
-            badge.style.color = "#ffffff";
-        } else {
-            badge.style.background = savedStyle;
-            badge.style.borderColor = "rgba(255,255,255,0.1)";
-            badge.style.boxShadow = "0 4px 10px rgba(0,0,0,0.2)";
-            badge.style.color = "#ffffff";
-        }
-    }
-
-    window.showChances = function(caseType) {
-        const chances = caseChances[caseType];
-        const titleMap = { bronze: "Бронзовая Капсула", silver: "Серебряная Капсула", gold: "Золотая Капсула" };
-        document.getElementById('chancesTitle').innerText = `Шансы: ${titleMap[caseType]}`;
-        let html = "";
-        Object.keys(chances).forEach(rarity => {
-            let percentDisplay = (chances[rarity] / 10).toFixed(1);
-            if (chances[rarity] > 0) {
-                html += `<div class="chance-row"><span style="font-weight:800; color:${rarityColors[rarity]}">${rarityNames[rarity]}</span><span style="font-weight:900;">${percentDisplay}%</span></div>`;
-            }
-        });
-        document.getElementById('chancesBody').innerHTML = html;
-        document.getElementById('chancesModal').classList.add('active');
-    }
-
-    window.closeModal = function(modalId) { document.getElementById(modalId).classList.remove('active'); }
-
-    function renderInventory() {
-        const grid = document.getElementById('inventoryGrid');
-        grid.innerHTML = "";
-
-        const keys = Object.keys(userInventory);
-        const uniqueCollected = keys.length;
-        document.getElementById('itemCounterDisplay').innerText = `Собрано: ${uniqueCollected} / ${TOTAL_UNIQUE_ITEMS}`;
-
-        if (uniqueCollected === 0) {
-            grid.innerHTML = `<div style="grid-column: span 3; opacity: 0.4; font-size: 13px; padding: 25px;">Твой инвентарь пуст. Накопи монет и открой капсулу! 📦</div>`;
-            return;
-        }
-
-        keys.forEach(id => {
-            const item = userInventory[id];
-            const card = document.createElement('div');
-            card.className = 'inventory-item';
-            
-            let currentInCraftCount = selectedCraftItems.filter(itemId => itemId === id).length;
-            if (currentInCraftCount > 0) card.classList.add('selected-for-craft');
-
-            card.setAttribute('onclick', `toggleItemToCraft('${id}')`);
-            let lineBackground = item.rarity === 'secret' ? 'linear-gradient(90deg, #ff007f, #7928ca, #ff007f)' : rarityColors[item.rarity];
-            
-            card.innerHTML = `
-                <div class="item-rarity-line" style="background: ${lineBackground}"></div>
-                <div class="item-icon">${item.icon}</div>
-                <div class="item-name">${item.name}</div>
-                <div class="item-count">x${item.count}</div>
-            `;
-            grid.appendChild(card);
-        });
-    }
-
-    updateBalanceDisplay();
-    loadSavedTitle();
-    renderInventory();
-</script>
+    </script>
 </body>
 </html>
