@@ -82,7 +82,7 @@
         .game-tabs { display: flex; gap: 6px; width: 100%; max-width: 400px; background: rgba(0, 0, 0, 0.3); padding: 5px; border-radius: 16px; margin-bottom: 15px; }
         .g-tab-btn { flex: 1; background: none; border: none; color: #94a3b8; padding: 11px 2px; font-size: 12px; font-weight: 800; border-radius: 12px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
         .g-tab-btn.active { background: var(--card-bg); color: var(--neon-cyan); border: 1px solid var(--glass-border); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-.section-title { font-size: 16px; font-weight: 850; align-self: flex-start; margin: 15px 0 10px 5px; color: #7dd3fc; letter-spacing: 1px; text-transform: uppercase; display: flex; justify-content: space-between; width: 100%; max-width: 400px; }
+        .section-title { font-size: 16px; font-weight: 850; align-self: flex-start; margin: 15px 0 10px 5px; color: #7dd3fc; letter-spacing: 1px; text-transform: uppercase; display: flex; justify-content: space-between; width: 100%; max-width: 400px; }
         .item-counter { font-size: 13px; color: #94a3b8; font-weight: 600; text-transform: none; letter-spacing: 0; }
         
         .cases-grid { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 400px; margin-bottom: 25px; }
@@ -135,12 +135,12 @@
         .buy-btn { background: linear-gradient(135deg, #0284c7, var(--neon-blue)); color: white; border: none; padding: 11px 18px; border-radius: 14px; font-size: 13px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(0, 114, 255, 0.4); }
         .buy-btn.purchased { background: #10b981; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3); pointer-events: none; }
 
-        /* --- ИНВЕНТАРЬ --- */
+        /* --- ИСПРАВЛЕННЫЕ СТИЛИ ИНВЕНТАРЯ --- */
         .inventory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; max-width: 400px; margin-bottom: 30px; }
-        .inventory-item { rgba(15, 23, 42, 0.55); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px; padding: 14px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; position: relative; box-shadow: 0 6px 15px rgba(0,0,0,0.2); transition: transform 0.2s; cursor: pointer; }
+        .inventory-item { background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px; padding: 14px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; position: relative; box-shadow: 0 6px 15px rgba(0,0,0,0.2); transition: transform 0.2s; cursor: pointer; }
         .inventory-item.selected-for-craft { border-color: #10b981 !important; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4) !important; transform: scale(0.96); }
         .item-rarity-line { position: absolute; top: 0; left: 0; width: 100%; height: 5px; border-top-left-radius: 18px; border-top-right-radius: 18px; }
-                .item-icon { font-size: 32px; margin-top: 4px; }
+        .item-icon { font-size: 32px; margin-top: 4px; }
         .item-name { font-size: 11px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 92%; }
         .item-count { position: absolute; bottom: 5px; right: 8px; background: rgba(0,0,0,0.5); font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 9px; }
 
@@ -217,7 +217,7 @@
             </div>
         </div>
     </div>
-<!-- РАБОЧАЯ ПАНЕЛЬ КОНТРАКТОВ И РУЛЕТКИ -->
+    <!-- РАБОЧАЯ ПАНЕЛЬ КОНТРАКТОВ И РУЛЕТКИ -->
     <div class="contract-workspace" id="contractZone">
         <div class="chance-progress-wrapper">
             <div class="chance-text"><span id="chanceValue">0</span>% шанс крафта</div>
@@ -273,7 +273,39 @@
             { id: "s1", name: "✨ ТАЙНЫЙ АРТЕФАКТ БОГА", icon: "🌌", basePrice: 500.0 }
         ]
     };
-    : 300, epic: 450, mythic: 160, secret: 10 }
+    // =========================================================================
+    // ⚙️ СИСТЕМНАЯ ЛОГИКА ИГРЫ (МАТЕМАТИКА КЛИКЕРА, БИРЖИ И КОНТРАКТ-РУЛЕТКИ)
+    // =========================================================================
+    const nftItems = {
+        common: [
+            { id: "c1", name: "Космический Мусор", icon: "🪨", basePrice: 0.1 },
+            { id: "c2", name: "Старый Спутник", icon: "🛰️", basePrice: 0.2 },
+            { id: "c3", name: "Обломок Ракеты", icon: "🚀", basePrice: 0.3 }
+        ],
+        rare: [
+            { id: "r1", name: "Лазерный Меч", icon: "⚔️", basePrice: 1.5 },
+            { id: "r2", name: "Плазменная Сфера", icon: "🔮", basePrice: 2.2 },
+            { id: "r3", name: "Марсоход TheBS", icon: "🚜", basePrice: 3.0 }
+        ],
+        epic: [
+            { id: "e1", name: "Кибер-Шлем", icon: "🦱", basePrice: 8.0 },
+            { id: "e2", name: "Скин AQUAPHOBIA", icon: "🎭", basePrice: 12.5 },
+            { id: "e3", name: "Космический Трон", icon: "💺", basePrice: 15.0 }
+        ],
+        mythic: [
+            { id: "m1", name: "👑 Корона GORM", icon: "👑", basePrice: 50.0 },
+            { id: "m2", name: "🔥 NFT РАКЕТА 3D", icon: "🚀", basePrice: 75.0 }
+        ],
+        secret: [
+            { id: "s1", name: "✨ ТАЙНЫЙ АРТЕФАКТ БОГА", icon: "🌌", basePrice: 500.0 }
+        ]
+    };
+
+    const TOTAL_UNIQUE_ITEMS = 12;
+    const caseChances = {
+        bronze: { common: 795, rare: 160, epic: 40, mythic: 5, secret: 0 },
+        silver: { common: 350, rare: 480, epic: 140, mythic: 28, secret: 2 },
+        gold:   { common: 80, rare: 300, epic: 450, mythic: 160, secret: 10 }
     };
 
     const rarityNames = { common: "Обычный", rare: "Редкий", epic: "Эпический", mythic: "Мифический", secret: "СЕКРЕТНЫЙ" };
@@ -296,7 +328,6 @@
         document.getElementById('balanceDisplayTitles').innerText = userBalance.toFixed(3);
         localStorage.setItem('game_balance', userBalance);
     }
-
     // УПРАВЛЕНИЕ ТРЕХКНОПОЧНЫМИ ВКЛАДКАМИ
     window.switchMode = function(mode) {
         currentMode = mode;
@@ -350,7 +381,8 @@
             planet.style.transform = 'none';
         }, 500);
     });
-        // РАСЧЁТ РЫНОЧНОЙ СТОИМОСТИ НА ОСНОВЕ ДЕФИЦИТА
+
+    // РАСЧЁТ РЫНОЧНОЙ СТОИМОСТИ НА ОСНОВЕ ДЕФИЦИТА
     function calculateMarketStats(itemId, rarity, basePrice, countInInventory) {
         let rarityModifiers = { common: 8.5, rare: 2.1, epic: 0.6, mythic: 0.08, secret: 0.003 };
         let simulatedWorldTotal = Math.floor((globalOpenCount + 150) * rarityModifiers[rarity]) + 1;
@@ -363,7 +395,6 @@
         }
         return { worldTotal: simulatedWorldTotal, price: basePrice * scarcityMultiplier };
     }
-
     // ОТКРЫТИЕ КЕЙСОВ
     window.openCase = function(caseType, cost) {
         if (userBalance < cost) {
@@ -565,10 +596,6 @@
 
         localStorage.setItem('user_active_title_name', titleName);
         localStorage.setItem('user_active_title_style', badgeStyle);
-
-        const btn = document.getElementById(`btn-${titleId}`);
-        btn.innerText = "Активен ✓";
-        btn.className = "buy-btn purchased";
 
         loadSavedTitle();
         
