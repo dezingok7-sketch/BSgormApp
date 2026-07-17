@@ -171,13 +171,14 @@
     }
 
     // БРОНЕБОЙНЫЙ ОФИЦИАЛЬНЫЙ МЕТОД ОТКРЫТИЯ ТВОЕГО ЧАТА В ЛС
+    // НАДЁЖНЫЙ ОФИЦИАЛЬНЫЙ МЕТОД ОТКРЫТИЯ ТВОЕГО ЧАТА В ЛС
     window.openCreatorChat = function() {
-        // Укажи здесь свой точный юзернейм вместо @TheBSgorm (если он отличается)
-        const creatorUsername = "TheBSgorm"; 
-        const link = `https://t.me{creatorUsername.replace('@', '')}`;
+        // Просто укажи здесь свой текстовый юзернейм в Телеграм (БЕЗ знака @)
+        const myUsername = "TheBSgorm"; 
+        const link = "https://t.me" + myUsername;
         
         if (tg && tg.openTelegramLink) {
-            // Родной метод WebApp — Telegram сам находит профиль по нику в приложении
+            // Родной метод WebApp — открывает профиль внутри приложения
             tg.openTelegramLink(link);
         } else {
             // Запасной вариант для внешнего браузера
