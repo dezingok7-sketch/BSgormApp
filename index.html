@@ -12,6 +12,7 @@
             --neon-pink: #ff007f;
             --neon-purple: #7928ca;
             --neon-cyan: #00f2fe;
+            --neon-blue: #0072ff;
             --glass: rgba(15, 23, 42, 0.55);
             --border-glass: rgba(255, 255, 255, 0.08);
         }
@@ -43,57 +44,51 @@
         .subtitle { font-size: 13px; color: var(--neon-cyan); text-shadow: 0 0 8px rgba(0, 242, 254, 0.4); opacity: 0.9; margin-bottom: 30px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
         .menu-container { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 14px; }
         
-        /* ПУЛЬСИРУЮЩАЯ КНОПКА ЗАЯВКИ С НЕОНОВЫМ ДЫХАНИЕМ */
-        .feedback-trigger-btn {
-            width: 100%; background: var(--glass); color: #fff; border: 2px solid var(--neon-cyan); padding: 15px; border-radius: 18px;
-            font-size: 14px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); box-sizing: border-box; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); animation: pulseNeon 3s infinite ease-in-out;
+        /* КНОПКИ МЕНЮ ХАБА */
+        .hub-main-btn {
+            width: 100%; padding: 18px; border-radius: 18px; font-size: 15px; font-weight: 800; 
+            color: #fff; border: none; cursor: pointer; display: flex; align-items: center; 
+            justify-content: space-between; box-sizing: border-box;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .feedback-trigger-btn:active { transform: scale(0.96); box-shadow: 0 0 30px var(--neon-cyan); background: var(--neon-cyan); color: #000; }
-        @keyframes pulseNeon { 0%, 100% { box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); border-color: rgba(0, 242, 254, 0.4); } 50% { box-shadow: 0 0 25px rgba(0, 242, 254, 0.6); border-color: var(--neon-cyan); } }
+        .hub-main-btn:active { transform: scale(0.97); filter: brightness(1.2); }
+        .btn-blue { background: linear-gradient(135deg, #00f2fe, #0072ff); box-shadow: 0 6px 20px rgba(0, 114, 255, 0.35); border: 1px solid rgba(255,255,255,0.15); }
+        .btn-cyan { background: linear-gradient(135deg, #7928ca, #ff007f); box-shadow: 0 6px 20px rgba(255, 0, 127, 0.35); border: 1px solid rgba(255,255,255,0.15); }
+        .btn-space { background: linear-gradient(135deg, #0284c7, #1e3a8a); box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3); border: 1px solid rgba(255,255,255,0.15); }
+        .btn-icon { font-size: 13px; opacity: 0.8; }
 
-        /* КНОПКИ-АККОРДЕОНЫ С УЛЬТРА-ГРАДИЕНТАМИ */
-        .accordion-btn { width: 100%; padding: 18px; border-radius: 18px; font-size: 15px; font-weight: 800; color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
-        .accordion-btn:active { transform: scale(0.97); filter: brightness(1.2); }
-        .acc-blue { background: linear-gradient(135deg, #00f2fe, #0072ff); box-shadow: 0 6px 20px rgba(0, 114, 255, 0.35); border: 1px solid rgba(255,255,255,0.15); }
-        .acc-cyan { background: linear-gradient(135deg, #7928ca, #ff007f); box-shadow: 0 6px 20px rgba(255, 0, 127, 0.35); border: 1px solid rgba(255,255,255,0.15); }
-        .acc-icon { font-size: 13px; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 0.8; }
-        
-        /* ИСПРАВЛЕННЫЕ GUI-ПАНЕЛИ (РАЗДВИГАЮТ ИНТЕРФЕЙС БЕЗ НАЛОЖЕНИЯ) */
-        .panel { 
-            width: 100%; max-height: 0; overflow: hidden; 
-            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease, margin 0.35s ease, opacity 0.3s ease; 
-            background: var(--glass); border: 1px solid var(--border-glass); border-radius: 20px; 
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); box-sizing: border-box; padding: 0 14px; opacity: 0;
+        /* МОДАЛЬНЫЕ ОКНА С ЭФФЕКТОМ ZOOM (КАК НА СКРИНШОТЕ) */
+        .feedback-modal { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(2, 4, 10, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            display: flex; align-items: center; justify-content: center; 
+            opacity: 0; pointer-events: none; transition: all 0.25s ease; z-index: 3000; 
         }
-        .panel.show { padding: 16px; margin-top: 4px; margin-bottom: 4px; opacity: 1; box-shadow: inset 0 0 20px rgba(255,255,255,0.03); }
-        
-        .gui-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; }
-        /* СТИЛЬНЫЕ НЕОНОВЫЕ СТЕКЛЯННЫЕ МОДУЛИ ДЛЯ ССЫЛОК */
-        .gui-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 14px; padding: 14px 10px; text-align: center;
-            text-decoration: none; color: #fff; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; gap: 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .gui-card:active { transform: translateY(2px) scale(0.96); box-shadow: none; }
-        .gui-card.g-tg { border-color: rgba(0, 242, 254, 0.2); }
-        .gui-card.g-tg:active { background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); }
-        .gui-card.g-yt { border-color: rgba(255, 0, 127, 0.2); }
-        .gui-card.g-yt:active { background: var(--neon-pink); color: #000; box-shadow: 0 0 15px var(--neon-pink); }
-        
-        .gui-card-icon { font-size: 26px; }
-        .gui-card-name { font-size: 12px; font-weight: 800; letter-spacing: 0.3px; }
-
-        /* ЭФФЕКТНОЕ ZOOM-ОКНО ОБРАТНОЙ СВЯЗИ */
-        .feedback-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 4, 10, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: all 0.25s ease; z-index: 3000; }
         .feedback-modal.active { opacity: 1; pointer-events: auto; }
         .feedback-modal.active .fb-content { transform: scale(1); opacity: 1; }
-        .fb-content { background: rgba(11, 19, 43, 0.96); border: 1px solid rgba(0, 242, 254, 0.25); padding: 25px; border-radius: 26px; width: 85%; max-width: 340px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); box-sizing: border-box; transform: scale(0.75); opacity: 0; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .fb-content { 
+            background: rgba(11, 19, 43, 0.96); border: 1px solid rgba(0, 242, 254, 0.25); 
+            padding: 25px; border-radius: 26px; width: 85%; max-width: 360px; 
+            text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); box-sizing: border-box; 
+            transform: scale(0.75); opacity: 0; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        /* СЕТКА И НЕОНОВЫЕ ЯЧЕЙКИ GUI ДЛЯ ССЫЛОК ВНУТРИ МОДАЛОК */
+        .gui-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; margin: 15px 0; }
+        .gui-card {
+            background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px; padding: 16px 12px; text-align: center; text-decoration: none; color: #fff;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .gui-card:active { transform: translateY(2px) scale(0.96); box-shadow: none; }
+        .gui-card.g-tg { border-color: rgba(0, 242, 254, 0.25); }
+        .gui-card.g-tg:active { background: var(--neon-cyan); color: #000; box-shadow: 0 0 20px var(--neon-cyan); }
+        .gui-card.g-yt { border-color: rgba(255, 0, 127, 0.25); }
+        .gui-card.g-yt:active { background: var(--neon-pink); color: #000; box-shadow: 0 0 20px var(--neon-pink); }
+        
+        .gui-card-icon { font-size: 28px; }
+        .gui-card-name { font-size: 12px; font-weight: 850; letter-spacing: 0.3px; }
+
         .fb-textarea { width: 100%; height: 110px; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; color: #fff; padding: 12px; font-family: inherit; font-size: 14px; resize: none; margin: 15px 0; box-sizing: border-box; }
         .fb-textarea:focus { border-color: #00f2fe; outline: none; box-shadow: 0 0 10px rgba(0, 242, 254, 0.2); }
         .action-btn { width: 100%; padding: 14px; border-radius: 12px; font-size: 13px; font-weight: 800; border: none; cursor: pointer; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.1s; }
@@ -106,16 +101,33 @@
     <h1>TheBSgorm</h1>
     <div class="subtitle">Web3 VIP Станция</div>
 
+    <!-- ТВОЁ НОВОЕ ГЛАВНОЕ МЕНЮ КНОПОК -->
     <div class="menu-container">
-        <!-- Кнопка VIP-заявки -->
-        <button class="feedback-trigger-btn" onclick="openFeedback()">📞 Отправить VIP-Заявку</button>
+        <button class="feedback-trigger-btn" onclick="openModal('feedbackModal')">📞 Отправить VIP-Заявку</button>
 
-        <!-- Аккордеон 1: Социальные сети -->
-        <button class="accordion-btn acc-blue" onclick="toggleAccordion('panel1', this)">
+        <button class="hub-main-btn btn-blue" onclick="openModal('socialModal')">
             <span>🌐 &nbsp; GUI Социальная Карта</span>
-            <span class="acc-icon">▼</span>
+            <span class="btn-icon">►</span>
         </button>
-        <div class="panel" id="panel1">
+
+        <button class="hub-main-btn btn-cyan" onclick="openModal('projectModal')">
+            <span>📁 &nbsp; GUI Карта Проектов</span>
+            <span class="btn-icon">►</span>
+        </button>
+
+        <a href="game.html" style="text-decoration: none;">
+            <button class="hub-main-btn btn-space">
+                <span>🎮 &nbsp; Играть в Clicker NFT</span>
+                <span class="btn-icon">►</span>
+            </button>
+        </a>
+    </div>
+
+    <!-- ОКНО 1: СОЦИАЛЬНЫЕ СЕТИ ПОВЕРХ ВСЕГО -->
+    <div class="feedback-modal" id="socialModal">
+        <div class="fb-content">
+            <h3 style="margin-top:0; color:#7dd3fc; font-weight:900; font-size:18px;">🌐 СОЦИАЛЬНЫЕ СЕТИ</h3>
+            <p style="font-size:12px; color:#94a3b8; margin:0; font-weight:600; line-height:1.4;">Официальные медиа-ресурсы и каналы связи проекта TheBSgorm</p>
             <div class="gui-grid">
                 <a href="https://t.me" class="gui-card g-tg" target="_blank">
                     <span class="gui-card-icon">📢</span>
@@ -126,32 +138,27 @@
                     <span class="gui-card-name">YouTube</span>
                 </a>
             </div>
+            <button class="action-btn" style="background:#334155; color:#94a3b8; margin-bottom:0;" onclick="closeModal('socialModal')">Назад</button>
         </div>
-
-        <!-- Аккордеон 2: Карта Проектов (Только AQUAPHOBIA) -->
-        <button class="accordion-btn acc-cyan" onclick="toggleAccordion('panel2', this)">
-            <span>📁 &nbsp; GUI Карта Проектов</span>
-            <span class="acc-icon">▼</span>
-        </button>
-        <div class="panel" id="panel2">
-            <div class="gui-grid">
-                <a href="#" class="gui-card g-yt" style="grid-column: span 2; border-color: rgba(234, 179, 8, 0.4); padding: 18px 12px; background: rgba(234, 179, 8, 0.03);" onclick="if(window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert('🎭 AQUAPHOBIA: Escape \n\nЭто атмосферное хоррор-выживание от первого лица! Игроку предстоит разгадать мрачные тайны подводного комплекса, спасаясь от жутких аномалий в условиях ограниченного кислорода. \n\nПроект находится в активной разработке. Приготовьтесь встретиться со своим страхом!'); return false;">
-                    <span class="gui-card-icon">🎭</span>
-                    <span class="gui-card-name" style="color: #eab308; font-size: 14px; margin-bottom: 2px;">AQUAPHOBIA: Escape</span>
-                    <span style="font-size: 10px; color: #a1a1aa; font-weight: 500; line-height: 1.3;">Хоррор-выживание в затопленном комплексе. Нажми для описания!</span>
-                </a>
+    </div>
+    <!-- ОКНО 2: КАРТА ПРОЕКТОВ (AQUAPHOBIA) ПОВЕРХ ВСЕГО -->
+    <div class="feedback-modal" id="projectModal">
+        <div class="fb-content">
+            <h3 style="margin-top:0; color:#7dd3fc; font-weight:900; font-size:18px;">📁 GUI КАРТА ПРОЕКТОВ</h3>
+            <p style="font-size:12px; color:#94a3b8; margin:0 0 15px 0; font-weight:600; line-height:1.4;">Разработки и игровые релизы экосистемы TheBSgorm</p>
+            
+            <!-- Модуль твоей игры AQUAPHOBIA -->
+            <div style="background: rgba(234, 179, 8, 0.04); border: 1px solid rgba(234, 179, 8, 0.35); border-radius: 16px; padding: 16px 12px; text-align: center; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                <span style="font-size:32px;">🎭</span>
+                <div style="color: #eab308; font-size: 15px; font-weight: 900; margin: 4px 0 2px 0;">AQUAPHOBIA: Escape</div>
+                <p style="font-size: 11px; color: #d4d4d8; font-weight: 500; line-height: 1.4; margin: 0; text-align: left;">Это атмосферное хоррор-выживание от первого лица! Игроку предстоит разгадать мрачные тайны подводного комплекса, спасаясь от жутких аномалий в условиях ограниченного кислорода. Проект находится в активной разработке!</p>
             </div>
+
+            <button class="action-btn" style="background:#334155; color:#94a3b8; margin-bottom:0;" onclick="closeModal('projectModal')">Назад</button>
         </div>
-        <!-- Кнопка запуска игры-кликера -->
-        <a href="game.html" style="text-decoration: none;">
-            <button class="accordion-btn" style="background: linear-gradient(135deg, #0284c7, #1e3a8a); box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3); border: 1px solid rgba(255,255,255,0.15);">
-                <span>🎮 &nbsp; Играть в Clicker NFT</span>
-                <span class="acc-icon">►</span>
-            </button>
-        </a>
     </div>
 
-    <!-- ОКНО СТИЛЬНОЙ VIP-ЗАЯВКИ С ZOOM-АНИМАЦИЕЙ -->
+    <!-- ОКНО 3: СТИЛЬНАЯ VIP-ЗАЯВКА В ЛС -->
     <div class="feedback-modal" id="feedbackModal">
         <div class="fb-content">
             <h3 style="margin-top: 0; color: #7dd3fc; font-weight: 900; font-size: 18px; letter-spacing: 0.5px;">👑 VIP-ЗАЯВКА В ЛС</h3>
@@ -166,29 +173,19 @@
     const tg = window.Telegram?.WebApp;
     if (tg) { tg.ready(); tg.expand(); }
 
-    // ФУНКЦИЯ ПЛАВНОГО РАСКРЫТИЯ GUI-ПАНЕЛЕЙ (РАЗДВИГАЮТ МЕНЮ)
-    window.toggleAccordion = function(panelId, btn) {
-        const panel = document.getElementById(panelId);
-        const icon = btn.querySelector('.acc-icon');
-        
-        if (panel.style.maxHeight) {
-            panel.style.maxHeight = null;
-            panel.classList.remove('show');
-            icon.style.transform = 'rotate(0deg)';
-        } else {
-            // Мягко закрываем другие вкладки перед открытием текущей
-            document.querySelectorAll('.panel').forEach(p => { p.style.maxHeight = null; p.classList.remove('show'); });
-            document.querySelectorAll('.acc-icon').forEach(i => i.style.transform = 'rotate(0deg)');
-            
-            panel.style.maxHeight = panel.scrollHeight + "px";
-            panel.classList.add('show');
-            icon.style.transform = 'rotate(180deg)';
-        }
+    // УПРАВЛЕНИЕ ПОЛНОЭКРАННЫМИ VIP ОКНАМИ
+    window.openModal = function(modalId) { 
+        document.getElementById(modalId).classList.add('active'); 
+    }
+    window.closeModal = function(modalId) { 
+        document.getElementById(modalId).classList.remove('active'); 
     }
 
-    // УПРАВЛЕНИЕ ОКНОМ СВЯЗИ
-    window.openFeedback = function() { document.getElementById('feedbackModal').classList.add('active'); }
-    window.closeFeedback = function() { document.getElementById('feedbackModal').classList.remove('active'); document.getElementById('feedbackText').value = ""; }
+    // Отдельные функции для окна заявки
+    window.closeFeedback = function() { 
+        document.getElementById('feedbackModal').classList.remove('active'); 
+        document.getElementById('feedbackText').value = ""; 
+    }
 
     window.sendFeedback = function() {
         const text = document.getElementById('feedbackText').value.trim();
@@ -200,7 +197,6 @@
         const BOT_TOKEN = "8794927474:AAG4C5t64F1R8kiH8lZxyFgIczbwLyoEJnE";
         const MY_TELEGRAM_ID = "5591880317";
 
-        // Сбор данных об авторе из API мессенджера
         const tgUser = tg?.initDataUnsafe?.user || {};
         const senderName = tgUser.first_name ? `${tgUser.first_name} ${tgUser.last_name || ''}`.trim() : "Анонимный пилот";
         const senderUsername = tgUser.username ? `@${tgUser.username}` : "нет юзернейма";
