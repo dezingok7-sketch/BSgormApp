@@ -100,10 +100,11 @@
     <div class="menu-container">
         <!-- Бронебойная прямая кнопка связи в ЛС с эффектом дыхания -->
         <a href="tg://user?id=5591880317" style="text-decoration: none; width: 100%;">
-            <button class="hub-main-btn btn-cyan" style="animation: breathePink 2.5s infinite ease-in-out;">
-                <span>📞 Написать Создателю в ЛС</span>
-                <span class="btn-icon">►</span>
-            </button>
+            <!-- ОФИЦИАЛЬНАЯ VIP-КНОПКА СВЯЗИ ЧЕРЕЗ API WEBAPP -->
+        <button class="hub-main-btn btn-cyan" style="animation: breathePink 2.5s infinite ease-in-out;" onclick="openCreatorChat()">
+            <span>📞 Написать Создателю в ЛС</span>
+            <span class="btn-icon">►</span>
+        </button>
         </a>
 
         <button class="hub-main-btn btn-blue" onclick="openModal('socialModal')">
@@ -139,7 +140,8 @@
             <button class="action-btn" style="background:#334155; color:#94a3b8; margin-bottom:0;" onclick="closeModal('socialModal')">Назад</button>
         </div>
     </div>
-    <!-- ОКНО 2: КАРТА ПРОЕКТОВ (AQUAPHOBIA) ПОВЕРХ ВСЕГО -->
+    
+<!-- ОКНО 2: КАРТА ПРОЕКТОВ ПОВЕРХ ВСЕГО -->
     <div class="feedback-modal" id="projectModal">
         <div class="fb-content">
             <h3 style="margin-top:0; color:#7dd3fc; font-weight:900; font-size:18px;">📁 КАРТА ПРОЕКТОВ</h3>
@@ -166,6 +168,21 @@
     }
     window.closeModal = function(modalId) { 
         document.getElementById(modalId).classList.remove('active'); 
+    }
+
+    // БРОНЕБОЙНЫЙ ОФИЦИАЛЬНЫЙ МЕТОД ОТКРЫТИЯ ТВОЕГО ЧАТА В ЛС
+    window.openCreatorChat = function() {
+        // Укажи здесь свой точный юзернейм вместо @TheBSgorm (если он отличается)
+        const creatorUsername = "TheBSgorm"; 
+        const link = `https://t.me{creatorUsername.replace('@', '')}`;
+        
+        if (tg && tg.openTelegramLink) {
+            // Родной метод WebApp — Telegram сам находит профиль по нику в приложении
+            tg.openTelegramLink(link);
+        } else {
+            // Запасной вариант для внешнего браузера
+            window.open(link, "_blank");
+        }
     }
 </script>
 </body>
