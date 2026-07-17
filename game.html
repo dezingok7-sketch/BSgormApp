@@ -232,6 +232,50 @@
     </div>
 
 <script>
+        // БРОНЕБОЙНЫЙ ТАПЕР С АВТО-ИНИЦИАЛИЗАЦИЕЙ СИЛЫ КЛИКА
+    document.getElementById('planetBtn').addEventListener('click', (e) => {
+        if (!canClick) return;
+        canClick = false;
+        
+        const planet = document.getElementById('planetBtn');
+        planet.style.pointerEvents = 'none'; 
+        planet.style.filter = 'grayscale(0.9) brightness(0.4)'; 
+        planet.style.transform = 'scale(0.92)';
+
+        // ПРОВЕРКА: Считываем силу клика. Если там пусто или ошибка — ставим базовые 0.005
+        let savedPower = localStorage.getItem('game_click_power');
+        let clickPower = 0.005;
+        
+        if (savedPower && !isNaN(parseFloat(savedPower))) {
+            clickPower = parseFloat(savedPower);
+        } else {
+            localStorage.setItem('game_click_power', '0.005'); // Страховка в память
+        }
+
+        // Начисляем монеты
+        userBalance += clickPower;
+        updateBalanceDisplay();
+
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+
+        // Вылетающий текст
+        const floatText = document.createElement('div');
+        floatText.className = 'click-floating-text'; 
+        floatText.innerText = `+${clickPower.toFixed(3)}`;
+        floatText.style.left = `${e.clientX - 25}px`; 
+        floatText.style.top = `${e.clientY - 15}px`;
+        document.body.appendChild(floatText);
+        setTimeout(() => floatText.remove(), 500);
+
+        // Возврат планеты в рабочий режим через 500 мс
+        setTimeout(() => { 
+            canClick = true; 
+            planet.style.pointerEvents = 'auto'; 
+            planet.style.filter = 'none'; 
+            planet.style.transform = 'none'; 
+        }, 500);
+    });
+
     // =========================================================================
     // ⚙️ СИСТЕМНАЯ ЛОГИКА ИГРЫ (ОБНОВЛЁННЫЙ ЧИСТЫЙ МОДУЛЬ КЛИКЕРА И КЕЙСОВ)
     // =========================================================================
