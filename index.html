@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TheBSgorm VIP Hub</title>
+    <title>TheBSgorm Web3 VIP Hub</title>
     <!-- Официальный скрипт Telegram Web App -->
     <script src="https://telegram.org"></script>
     <style>
@@ -12,6 +12,7 @@
             --neon-pink: #ff007f;
             --neon-purple: #7928ca;
             --neon-cyan: #00f2fe;
+            --neon-blue: #0072ff;
             --glass: rgba(15, 23, 42, 0.45);
             --border-glass: rgba(255, 255, 255, 0.08);
         }
@@ -44,77 +45,59 @@
         .subtitle { font-size: 13px; color: var(--neon-cyan); text-shadow: 0 0 8px rgba(0, 242, 254, 0.4); opacity: 0.9; margin-bottom: 30px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
         .menu-container { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 14px; }
         
-        /* ПУЛЬСИРУЮЩАЯ КНОПКА ПОДДЕРЖКИ С НЕОНОВЫМ ДЫХАНИЕМ */
+        /* ПУЛЬСИРУЮЩАЯ КНОПКА ПОДДЕРЖКИ */
         .feedback-trigger-btn {
-            width: 100%; background: var(--glass); color: #fff;
-            border: 2px solid var(--neon-cyan); padding: 15px; border-radius: 18px;
-            font-size: 14px; font-weight: 900; cursor: pointer; letter-spacing: 0.5px;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); box-sizing: border-box;
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: pulseNeon 3s infinite ease-in-out;
+            width: 100%; background: var(--glass); color: #fff; border: 2px solid var(--neon-cyan); padding: 15px; border-radius: 18px;
+            font-size: 14px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); box-sizing: border-box; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); animation: pulseNeon 3s infinite ease-in-out;
         }
-        .feedback-trigger-btn:active {
-            transform: scale(0.96); box-shadow: 0 0 30px var(--neon-cyan);
-            background: var(--neon-cyan); color: #000;
-        }
-        @keyframes pulseNeon {
-            0%, 100% { box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); border-color: rgba(0, 242, 254, 0.4); }
-            50% { box-shadow: 0 0 25px rgba(0, 242, 254, 0.6); border-color: var(--neon-cyan); }
-        }
+        .feedback-trigger-btn:active { transform: scale(0.96); box-shadow: 0 0 30px var(--neon-cyan); background: var(--neon-cyan); color: #000; }
+        @keyframes pulseNeon { 0%, 100% { box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); border-color: rgba(0, 242, 254, 0.4); } 50% { box-shadow: 0 0 25px rgba(0, 242, 254, 0.6); border-color: var(--neon-cyan); } }
 
-        /* КНОПКИ-АККОРДЕОНЫ С УЛЬТРА-ГРАДИЕНТАМИ */
-        .accordion-btn { 
-            width: 100%; padding: 18px; border-radius: 18px; font-size: 15px; font-weight: 800; 
-            color: #fff; border: none; cursor: pointer; display: flex; align-items: center; 
-            justify-content: space-between; box-sizing: border-box;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        /* КНОПКИ-АККОРДЕОНЫ */
+        .accordion-btn { width: 100%; padding: 18px; border-radius: 18px; font-size: 15px; font-weight: 800; color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
         .accordion-btn:active { transform: scale(0.97); filter: brightness(1.2); }
         .acc-blue { background: linear-gradient(135deg, #00f2fe, #0072ff); box-shadow: 0 6px 20px rgba(0, 114, 255, 0.35); border: 1px solid rgba(255,255,255,0.15); }
         .acc-cyan { background: linear-gradient(135deg, #7928ca, #ff007f); box-shadow: 0 6px 20px rgba(255, 0, 127, 0.35); border: 1px solid rgba(255,255,255,0.15); }
         .acc-icon { font-size: 13px; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 0.8; }
-        /* КРАСИВО ВЫЕЗЖАЮЩИЕ ВНУТРЕННИЕ МЕНЮ С СЕТКОЙ КНОПОК */
-        .panel { 
-            max-height: 0; overflow: hidden; 
-            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease, margin 0.3s ease; 
-            background: var(--glass); border: 1px solid var(--border-glass);
-            border-radius: 18px; display: flex; flex-direction: column; gap: 8px; box-sizing: border-box; padding: 0 14px; 
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-        }
-        .panel.show { padding: 14px; margin-top: -4px; margin-bottom: 6px; box-shadow: inset 0 0 15px rgba(255,255,255,0.03); }
         
-        /* СТИЛЬНЫЕ КНОПКИ ВНУТРИ ВЫПАДАЮЩИХ СПИСКОВ */
-        .panel-link { 
-            background: rgba(255, 255, 255, 0.05); color: #fff; text-decoration: none; 
-            padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 700; 
-            text-align: center; border: 1px solid rgba(255, 255, 255, 0.03);
-            transition: all 0.15s ease; display: block; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        /* КРАСИВЫЕ ВЫЕЗЖАЮЩИЕ GUI-ПАНЕЛИ КАРТЫ */
+        .panel { 
+            max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease, margin 0.35s ease; 
+            background: var(--glass); border: 1px solid var(--border-glass); border-radius: 20px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); box-sizing: border-box; padding: 0 14px;
         }
-        .panel-link:active { background: #ffffff; color: #03001e; transform: translateY(1px); box-shadow: none; }
+        .panel.show { padding: 16px; margin-top: -4px; margin-bottom: 6px; box-shadow: inset 0 0 20px rgba(255,255,255,0.03); }
+        
+        /* ИНТЕРФЕЙСНАЯ СЕТКА МОДУЛЕЙ GUI КАРТЫ */
+        .gui-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; }
+        /* СТИЛЬНЫЕ НЕОНОВЫЕ СТЕКЛЯННЫЕ МОДУЛИ ДЛЯ ССЫЛОК */
+        .gui-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px; padding: 14px 10px; text-align: center;
+            text-decoration: none; color: #fff; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .gui-card:active { transform: translateY(2px) scale(0.96); box-shadow: none; }
+        .gui-card.g-tg { border-color: rgba(0, 242, 254, 0.2); }
+        .gui-card.g-tg:active { background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); }
+        .gui-card.g-yt { border-color: rgba(255, 0, 127, 0.2); }
+        .gui-card.g-yt:active { background: var(--neon-pink); color: #000; box-shadow: 0 0 15px var(--neon-pink); }
+        .gui-card.g-gh { border-color: rgba(121, 40, 202, 0.3); }
+        .gui-card.g-gh:active { background: var(--neon-purple); color: #fff; box-shadow: 0 0 15px var(--neon-purple); }
+        
+        .gui-card-icon { font-size: 26px; }
+        .gui-card-name { font-size: 12px; font-weight: 800; letter-spacing: 0.3px; }
 
         /* ЭФФЕКТНОЕ ZOOM-ОКНО ОБРАТНОЙ СВЯЗИ */
-        .feedback-modal { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(2, 4, 10, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            display: flex; align-items: center; justify-content: center; 
-            opacity: 0; pointer-events: none; transition: all 0.25s ease; z-index: 3000; 
-        }
+        .feedback-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 4, 10, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: all 0.25s ease; z-index: 3000; }
         .feedback-modal.active { opacity: 1; pointer-events: auto; }
         .feedback-modal.active .fb-content { transform: scale(1); opacity: 1; }
-        .fb-content { 
-            background: rgba(11, 19, 43, 0.96); border: 1px solid rgba(0, 242, 254, 0.25); 
-            padding: 25px; border-radius: 26px; width: 85%; max-width: 340px; 
-            text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); box-sizing: border-box; 
-            transform: scale(0.75); opacity: 0; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .fb-textarea { 
-            width: 100%; height: 110px; background: rgba(0, 0, 0, 0.35); 
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; 
-            color: #fff; padding: 12px; font-family: inherit; font-size: 14px; 
-            resize: none; margin: 15px 0; box-sizing: border-box; 
-        }
+        .fb-content { background: rgba(11, 19, 43, 0.96); border: 1px solid rgba(0, 242, 254, 0.25); padding: 25px; border-radius: 26px; width: 85%; max-width: 340px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); box-sizing: border-box; transform: scale(0.75); opacity: 0; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .fb-textarea { width: 100%; height: 110px; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; color: #fff; padding: 12px; font-family: inherit; font-size: 14px; resize: none; margin: 15px 0; box-sizing: border-box; }
         .fb-textarea:focus { border-color: #00f2fe; outline: none; box-shadow: 0 0 10px rgba(0, 242, 254, 0.2); }
         .action-btn { width: 100%; padding: 14px; border-radius: 12px; font-size: 13px; font-weight: 800; border: none; cursor: pointer; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.1s; }
         .action-btn:active { transform: scale(0.97); }
@@ -124,28 +107,50 @@
 
     <div class="avatar-zone">🚀</div>
     <h1>TheBSgorm</h1>
-    <div class="subtitle">Официальный Бот-Помощник</div>
+    <div class="subtitle">Web3 VIP Станция</div>
 
     <div class="menu-container">
-        <!-- Твоя верхняя анимированная кнопка связи -->
+        <!-- Кнопка связи -->
         <button class="feedback-trigger-btn" onclick="openFeedback()">📞 Связь / Поддержка</button>
 
         <!-- Аккордеон 1: Социальные сети -->
         <button class="accordion-btn acc-blue" onclick="toggleAccordion('panel1', this)">
-            <span>🌐 &nbsp; Социальные сети</span>
+            <span>🌐 &nbsp; GUI Социальная Карта</span>
             <span class="acc-icon">▼</span>
         </button>
         <div class="panel" id="panel1">
-            <a href="https://t.me" class="panel-link" target="_blank">📢 Телеграм Канал</a>
-            <a href="#" class="panel-link">🎬 Наш YouTube</a>
+            <div class="gui-grid">
+                <a href="https://t.me" class="gui-card g-tg" target="_blank">
+                    <span class="gui-card-icon">📢</span>
+                    <span class="gui-card-name">Telegram</span>
+                </a>
+                <a href="#" class="gui-card g-yt" target="_blank">
+                    <span class="gui-card-icon">🎬</span>
+                    <span class="gui-card-name">YouTube</span>
+                </a>
+            </div>
         </div>
-        <!-- Аккордеон 2: Проекты -->
+        <!-- Аккордеон 2: Карта Проектов -->
         <button class="accordion-btn acc-cyan" onclick="toggleAccordion('panel2', this)">
-            <span>📁 &nbsp; Посмотреть проекты</span>
+            <span>📁 &nbsp; GUI Карта Проектов</span>
             <span class="acc-icon">▼</span>
         </button>
         <div class="panel" id="panel2">
-            <a href="https://github.com" class="panel-link" target="_blank">💻 Мой GitHub</a>
+            <div class="gui-grid">
+                <!-- Твой главный проект AQUAPHOBIA -->
+                <a href="#" class="gui-card g-yt" style="grid-column: span 2; border-color: rgba(234, 179, 8, 0.35);" onclick="if(window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert('🎭 AQUAPHOBIA: Escape — Хоррор-выживание в разработке! Скоро релиз.'); return false;">
+                    <span class="gui-card-icon">🎭</span>
+                    <span class="gui-card-name" style="color: #eab308; font-size: 13px;">AQUAPHOBIA: Escape</span>
+                </a>
+                <a href="https://github.com" class="gui-card g-gh" target="_blank">
+                    <span class="gui-card-icon">💻</span>
+                    <span class="gui-card-name">GitHub</span>
+                </a>
+                <a href="#" class="gui-card g-tg" onclick="if(window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert('🪐 Новый проект в разработке...'); return false;">
+                    <span class="gui-card-icon">🧪</span>
+                    <span class="gui-card-name">В разработке</span>
+                </a>
+            </div>
         </div>
 
         <!-- Кнопка запуска игры-кликера -->
@@ -157,7 +162,7 @@
         </a>
     </div>
 
-    <!-- КРАСИВОЕ ОКНО ОБРАТНОЙ СВЯЗИ С ZOOM-АНИМАЦИЕЙ -->
+    <!-- ОКНО ОБРАТНОЙ СВЯЗИ С ZOOM-АНИМАЦИЕЙ -->
     <div class="feedback-modal" id="feedbackModal">
         <div class="fb-content">
             <h3 style="margin-top: 0; color: #7dd3fc; font-weight: 900; font-size: 18px; letter-spacing: 0.5px;">📬 ОБРАТНАЯ СВЯЗЬ</h3>
@@ -172,7 +177,7 @@
     const tg = window.Telegram?.WebApp;
     if (tg) { tg.ready(); tg.expand(); }
 
-    // ФУНКЦИЯ ПЛАВНОГО РАСКРЫТИЯ АККОРДЕОНОВ И 3D ПОВОРОТА СТРЕЛОЧЕК
+    // ФУНКЦИЯ ПЛАВНОГО РАСКРЫТИЯ GUI-КАРТЫ И ПОВОРОТА СТРЕЛОЧЕК
     window.toggleAccordion = function(panelId, btn) {
         const panel = document.getElementById(panelId);
         const icon = btn.querySelector('.acc-icon');
@@ -235,5 +240,3 @@
 </script>
 </body>
 </html>
-
-        
