@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TheBSgorm Web3 VIP Hub</title>
+    <title>TheBSgorm VIP Hub</title>
     <!-- Официальный скрипт Telegram Web App -->
     <script src="https://telegram.org"></script>
     <style>
@@ -12,42 +12,51 @@
             --neon-pink: #ff007f;
             --neon-purple: #7928ca;
             --neon-cyan: #00f2fe;
-            --neon-blue: #0072ff;
-            --glass: rgba(15, 23, 42, 0.45);
-            --border-glass: rgba(255, 255, 255, 0.08);
+            --glass: rgba(15, 23, 42, 0.65);
+            --border-glass: rgba(255, 255, 255, 0.12);
         }
 
-        @keyframes cyberPulse {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        /* --- НЕОНОВЫЙ ЭКРАН ЗАГРУЗКИ (PRELOADER) --- */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #03001e; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; z-index: 9999;
+            transition: opacity 0.5s ease, pointer-events 0.5s ease; gap: 20px;
         }
+        .loader-spinner {
+            width: 55px; height: 55px; border: 4px solid rgba(0, 242, 254, 0.1);
+            border-top-color: var(--neon-cyan); border-bottom-color: var(--neon-pink);
+            border-radius: 50%; animation: spin 1s linear infinite;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+        }
+        .loader-text { font-size: 12px; font-weight: 900; color: var(--neon-cyan); letter-spacing: 3px; text-transform: uppercase; animation: pulseText 1.5s infinite ease-in-out; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulseText { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; text-shadow: 0 0 8px var(--neon-cyan); } }
 
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: radial-gradient(circle at 50% 0%, #110033 0%, var(--bg-dark) 70%);
-            background-attachment: fixed; 
-            color: #fff; margin: 0; padding: 25px 15px; 
+            background-attachment: fixed; color: #fff; margin: 0; padding: 25px 15px; 
             display: flex; flex-direction: column; align-items: center; 
             min-height: 100vh; box-sizing: border-box; overflow-x: hidden;
         }
 
-        /* МЕГА-АВАТАР С НЕОНОВЫМ ПЕРЕЛИВОМ */
+        /* МЕГА-АВАТАР */
         .avatar-zone { 
-            width: 125px; height: 125px; 
-            background: linear-gradient(-45deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+            width: 125px; height: 125px; background: linear-gradient(-45deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
             background-size: 300% 300%; animation: cyberPulse 6s infinite ease-in-out;
             border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 55px; 
-            box-shadow: 0 0 35px rgba(0, 242, 254, 0.4), inset 0 0 15px rgba(255,255,255,0.3); 
-            margin-top: 20px; border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: 0 0 35px rgba(0, 242, 254, 0.4); margin-top: 20px; border: 2px solid rgba(255,255,255,0.2);
         }
+        @keyframes cyberPulse { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 
         h1 { font-size: 28px; font-weight: 950; margin: 18px 0 4px 0; letter-spacing: 1px; text-transform: uppercase; background: linear-gradient(90deg, #fff, #93c5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .subtitle { font-size: 13px; color: var(--neon-cyan); text-shadow: 0 0 8px rgba(0, 242, 254, 0.4); opacity: 0.9; margin-bottom: 30px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
-        .menu-container { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 14px; }
+        .subtitle { font-size: 13px; color: var(--neon-cyan); text-shadow: 0 0 8px rgba(0, 242, 254, 0.4); margin-bottom: 30px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+        .menu-container { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 14px; position: relative; }
         
-        /* ПУЛЬСИРУЮЩАЯ КНОПКА ПОДДЕРЖКИ */
+        /* КНОПКА СВЯЗИ */
         .feedback-trigger-btn {
-            width: 100%; background: var(--glass); color: #fff; border: 2px solid var(--neon-cyan); padding: 15px; border-radius: 18px;
+            width: 100%; background: rgba(15, 23, 42, 0.45); color: #fff; border: 2px solid var(--neon-cyan); padding: 15px; border-radius: 18px;
             font-size: 14px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
             box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); box-sizing: border-box; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); animation: pulseNeon 3s infinite ease-in-out;
@@ -56,43 +65,45 @@
         @keyframes pulseNeon { 0%, 100% { box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); border-color: rgba(0, 242, 254, 0.4); } 50% { box-shadow: 0 0 25px rgba(0, 242, 254, 0.6); border-color: var(--neon-cyan); } }
 
         /* КНОПКИ-АККОРДЕОНЫ */
-        .accordion-btn { width: 100%; padding: 18px; border-radius: 18px; font-size: 15px; font-weight: 800; color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+        .accordion-btn { width: 100%; padding: 18px; border-radius: 18px; font-size: 15px; font-weight: 800; color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); position: relative; z-index: 5; }
         .accordion-btn:active { transform: scale(0.97); filter: brightness(1.2); }
         .acc-blue { background: linear-gradient(135deg, #00f2fe, #0072ff); box-shadow: 0 6px 20px rgba(0, 114, 255, 0.35); border: 1px solid rgba(255,255,255,0.15); }
         .acc-cyan { background: linear-gradient(135deg, #7928ca, #ff007f); box-shadow: 0 6px 20px rgba(255, 0, 127, 0.35); border: 1px solid rgba(255,255,255,0.15); }
         .acc-icon { font-size: 13px; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 0.8; }
-        
-        /* КРАСИВЫЕ ВЫЕЗЖАЮЩИЕ GUI-ПАНЕЛИ КАРТЫ */
+                /* --- ПРЕМИАЛЬНЫЕ GUI-ПАНЕЛИ С ЭФФЕКТОМ НАЛОЖЕНИЯ ПОВЕРХ МЕНЮ --- */
         .panel { 
-            max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease, margin 0.35s ease; 
-            background: var(--glass); border: 1px solid var(--border-glass); border-radius: 20px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); box-sizing: border-box; padding: 0 14px;
+            position: absolute; left: 0; width: 100%; max-height: 0; overflow: hidden; 
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease, margin 0.35s ease, opacity 0.3s ease; 
+            background: rgba(11, 19, 43, 0.95); border: 2px solid var(--border-glass); border-radius: 22px; 
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); box-sizing: border-box; padding: 0 16px;
+            z-index: 50; opacity: 0; pointer-events: none;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 242, 254, 0.05);
         }
-        .panel.show { padding: 16px; margin-top: -4px; margin-bottom: 6px; box-shadow: inset 0 0 20px rgba(255,255,255,0.03); }
+        .panel.show { padding: 18px; margin-top: 6px; opacity: 1; pointer-events: auto; }
         
         /* ИНТЕРФЕЙСНАЯ СЕТКА МОДУЛЕЙ GUI КАРТЫ */
-        .gui-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; }
-        /* СТИЛЬНЫЕ НЕОНОВЫЕ СТЕКЛЯННЫЕ МОДУЛИ ДЛЯ ССЫЛОК */
+        .gui-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; }
+        
+        /* НЕОНОВЫЕ СТЕКЛЯННЫЕ МОДУЛИ ДЛЯ ССЫЛОК */
         .gui-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 14px; padding: 14px 10px; text-align: center;
+            background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px; padding: 16px 12px; text-align: center;
             text-decoration: none; color: #fff; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; gap: 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .gui-card:active { transform: translateY(2px) scale(0.96); box-shadow: none; }
-        .gui-card.g-tg { border-color: rgba(0, 242, 254, 0.2); }
-        .gui-card.g-tg:active { background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); }
-        .gui-card.g-yt { border-color: rgba(255, 0, 127, 0.2); }
-        .gui-card.g-yt:active { background: var(--neon-pink); color: #000; box-shadow: 0 0 15px var(--neon-pink); }
-        .gui-card.g-gh { border-color: rgba(121, 40, 202, 0.3); }
-        .gui-card.g-gh:active { background: var(--neon-purple); color: #fff; box-shadow: 0 0 15px var(--neon-purple); }
+        .gui-card.g-tg { border-color: rgba(0, 242, 254, 0.25); }
+        .gui-card.g-tg:active { background: var(--neon-cyan); color: #000; box-shadow: 0 0 20px var(--neon-cyan); }
+        .gui-card.g-yt { border-color: rgba(255, 0, 127, 0.25); }
+        .gui-card.g-yt:active { background: var(--neon-pink); color: #000; box-shadow: 0 0 20px var(--neon-pink); }
+        .gui-card.g-gh { border-color: rgba(121, 40, 202, 0.35); }
+        .gui-card.g-gh:active { background: var(--neon-purple); color: #fff; box-shadow: 0 0 20px var(--neon-purple); }
         
-        .gui-card-icon { font-size: 26px; }
-        .gui-card-name { font-size: 12px; font-weight: 800; letter-spacing: 0.3px; }
+        .gui-card-icon { font-size: 28px; }
+        .gui-card-name { font-size: 12px; font-weight: 850; letter-spacing: 0.3px; }
 
-        /* ЭФФЕКТНОЕ ZOOM-ОКНО ОБРАТНОЙ СВЯЗИ */
+        /* ОКНО ОБРАТНОЙ СВЯЗИ */
         .feedback-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 4, 10, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: all 0.25s ease; z-index: 3000; }
         .feedback-modal.active { opacity: 1; pointer-events: auto; }
         .feedback-modal.active .fb-content { transform: scale(1); opacity: 1; }
@@ -105,56 +116,66 @@
 </head>
 <body>
 
+    <!-- ЭКРАН ЗАГРУЗКИ -->
+    <div id="preloader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">Инициализация систем...</div>
+    </div>
+
     <div class="avatar-zone">🚀</div>
     <h1>TheBSgorm</h1>
     <div class="subtitle">Web3 VIP Станция</div>
 
     <div class="menu-container">
-        <!-- Кнопка связи -->
         <button class="feedback-trigger-btn" onclick="openFeedback()">📞 Связь / Поддержка</button>
 
-        <!-- Аккордеон 1: Социальные сети -->
-        <button class="accordion-btn acc-blue" onclick="toggleAccordion('panel1', this)">
-            <span>🌐 &nbsp; GUI Социальная Карта</span>
-            <span class="acc-icon">▼</span>
-        </button>
-        <div class="panel" id="panel1">
-            <div class="gui-grid">
-                <a href="https://t.me" class="gui-card g-tg" target="_blank">
-                    <span class="gui-card-icon">📢</span>
-                    <span class="gui-card-name">Telegram</span>
-                </a>
-                <a href="#" class="gui-card g-yt" target="_blank">
-                    <span class="gui-card-icon">🎬</span>
-                    <span class="gui-card-name">YouTube</span>
-                </a>
+        <!-- Модуль 1: Социальные сети -->
+        <div style="position: relative;">
+            <button class="accordion-btn acc-blue" onclick="toggleAccordion('panel1', this)">
+                <span>🌐 &nbsp; GUI Социальная Карта</span>
+                <span class="acc-icon">▼</span>
+            </button>
+            <div class="panel" id="panel1">
+                <div class="gui-grid">
+                    <a href="https://t.me" class="gui-card g-tg" target="_blank">
+                        <span class="gui-card-icon">📢</span>
+                        <span class="gui-card-name">Telegram</span>
+                    </a>
+                    <a href="#" class="gui-card g-yt" target="_blank">
+                        <span class="gui-card-icon">🎬</span>
+                        <span class="gui-card-name">YouTube</span>
+                    </a>
+                </div>
             </div>
         </div>
-        <!-- Аккордеон 2: Карта Проектов -->
-        <button class="accordion-btn acc-cyan" onclick="toggleAccordion('panel2', this)">
-            <span>📁 &nbsp; GUI Карта Проектов</span>
-            <span class="acc-icon">▼</span>
-        </button>
-        <div class="panel" id="panel2">
-            <div class="gui-grid">
-                <!-- Твой главный проект AQUAPHOBIA -->
-                <a href="#" class="gui-card g-yt" style="grid-column: span 2; border-color: rgba(234, 179, 8, 0.35);" onclick="if(window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert('🎭 AQUAPHOBIA: Escape — Хоррор-выживание в разработке! Скоро релиз.'); return false;">
-                    <span class="gui-card-icon">🎭</span>
-                    <span class="gui-card-name" style="color: #eab308; font-size: 13px;">AQUAPHOBIA: Escape</span>
-                </a>
-                <a href="https://github.com" class="gui-card g-gh" target="_blank">
-                    <span class="gui-card-icon">💻</span>
-                    <span class="gui-card-name">GitHub</span>
-                </a>
-                <a href="#" class="gui-card g-tg" onclick="if(window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert('🪐 Новый проект в разработке...'); return false;">
-                    <span class="gui-card-icon">🧪</span>
-                    <span class="gui-card-name">В разработке</span>
-                </a>
+        <!-- Модуль 2: Карта Проектов -->
+        <div style="position: relative; margin-top: 14px;">
+            <button class="accordion-btn acc-cyan" onclick="toggleAccordion('panel2', this)">
+                <span>📁 &nbsp; GUI Карта Проектов</span>
+                <span class="acc-icon">▼</span>
+            </button>
+            <div class="panel" id="panel2">
+                <div class="gui-grid">
+                    <!-- Твой проект AQUAPHOBIA: Escape с описанием -->
+                    <a href="#" class="gui-card g-yt" style="grid-column: span 2; border-color: rgba(234, 179, 8, 0.4); padding: 18px 12px; background: rgba(234, 179, 8, 0.03);" onclick="if(window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert('🎭 AQUAPHOBIA: Escape \n\nЭто атмосферное хоррор-выживание от первого лица! Игроку предстоит разгадать мрачные тайны подводного комплекса, спасаясь от жутких аномалий в условиях ограниченного кислорода. \n\nПроект находится в активной разработке. Приготовьтесь встретиться со своим страхом!'); return false;">
+                        <span class="gui-card-icon">🎭</span>
+                        <span class="gui-card-name" style="color: #eab308; font-size: 14px; margin-bottom: 2px;">AQUAPHOBIA: Escape</span>
+                        <span style="font-size: 10px; color: #a1a1aa; font-weight: 500; line-height: 1.3;">Хоррор-выживание в затопленном комплексе. Нажми, чтобы прочесть описание!</span>
+                    </a>
+                    <a href="https://github.com" class="gui-card g-gh" target="_blank">
+                        <span class="gui-card-icon">💻</span>
+                        <span class="gui-card-name">GitHub</span>
+                    </a>
+                    <a href="#" class="gui-card g-tg" onclick="if(window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert('🧪 Тайные разработки...'); return false;">
+                        <span class="gui-card-icon">🧪</span>
+                        <span class="gui-card-name">В разработке</span>
+                    </a>
+                </div>
             </div>
         </div>
 
         <!-- Кнопка запуска игры-кликера -->
-        <a href="game.html" style="text-decoration: none;">
+        <a href="game.html" style="text-decoration: none; margin-top: 14px; display: block;">
             <button class="accordion-btn" style="background: linear-gradient(135deg, #0284c7, #1e3a8a); box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3); border: 1px solid rgba(255,255,255,0.15);">
                 <span>🎮 &nbsp; Играть в Clicker NFT</span>
                 <span class="acc-icon">►</span>
@@ -177,7 +198,17 @@
     const tg = window.Telegram?.WebApp;
     if (tg) { tg.ready(); tg.expand(); }
 
-    // ФУНКЦИЯ ПЛАВНОГО РАСКРЫТИЯ GUI-КАРТЫ И ПОВОРОТА СТРЕЛОЧЕК
+    // ОТКЛЮЧЕНИЕ ЭКРАНА ЗАГРУЗКИ ПОСЛЕ ПОЛНОЙ ГОТОВНОСТИ
+    window.addEventListener('load', () => {
+        const preloader = document.getElementById('preloader');
+        if (preloader) {
+            preloader.style.opacity = '0';
+            preloader.style.pointerEvents = 'none';
+            setTimeout(() => preloader.remove(), 500);
+        }
+    });
+
+    // ФУНКЦИЯ ПЛАВНОГО РАСКРЫТИЯ GUI-ПАНЕЛЕЙ ПОВЕРХ МЕНЮ
     window.toggleAccordion = function(panelId, btn) {
         const panel = document.getElementById(panelId);
         const icon = btn.querySelector('.acc-icon');
@@ -211,7 +242,6 @@
         const BOT_TOKEN = "8794927474:AAG4C5t64F1R8kiH8lZxyFgIczbwLyoEJnE";
         const MY_TELEGRAM_ID = "5591880317";
 
-        // Собираем Web3-данные об авторе
         const tgUser = tg?.initDataUnsafe?.user || {};
         const senderName = tgUser.first_name ? `${tgUser.first_name} ${tgUser.last_name || ''}`.trim() : "Анонимный пилот";
         const senderUsername = tgUser.username ? `@${tgUser.username}` : "нет юзернейма";
