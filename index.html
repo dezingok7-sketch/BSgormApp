@@ -174,17 +174,41 @@
     // НАДЁЖНЫЙ ОФИЦИАЛЬНЫЙ МЕТОД ОТКРЫТИЯ ТВОЕГО ЧАТА В ЛС
     // НАДЁЖНЫЙ ОФИЦИАЛЬНЫЙ МЕТОД ОТКРЫТИЯ ТВОЕГО ЧАТА В ЛС
     // КИБЕР-ПЕРЕКЛЮЧЕНИЕ ЭКРАНА НА ЛС СОЗДАТЕЛЯ
+    // СИСТЕМА ОТПРАВКИ ЗАЯВКИ НАПРЯМУЮ В FIREBASE
     window.openCreatorChat = function() {
-        if (tg) {
-            // Обходим открытие браузера через вызов системного инвойса
-            if (tg.openInvoice) {
-                tg.openInvoice("tg://resolve?domain=TheBSgorm123");
-            } else if (tg.openTelegramLink) {
-                tg.openTelegramLink("https://t.me");
-            }
-        } else {
-            window.open("https://t.me", "_blank");
+        // Если окно VIP-заявки у тебя открывается по кнопке, вызываем его
+        if (typeof openFeedback === "function") {
+            openFeedback();
+            return;
         }
+
+        // Если же кнопка должна сразу отправлять быстрый сигнал:
+        const FIREBASE_URL = "https://ТВОЙ_://firebaseio.com";
+
+        const tgUser = tg?.initDataUnsafe?.user || {};
+        const senderName = tgUser.first_name ? `${tgUser.first_name} ${tgUser.last_name || ''}`.trim() : "Анонимный пилот";
+        const senderUsername = tgUser.username ? `@${tgUser.username}` : "нет юзернейма";
+        const senderId = tgUser.id || "не определен";
+
+        const requestData = {
+            name: senderName,
+            username: senderUsername,
+            userId: senderId,
+            message: "Пользователь нажал кнопку связи и ждет ответа!",
+            time: new Date().toLocaleTimeString("ru-RU")
+        };
+
+        fetch(FIREBASE_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(requestData)
+        })
+        .then(response => {
+            if (response.ok) {
+                if (tg && tg.showAlert) tg.showAlert("🚀 Заявка отправлена в облако Firebase! Создатель скоро свяжется с вами.");
+            }
+        })
+        .catch(error => console.error("Ошибка Firebase:", error));
     }
 </script>
 </body>
