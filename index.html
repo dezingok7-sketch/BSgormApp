@@ -63,85 +63,8 @@
         @keyframes breatheSpace { 0%, 100% { box-shadow: 0 6px 15px rgba(2, 132, 199, 0.2); } 50% { box-shadow: 0 6px 25px rgba(0, 242, 254, 0.4); } }
         
         .btn-icon { font-size: 13px; opacity: 0.8; }
-                /* СЕТКА И ЯЧЕЙКИ ССЫЛОК ВНУТРИ ОКН */
-        .gui-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; margin: 15px 0; }
-        .gui-card {
-            background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 14px; padding: 12px 6px; text-align: center; text-decoration: none; color: #fff;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .gui-card:active { transform: translateY(2px) scale(0.96); box-shadow: none; }
-        .gui-card.g-tg { border-color: rgba(0, 242, 254, 0.25); }
-        .gui-card.g-tg:active { background: var(--neon-cyan); color: #000; box-shadow: 0 0 20px var(--neon-cyan); }
-        .gui-card.g-yt { border-color: rgba(255, 0, 127, 0.25); }
-        .gui-card.g-yt:active { background: var(--neon-pink); color: #000; box-shadow: 0 0 20px var(--neon-pink); }
-        .gui-card.g-rt { border-color: rgba(234, 179, 8, 0.35); }
-        .gui-card.g-rt:active { background: #eab308; color: #000; box-shadow: 0 0 20px #eab308; }
-        
-        .gui-card-icon { font-size: 26px; }
-        .gui-card-name { font-size: 11px; font-weight: 850; letter-spacing: 0.3px; }
 
-        /* ОКНА С ZOOM-АНИМАЦИЕЙ */
-        .feedback-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 4, 10, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: all 0.25s ease; z-index: 3000; }
-        .feedback-modal.active { opacity: 1; pointer-events: auto; }
-        .feedback-modal.active .fb-content { transform: scale(1); opacity: 1; }
-        .fb-content { background: rgba(11, 19, 43, 0.96); border: 1px solid rgba(0, 242, 254, 0.25); padding: 25px; border-radius: 26px; width: 85%; max-width: 360px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); box-sizing: border-box; transform: scale(0.75); opacity: 0; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        .action-btn { width: 100%; padding: 14px; border-radius: 12px; font-size: 13px; font-weight: 800; border: none; cursor: pointer; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.1s; }
-        .action-btn:active { transform: scale(0.97); }
-    </style>
-</head>
-<body>
-
-    <div class="avatar-zone">🚀</div>
-    <h1>TheBSgorm</h1>
-    <div class="subtitle">Web3 VIP Станция</div>
-
-    <div class="menu-container">
-        <!-- Бронебойная прямая кнопка связи в ЛС с эффектом дыхания -->
-        <a href="tg://user?id=5591880317" style="text-decoration: none; width: 100%;">
-            <!-- ОФИЦИАЛЬНАЯ VIP-КНОПКА СВЯЗИ ЧЕРЕЗ API WEBAPP -->
-        <button class="hub-main-btn btn-cyan" style="animation: breathePink 2.5s infinite ease-in-out;" onclick="openCreatorChat()">
-            <span>📞 Написать Создателю в ЛС</span>
-            <span class="btn-icon">►</span>
-        </button>
-        </a>
-
-        <button class="hub-main-btn btn-blue" onclick="openModal('socialModal')">
-            <span>🌐 &nbsp; Социальная Карта</span>
-            <span class="btn-icon">►</span>
-        </button>
-
-        <button class="hub-main-btn btn-cyan" onclick="openModal('projectModal')">
-            <span>📁 &nbsp; Карта Проектов</span>
-            <span class="btn-icon">►</span>
-        </button>
-
-        <a href="game.html" style="text-decoration: none;">
-            <button class="hub-main-btn btn-space">
-                <span>🎮 &nbsp; Играть в Clicker NFT</span>
-                <span class="btn-icon">►</span>
-            </button>
-        </a>
-    </div>
-
-    <!-- ОКНО 1: СОЦИАЛЬНАЯ КАРТА (5 СЕТЕЙ) -->
-    <div class="feedback-modal" id="socialModal">
-        <div class="fb-content" style="max-width: 375px;">
-            <h3 style="margin-top:0; color:#7dd3fc; font-weight:900; font-size:18px;">🌐 СОЦИАЛЬНЫЕ СЕТИ</h3>
-            <p style="font-size:12px; color:#94a3b8; margin:0; font-weight:600; line-height:1.4;">Официальные медиа-ресурсы и каналы связи проекта TheBSgorm</p>
-            <div class="gui-grid">
-                <a href="https://t.me" class="gui-card g-tg" target="_blank"><span class="gui-card-icon">📢</span><span class="gui-card-name">Telegram</span></a>
-                <a href="#" class="gui-card g-yt" target="_blank"><span class="gui-card-icon">🎬</span><span class="gui-card-name">YouTube</span></a>
-                <a href="#" class="gui-card g-rt" target="_blank"><span class="gui-card-icon">🇷🇺</span><span class="gui-card-name">Rutube</span></a>
-                <a href="#" class="gui-card g-yt" style="border-color: rgba(255, 0, 127, 0.35);" target="_blank"><span class="gui-card-icon">📸</span><span class="gui-card-name">Instagram</span></a>
-                <a href="#" class="gui-card g-tg" style="grid-column: span 2; border-color: rgba(255,255,255,0.15);" target="_blank"><span class="gui-card-icon">🎵</span><span class="gui-card-name">TikTok</span></a>
-            </div>
-            <button class="action-btn" style="background:#334155; color:#94a3b8; margin-bottom:0;" onclick="closeModal('socialModal')">Назад</button>
-        </div>
-    </div>
-    
-<!-- ОКНО 2: КАРТА ПРОЕКТОВ ПОВЕРХ ВСЕГО -->
+            <!-- ОКНО 2: КАРТА ПРОЕКТОВ (AQUAPHOBIA) ПОВЕРХ ВСЕГО -->
     <div class="feedback-modal" id="projectModal">
         <div class="fb-content">
             <h3 style="margin-top:0; color:#7dd3fc; font-weight:900; font-size:18px;">📁 КАРТА ПРОЕКТОВ</h3>
@@ -158,6 +81,17 @@
         </div>
     </div>
 
+    <!-- ОКНО 3: СТИЛЬНАЯ VIP-ЗАЯВКА В ЛС -->
+    <div class="feedback-modal" id="feedbackModal">
+        <div class="fb-content">
+            <h3 style="margin-top: 0; color: #7dd3fc; font-weight: 900; font-size: 18px; letter-spacing: 0.5px;">👑 VIP-ЗАЯВКА В ЛС</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin: 0; font-weight: 600; line-height: 1.4;">Есть вопрос, предложение по сотрудничеству или баг? Опиши суть, и заявка мгновенно прилетит прямо создателю!</p>
+            <textarea class="fb-textarea" id="feedbackText" placeholder="Введите текст вашей заявки сюда..."></textarea>
+            <button class="action-btn" style="background: linear-gradient(135deg, #00f2fe, #0072ff); color: #fff;" onclick="sendFeedback()">Отправить заявку</button>
+            <button class="action-btn" style="background: #334155; color: #94a3b8; margin-bottom: 0;" onclick="closeModal('feedbackModal')">Отмена</button>
+        </div>
+    </div>
+
 <script>
     const tg = window.Telegram?.WebApp;
     if (tg) { tg.ready(); tg.expand(); }
@@ -170,11 +104,7 @@
         document.getElementById(modalId).classList.remove('active'); 
     }
 
-    // БРОНЕБОЙНЫЙ ОФИЦИАЛЬНЫЙ МЕТОД ОТКРЫТИЯ ТВОЕГО ЧАТА В ЛС
-    // НАДЁЖНЫЙ ОФИЦИАЛЬНЫЙ МЕТОД ОТКРЫТИЯ ТВОЕГО ЧАТА В ЛС
-    // НАДЁЖНЫЙ ОФИЦИАЛЬНЫЙ МЕТОД ОТКРЫТИЯ ТВОЕГО ЧАТА В ЛС
-    // КИБЕР-ПЕРЕКЛЮЧЕНИЕ ЭКРАНА НА ЛС СОЗДАТЕЛЯ
-    // СИСТЕМА ОТПРАВКИ ЗАЯВКИ НАПРЯМУЮ В FIREBASE
+    // ОТПРАВКА ДАННЫХ В ТВОЙ СЕРВЕР FIREBASE REALTIME DATABASE
     window.sendFeedback = function() {
         const text = document.getElementById('feedbackText').value.trim();
         if (!text) {
@@ -182,25 +112,21 @@
             return;
         }
 
-        // Твой личный сервер Firebase Realtime Database
         const FIREBASE_URL = "https://firebaseio.com";
 
-        // Автоматический сбор Web3-данных об авторе из Telegram
         const tgUser = tg?.initDataUnsafe?.user || {};
         const senderName = tgUser.first_name ? `${tgUser.first_name} ${tgUser.last_name || ''}`.trim() : "Анонимный пилот";
         const senderUsername = tgUser.username ? `@${tgUser.username}` : "нет юзернейма";
         const senderId = tgUser.id || "не определен";
 
-        // Формируем пакет данных для отправки на сервер
         const requestData = {
             name: senderName,
             username: senderUsername,
             userId: senderId,
             message: text,
-            time: new Date().toLocaleTimeString("ru-RU") // Время заявки
+            time: new Date().toLocaleTimeString("ru-RU")
         };
 
-        // Отправляем данные методом POST в облако Firebase
         fetch(FIREBASE_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -210,19 +136,14 @@
             if (response.ok) {
                 if (tg && tg.showAlert) {
                     tg.showAlert("✅ Ваша VIP-заявка успешно занесена в базу данных Firebase!");
-                } else {
-                    alert("✅ Заявка успешно отправлена в Firebase!");
                 }
-                closeFeedback(); // Очищаем поле и закрываем модалку связи
+                closeModal('feedbackModal');
+                document.getElementById('feedbackText').value = "";
             } else {
-                if (tg && tg.showAlert) {
-                    tg.showAlert("❌ Ошибка Firebase. Убедись, что в панели Rules выставлены значения true.");
-                }
+                if (tg && tg.showAlert) tg.showAlert("❌ Ошибка отправки. Проверьте правила Rules в Firebase.");
             }
         })
-        .catch(error => {
-            console.error("Ошибка сети Firebase:", error);
-        });
+        .catch(error => console.error("Ошибка:", error));
     }
 </script>
 </body>
