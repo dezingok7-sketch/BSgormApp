@@ -173,15 +173,17 @@
     // БРОНЕБОЙНЫЙ ОФИЦИАЛЬНЫЙ МЕТОД ОТКРЫТИЯ ТВОЕГО ЧАТА В ЛС
     // НАДЁЖНЫЙ ОФИЦИАЛЬНЫЙ МЕТОД ОТКРЫТИЯ ТВОЕГО ЧАТА В ЛС
     // НАДЁЖНЫЙ ОФИЦИАЛЬНЫЙ МЕТОД ОТКРЫТИЯ ТВОЕГО ЧАТА В ЛС
+    // КИБЕР-ПЕРЕКЛЮЧЕНИЕ ЭКРАНА НА ЛС СОЗДАТЕЛЯ
     window.openCreatorChat = function() {
-        const link = "https://t.me";
-        
-        if (tg && tg.openTelegramLink) {
-            // Родной метод WebApp — открывает профиль внутри приложения
-            tg.openTelegramLink(link);
+        if (tg) {
+            // Обходим открытие браузера через вызов системного инвойса
+            if (tg.openInvoice) {
+                tg.openInvoice("tg://resolve?domain=TheBSgorm123");
+            } else if (tg.openTelegramLink) {
+                tg.openTelegramLink("https://t.me");
+            }
         } else {
-            // Запасной вариант для внешнего браузера
-            window.open(link, "_blank");
+            window.open("https://t.me", "_blank");
         }
     }
 </script>
