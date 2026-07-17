@@ -3,126 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Бот-Помощник TheBSgorm</title>
+    <title>TheBSgorm Hub</title>
     <!-- Официальный скрипт Telegram Web App -->
     <script src="https://telegram.org"></script>
     <style>
-        :root {
-            --bg-color: #030712;
-            --text-color: #ffffff;
-            --btn-bg: #00d2ff;
-            --btn-text: #ffffff;
-            --card-bg: rgba(7, 15, 36, 0.65); /* Плотное матовое стекло в цвет космоса */
-            --neon-cyan: #00f2fe;
-            --neon-blue: #0072ff;
-            --neon-space: rgba(0, 242, 254, 0.25); /* Лазурное свечение */
-            --glass-border: rgba(0, 242, 254, 0.16); /* Неоновый лазерный контур */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: linear-gradient(180deg, #0076f6 0%, #0b1e3f 100%); 
+            background-attachment: fixed; 
+            color: #fff; margin: 0; padding: 20px; 
+            display: flex; flex-direction: column; align-items: center; 
+            min-height: 100vh; box-sizing: border-box; 
         }
-                /* АНИМИРОВАННАЯ НЕОНОВАЯ КНОПКА СВЯЗИ */
+        .avatar-zone { width: 120px; height: 120px; background: radial-gradient(circle, #38bdf8 0%, #0052d4 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 55px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.4); margin-top: 30px; }
+        h1 { font-size: 26px; font-weight: 900; margin: 15px 0 4px 0; letter-spacing: 0.5px; }
+        .subtitle { font-size: 13px; color: #93c5fd; opacity: 0.8; margin-bottom: 25px; font-weight: 600; }
+        .menu-container { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 12px; }
+        
+        /* АНИМИРОВАННАЯ НЕОНОВАЯ КНОПКА СВЯЗИ */
         .feedback-trigger-btn {
-            width: 100%;
-            background: rgba(7, 15, 36, 0.8) !important;
-            color: #00f2fe !important;
-            border: 1px solid #00f2fe !important;
-            padding: 13px !important;
-            border-radius: 12px !important;
-            font-size: 14px !important;
-            font-weight: 800 !important;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
-            transition: all 0.2s ease !important;
-            box-sizing: border-box;
-            animation: pulseNeon 3s infinite ease-in-out;
+            width: 100%; background: rgba(7, 15, 36, 0.8); color: #00f2fe;
+            border: 1px solid #00f2fe; padding: 13px; border-radius: 12px;
+            font-size: 14px; font-weight: 800; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); box-sizing: border-box;
+            transition: all 0.2s ease; animation: pulseNeon 3s infinite ease-in-out;
         }
         .feedback-trigger-btn:active {
-            transform: scale(0.96) !important;
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.6) !important;
-            background: #00f2fe !important;
-            color: #02040a !important;
+            transform: scale(0.96); box-shadow: 0 0 25px rgba(0, 242, 254, 0.6);
+            background: #00f2fe; color: #02040a;
         }
         @keyframes pulseNeon {
             0%, 100% { box-shadow: 0 0 12px rgba(0, 242, 254, 0.2); border-color: rgba(0, 242, 254, 0.5); }
             50% { box-shadow: 0 0 22px rgba(0, 242, 254, 0.5); border-color: #00f2fe; }
         }
 
-
-        /* Быстрая анимация перелива чисто синей туманности */
-        @keyframes blueLiquidGradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            /* Насыщенная палитра из глубоких и электрических синих оттенков */
-            background: linear-gradient(-45deg, #020617, #070a1e, #1e3a8a, #0369a1, #0072ff, #020617);
-            background-size: 300% 300%;
-            animation: blueLiquidGradient 8s ease infinite; /* Динамичный перелив туманности */
-            background-attachment: fixed;
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
-            overflow-x: hidden;
-        }
-
-        /* --- СТИЛИ КОСМИЧЕСКОГО ЗАГРУЗЧИКА (SPLASH SCREEN) --- */
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #010105; z-index: 9999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.5s ease, pointer-events 0.5s ease; overflow: hidden;
-        }
+        /* ТВОИ ФИРМЕННЫЕ КНОПКИ-АККОРДЕОНЫ */
+        .accordion-btn { width: 100%; padding: 18px; border-radius: 16px; font-size: 15px; font-weight: 800; color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 6px 15px rgba(0,0,0,0.2); box-sizing: border-box; }
+        .acc-blue { background: linear-gradient(135deg, #00f2fe, #0072ff); }
+        .acc-cyan { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
+        .acc-icon { font-size: 18px; opacity: 0.7; transition: transform 0.2s; }
         
-        .space-glow {
-            position: absolute; width: 350px; height: 350px;
-            background: radial-gradient(circle, rgba(0, 242, 254, 0.2) 0%, transparent 70%);
-            top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1;
-        }
+        /* ВНУТРЕННИЕ ПАНЕЛИ ДЛЯ ТВОИХ ФУНКЦИЙ */
+        .panel { max-height: 0; overflow: hidden; transition: max-height 0.2s ease-out; background: rgba(255, 255, 255, 0.05); border-radius: 12px; display: flex; flex-direction: column; gap: 8px; box-sizing: border-box; padding: 0 10px; }
+        .panel.show { padding: 12px 10px; margin-top: -4px; margin-bottom: 4px; }
+        .panel-link { background: rgba(255, 255, 255, 0.1); color: #fff; text-decoration: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 700; text-align: center; }
+        .panel-link:active { background: rgba(255, 255, 255, 0.2); }
 
-        .star {
-            position: absolute; background: linear-gradient(to top, rgba(255,255,255,0), #ffffff);
-            border-radius: 99px; bottom: -50px; animation: flyUp linear infinite; z-index: 2;
-            box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
-        }
-
-        @keyframes flyUp {
-            0% { transform: translateY(0) scale(0.3); opacity: 0; }
-            15% { opacity: 1; }
-            100% { transform: translateY(-115vh) scale(1.2); opacity: 0; }
-        }
-
-        .splash-content { display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
-        
-        .rocket-splash {
-            width: 85px; height: 85px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
-            display: flex; align-items: center; justify-content: center; font-size: 40px;
-            border: 3px solid rgba(255, 255, 255, 0.25); box-shadow: 0 0 30px rgba(0, 242, 254, 0.6);
-            animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) both, rocketFly 2.2s ease-in-out infinite 0.8s;
-        }
         /* КРАСИВОЕ ОКНО ОБРАТНОЙ СВЯЗИ */
         .feedback-modal { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(2, 4, 10, 0.7); backdrop-filter: blur(15px); 
-            -webkit-backdrop-filter: blur(15px); display: flex; align-items: center; 
-            justify-content: center; opacity: 0; pointer-events: none; 
-            transition: opacity 0.25s; z-index: 3000; 
+            background: rgba(2, 4, 10, 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            display: flex; align-items: center; justify-content: center; 
+            opacity: 0; pointer-events: none; transition: all 0.25s ease; z-index: 3000; 
         }
         .feedback-modal.active { opacity: 1; pointer-events: auto; }
+        .feedback-modal.active .fb-content { transform: scale(1); opacity: 1; }
         .fb-content { 
             background: rgba(11, 19, 43, 0.96); border: 1px solid rgba(0, 242, 254, 0.25); 
             padding: 25px; border-radius: 24px; width: 85%; max-width: 340px; 
             text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.5); box-sizing: border-box; 
+            transform: scale(0.8); opacity: 0; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         .fb-textarea { 
             width: 100%; height: 110px; background: rgba(0, 0, 0, 0.3); 
@@ -131,312 +72,96 @@
             resize: none; margin: 15px 0; box-sizing: border-box; 
         }
         .fb-textarea:focus { border-color: #00f2fe; outline: none; }
-        .action-btn { 
-            width: 100%; padding: 13px; border-radius: 12px; font-size: 13px; 
-            font-weight: 800; border: none; cursor: pointer; margin-bottom: 8px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
-        }
-
-        @keyframes bounceIn { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: scale(1); } }
-        @keyframes rocketFly { 0% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-8px) rotate(6deg); } 100% { transform: translateY(0) rotate(0deg); } }
-
-        .splash-title {
-            font-size: 38px; font-weight: 900; color: #ffffff; margin: 14px 0 0 0; letter-spacing: 3px; text-transform: uppercase;
-            text-shadow: 0 2px 12px rgba(0,0,0,0.9), 0 0 20px rgba(0, 242, 254, 0.5);
-            animation: fadeInText 1s ease-out 0.4s both; font-family: 'Arial Black', sans-serif;
-        }
-        .splash-sub {
-            font-size: 14px; font-weight: 800; color: #7dd3fc; letter-spacing: 5px; text-transform: uppercase; margin-top: 3px; opacity: 0.9;
-            animation: fadeInText 1s ease-out 0.6s both;
-        }
-
-        @keyframes fadeInText { from { opacity: 0; transform: translateY(12px); filter: blur(6px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
-
-        /* --- СТИЛИ КОСМИЧЕСКОГО ИНТЕРФЕЙСА ХАБА --- */
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Пульсирующий неоновый контур у кнопок («Дыхание») */
-        @keyframes космическийПульс {
-            0% { transform: scale(1); box-shadow: 0 8px 20px rgba(0,0,0,0.3), 0 0 0px var(--neon-space); }
-            50% { transform: scale(1.02); box-shadow: 0 12px 30px rgba(0,0,0,0.4), 0 0 20px var(--neon-space); border-color: var(--neon-cyan); }
-            100% { transform: scale(1); box-shadow: 0 8px 20px rgba(0,0,0,0.3), 0 0 0px var(--neon-space); }
-        }
-
-        .container { width: 100%; max-width: 400px; text-align: center; animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
-
-        .avatar {
-            width: 95px; height: 95px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
-            margin: 25px auto 18px; display: flex; align-items: center; justify-content: center; font-size: 40px;
-            border: 3px solid rgba(255, 255, 255, 0.2); box-shadow: 0 0 30px rgba(0, 242, 254, 0.6);
-            animation: rocketFly 3s infinite ease-in-out; transition: transform 0.3s;
-        }
-
-        h1 { font-size: 26px; margin: 0 0 6px 0; font-weight: 900; letter-spacing: -0.8px; text-shadow: 0 2px 12px rgba(0,0,0,0.6); }
-        .subtitle { font-size: 14px; opacity: 0.8; margin-bottom: 35px; font-weight: 600; text-shadow: 0 1px 6px rgba(0,0,0,0.5); }
-
-        .nav-buttons-block { display: flex; flex-direction: column; gap: 14px; width: 100%; }
-        
-        /* Лазурно-космические кнопки хаба */
-        .nav-button {
-            background: var(--card-bg); color: var(--text-color);
-            border: 1px solid var(--glass-border); padding: 18px 22px; border-radius: 22px;
-            font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: space-between;
-            cursor: pointer; text-decoration: none; backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            animation: космическийПульс 4s infinite ease-in-out; transition: border-color 0.2s, box-shadow 0.2s;
-        }
-.nav-button:active { 
-            animation: none !important;
-            transform: scale(0.95) !important; 
-            border-color: var(--neon-cyan) !important;
-            box-shadow: 0 0 20px var(--neon-cyan) !important;
-        }
-        
-        .primary-btn { 
-            background: linear-gradient(135deg, #0284c7, var(--neon-blue)); 
-            color: #ffffff; border: none;
-            animation: космическийПульс 4s infinite ease-in-out 0.5s;
-        }
-        .primary-btn:active { box-shadow: 0 0 25px rgba(0, 114, 255, 0.5) !important; }
-
-        .stars-btn { 
-            border: 1px solid rgba(255, 205, 0, 0.4); 
-            background: rgba(255, 205, 0, 0.05);
-            --neon-space: rgba(255, 205, 0, 0.2);
-            animation: космическийПульс 4s infinite ease-in-out 1s;
-        }
-        .stars-btn:active { border-color: #ffcd00 !important; box-shadow: 0 0 20px rgba(255, 205, 0, 0.4) !important; }
-        
-        .socials-trigger-btn { 
-            background: linear-gradient(135deg, #0d9488, #0ea5e9); 
-            color: #ffffff; border: none; 
-            --neon-space: rgba(14, 165, 233, 0.25);
-            animation: космическийПульс 4s infinite ease-in-out 1.5s;
-        }
-        .socials-trigger-btn:active { box-shadow: 0 0 25px rgba(14, 165, 233, 0.5) !important; }
-
-        .projects-trigger-btn { 
-            background: linear-gradient(135deg, var(--neon-cyan), #0052d4); 
-            color: #ffffff; border: none; margin-top: 4px; 
-            --neon-space: rgba(0, 242, 254, 0.35);
-            animation: космическийПульс 3.5s infinite ease-in-out;
-        }
-        .projects-trigger-btn:active { box-shadow: 0 0 25px rgba(0, 242, 254, 0.5) !important; }
-
-        .icon { font-size: 22px; transition: transform 0.2s ease; }
-        .nav-button:active .icon { transform: scale(1.2); }
-        .arrow { opacity: 0.6; font-size: 14px; transition: transform 0.2s ease; }
-        .nav-button:active .arrow { transform: translateX(4px); }
-
-        /* --- СТИЛИ ОКНА МЕНЮ (КОСМИЧЕСКИЙ БОРТОВОЙ КОМПЬЮТЕР) --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 4, 10, 0.55); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            display: flex; align-items: flex-end; justify-content: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 1000;
-        }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
-
-        .modal-content {
-            width: 100%; max-width: 450px; 
-            background: rgba(7, 15, 36, 0.94); /* Плотное контрастное синее стекло */
-            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border-top-left-radius: 28px; border-top-right-radius: 28px;
-            padding: 24px; box-sizing: border-box;
-            transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-            max-height: 85vh; display: flex; flex-direction: column;
-            border-top: 1px solid rgba(0, 242, 254, 0.25);
-            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
-        }
-        .modal-overlay.active .modal-content { transform: translateY(0); }
-
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
-        .modal-title { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0, 242, 254, 0.3); }
-        .close-btn { 
-            background: rgba(255, 255, 255, 0.06); border: 1px solid var(--glass-border); 
-            color: var(--text-color); font-size: 13px; font-weight: 700; padding: 8px 14px; 
-            border-radius: 12px; cursor: pointer; transition: background 0.2s;
-        }
-        .close-btn:active { background: rgba(255, 255, 255, 0.12); }
-
-        /* Вкладки для проектов */
-        .tabs { display: flex; gap: 6px; background: rgba(0, 0, 0, 0.35); padding: 5px; border-radius: 14px; margin-bottom: 18px; flex-shrink: 0; }
-        .tab-btn {
-            flex: 1; background: none; border: none; color: var(--text-color); padding: 11px 5px;
-            font-size: 14px; font-weight: 700; border-radius: 10px; cursor: pointer; opacity: 0.5; transition: all 0.25s;
-        }
-        .tab-btn.active { background: rgba(15, 23, 42, 0.8); opacity: 1; border: 1px solid var(--glass-border); box-shadow: 0 4px 12px rgba(0,0,0,0.3); color: var(--neon-cyan); }
-
-        .projects-scroll-container { overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 14px; padding-bottom: 15px; }
-                .project-card {
-            background: rgba(15, 23, 42, 0.65); border: 1px solid var(--glass-border);
-            padding: 16px; border-radius: 20px; display: flex; flex-direction: column; gap: 8px; text-align: left;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: fadeInUp 0.4s ease both;
-        }
-        .project-card-header { display: flex; justify-content: space-between; align-items: center; }
-        .project-name { font-weight: 800; font-size: 16px; }
-        .project-id { font-size: 10px; opacity: 0.3; font-family: monospace; }
-        
-        .badge { font-size: 10px; font-weight: 800; padding: 5px 10px; border-radius: 20px; text-transform: uppercase; }
-        .badge.current { background: rgba(0, 242, 254, 0.15); color: #7dd3fc; border: 1px solid rgba(0, 242, 254, 0.3); }
-        .badge.planned { background: rgba(234, 179, 8, 0.15); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.3); }
-        .badge.finished { background: rgba(148, 163, 184, 0.15); color: #e2e8f0; border: 1px solid rgba(148, 163, 184, 0.3); }
-        
-        .project-desc { font-size: 13px; opacity: 0.85; line-height: 1.5; }
-        .project-link { font-size: 13px; color: var(--soft-blue); text-decoration: none; font-weight: 700; }
-        .empty-text { text-align: center; opacity: 0.4; padding: 30px; font-size: 14px; }
-
-        /* Админ-панель */
-        .admin-panel {
-            display: none; background: rgba(0, 0, 0, 0.3); border: 1px dashed rgba(0, 242, 254, 0.2);
-            border-radius: 20px; padding: 14px; margin-bottom: 18px; flex-direction: column; gap: 10px; flex-shrink: 0;
-        }
-        .admin-input, .admin-select {
-            background: #070e24; border: 1px solid rgba(255,255,255,0.08); color: var(--text-color);
-            padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none;
-        }
-        .admin-panel-btn {
-            background: linear-gradient(135deg, #0284c7, var(--neon-blue)); color: white; border: none;
-            padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 114, 255, 0.3);
-        }
-        .admin-controls { display: flex; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); justify-content: flex-end; }
-        .admin-btn { background: #1e293b; border: 1px solid var(--glass-border); color: white; padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
-        .admin-btn.delete { background: #ef4444; border: none; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2); }
+        .action-btn { width: 100%; padding: 13px; border-radius: 12px; font-size: 13px; font-weight: 800; border: none; cursor: pointer; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
 
-<!-- 🚀 КОСМИЧЕСКИЙ ЭКРАН ЗАГРУЗКИ (SPLASH SCREEN) -->
-<div id="splash-screen">
-    <div class="space-glow"></div>
-    <div class="star" style="left: 8%; width: 5px; height: 18px; animation-duration: 2.5s; animation-delay: 0.2s;"></div>
-    <div class="star" style="left: 22%; width: 7px; height: 25px; animation-duration: 1.8s; animation-delay: 0s;"></div>
-    <div class="star" style="left: 38%; width: 4px; height: 15px; animation-duration: 3.2s; animation-delay: 1s;"></div>
-    <div class="star" style="left: 52%; width: 8px; height: 28px; animation-duration: 1.5s; animation-delay: 0.4s;"></div>
-    <div class="star" style="left: 68%; width: 6px; height: 22px; animation-duration: 2.8s; animation-delay: 0.7s;"></div>
-    <div class="star" style="left: 82%; width: 9px; height: 32px; animation-duration: 1.3s; animation-delay: 0.1s;"></div>
-    <div class="star" style="left: 94%; width: 5px; height: 16px; animation-duration: 2.2s; animation-delay: 1.4s;"></div>
-    <div class="star" style="left: 14%; width: 6px; height: 20px; animation-duration: 2s; animation-delay: 0.5s;"></div>
-    <div class="star" style="left: 30%; width: 5px; height: 18px; animation-duration: 2.9s; animation-delay: 0.1s;"></div>
-    <div class="star" style="left: 45%; width: 8px; height: 30px; animation-duration: 1.4s; animation-delay: 0.8s;"></div>
-    <div class="star" style="left: 60%; width: 4px; height: 14px; animation-duration: 3.5s; animation-delay: 0.3s;"></div>
-    <div class="star" style="left: 74%; width: 7px; height: 24px; animation-duration: 1.9s; animation-delay: 1.1s;"></div>
-    <div class="star" style="left: 88%; width: 6px; height: 21px; animation-duration: 2.6s; animation-delay: 0.6s;"></div>
-    <div class="splash-content">
-        <div class="rocket-splash">🚀</div>
-        <h1 class="splash-title">THEBSGORM</h1>
-        <div class="splash-sub">Бот-Помощник</div>
-    </div>
-</div>
-
-<!-- 📱 ГЛАВНЫЙ ИНТЕРФЕЙС АССИСТЕНТА -->
-<div class="container">
-    <div class="avatar">🚀</div>
+    <div class="avatar-zone">🚀</div>
     <h1>TheBSgorm</h1>
     <div class="subtitle">Официальный Бот-Помощник</div>
-    <div class="nav-buttons-block">
-<button class="feedback-trigger-btn" onclick="openFeedback()">📞 Связь / Поддержка</button>
-        <button class="nav-button socials-trigger-btn" id="openSocialsBtn"><span class="icon">🌐</span> <span>Социальные сети</span> <span class="arrow">▼</span></button>
-        <button class="nav-button projects-trigger-btn" id="openProjectsBtn"><span class="icon">📂</span> <span>Посмотреть проекты</span> <span class="arrow">▼</span></button>
-        <a href="game.html" class="nav-button stars-btn" style="border-color: rgba(0, 242, 254, 0.4); background: rgba(0, 242, 254, 0.05); --neon-space: rgba(0, 242, 254, 0.25);"><span class="icon">🎮</span> <span>Играть в Clicker NFT</span> <span class="arrow">▶</span></a>
-    </div>
-</div>
 
-<!-- ОКНО 1: СОЦИАЛЬНЫЕ СЕТИ -->
-<div class="modal-overlay" id="socialsModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <div class="modal-title">Мои Социальные Сети</div>
-            <button class="close-btn" id="closeSocialsBtn">Закрыть</button>
-        </div>
-        <div class="projects-scroll-container">
-            <a href="#" class="nav-button" id="social-tg" style="background: rgba(0, 114, 255, 0.15); border-color: rgba(0, 242, 254, 0.3); animation: none;"><span class="icon">📢</span> <span>Telegram Канал</span> <span class="arrow">▶</span></a>
-            <a href="#" class="nav-button" id="social-yt" style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.35); animation: none;"><span class="icon">📹</span> <span>YouTube Канал</span> <span class="arrow">▶</span></a>
-            <a href="#" class="nav-button" id="social-tt" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2); animation: none;"><span class="icon">🎵</span> <span>TikTok Профиль</span> <span class="arrow">▶</span></a>
-            <a href="#" class="nav-button" id="social-rt" style="background: rgba(249, 115, 22, 0.15); border-color: rgba(249, 115, 22, 0.35); animation: none;"><span class="icon">🍊</span> <span>RuTube Канал</span> <span class="arrow">▶</span></a>
-            <a href="#" class="nav-button" id="social-inst" style="background: rgba(236, 72, 153, 0.15); border-color: rgba(236, 72, 153, 0.35); animation: none;"><span class="icon">📸</span> <span>Instagram</span> <span class="arrow">▶</span></a>
-        </div>
-    </div>
-</div>
+    <div class="menu-container">
+        <!-- Твоя верхняя анимированная кнопка связи -->
+        <button class="feedback-trigger-btn" onclick="openFeedback()">📞 Связь / Поддержка</button>
 
-        <!-- ВСПЛЫВАЮЩЕЕ ОКНО ОБРАТНОЙ СВЯЗИ -->
-    <div class="feedback-modal" id="feedbackModal">
-        <div class="fb-content">
-            <h3 style="margin-top:0; color:#7dd3fc; font-weight:900;">📬 Обратная связь</h3>
-            <p style="font-size:12px; color:#94a3b8; margin:0; font-weight:600; line-height:1.3;">Оставь отзыв, предложение или опиши баг. Текст прилетит прямо создателю!</p>
-            <textarea class="fb-textarea" id="feedbackText" placeholder="Введите ваше сообщение сюда..."></textarea>
-            <button class="action-btn" style="background: linear-gradient(135deg, #00f2fe, #0072ff); color:#fff;" onclick="sendFeedback()">Отправить в Telegram</button>
-            <button class="action-btn" style="background: #334155; color:#94a3b8;" onclick="closeFeedback()">Отмена</button>
+        <!-- Аккордеон 1: Социальные сети -->
+        <button class="accordion-btn acc-blue" onclick="toggleAccordion('panel1', this)">
+            <span>🌐 &nbsp; Социальные сети</span>
+            <span class="acc-icon">▼</span>
+        </button>
+        <div class="panel" id="panel1">
+            <a href="https://t.me" class="panel-link" target="_blank">📢 Телеграм Канал</a>
+            <a href="#" class="panel-link">🎬 Наш YouTube</a>
         </div>
+
+        <!-- Аккордеон 2: Проекты -->
+        <button class="accordion-btn acc-cyan" onclick="toggleAccordion('panel2', this)">
+            <span>📁 &nbsp; Посмотреть проекты</span>
+            <span class="acc-icon">▼</span>
+        </button>
+        <div class="panel" id="panel2">
+            <a href="https://github.com" class="panel-link" target="_blank">💻 Мой GitHub</a>
+        </div>
+
+        <!-- Прямая кнопка запуска кликера -->
+        <a href="game.html" style="text-decoration: none;">
+            <button class="accordion-btn acc-blue" style="background: linear-gradient(135deg, #0284c7, #1e3a8a);">
+                <span>🎮 &nbsp; Играть в Clicker NFT</span>
+                <span class="acc-icon">►</span>
+            </button>
+        </a>
     </div>
 
-
-<!-- ОКНО 2: ПРОЕКТЫ -->
-<div class="modal-overlay" id="modalOverlay">
-    <div class="modal-content">
-        <div class="modal-header">
-            <div class="modal-title">Проекты TheBSgorm</div>
-            <button class="close-btn" id="closeProjectsBtn">Закрыть</button>
-        </div>
-        <div class="admin-panel" id="adminPanel">
-            <input type="text" id="newProjName" class="admin-input" placeholder="Название проекта">
-            <input type="text" id="newProjDesc" class="admin-input" placeholder="Описание проекта">
-            <input type="text" id="newProjLink" class="admin-input" placeholder="Ссылка (если есть)">
-            <select id="newProjStatus" class="admin-select">
-                <option value="current">🔥 Вкладка: Есть</option>
-                <option value="planned">⏳ Вкладка: Планируются</option>
-                <option value="finished">✅ Вкладка: Завершены</option>
-            </select>
-            <button class="admin-panel-btn" id="addProjBtn">➕ Добавить новый проект</button>
-        </div>
-        <div class="tabs">
-            <button class="tab-btn active" id="tab-current">🔥 Есть</button>
-            <button class="tab-btn" id="tab-planned">⏳ Планируются</button>
-            <button class="tab-btn" id="tab-finished">✅ Завершены</button>
-        </div>
-        <div class="projects-scroll-container" id="projectsContainer"></div>
-    </div>
-</div>
-    <!-- ОБНОВЛЕННОЕ ВСПЛЫВАЮЩЕЕ ОКНО ОБРАТНОЙ СВЯЗИ С АНИМАЦИЕЙ -->
+    <!-- КРАСИВОЕ ОКНО ОБРАТНОЙ СВЯЗИ С ZOOM-АНИМАЦИЕЙ -->
     <div class="feedback-modal" id="feedbackModal">
         <div class="fb-content">
             <h3 style="margin-top: 0; color: #7dd3fc; font-weight: 900; font-size: 18px; letter-spacing: 0.5px;">📬 ОБРАТНАЯ СВЯЗЬ</h3>
             <p style="font-size: 12px; color: #94a3b8; margin: 0; font-weight: 600; line-height: 1.4;">Есть идея, баг или предложение? Напиши его сюда, и сообщение мгновенно прилетит прямо создателю!</p>
             <textarea class="fb-textarea" id="feedbackText" placeholder="Введите ваше сообщение сюда..."></textarea>
-            
-            <!-- Кнопка отправки с неоновым градиентом в стиле кликера -->
             <button class="action-btn" style="background: linear-gradient(135deg, #00f2fe, #0072ff); color: #fff;" onclick="sendFeedback()">Отправить сообщение</button>
-            
-            <!-- Кнопка отмены -->
             <button class="action-btn" style="background: #334155; color: #94a3b8; margin-bottom: 0;" onclick="closeFeedback()">Закрыть окно</button>
         </div>
     </div>
-
 <script>
-        // --- ФУНКЦИИ ОКНА СВЯЗИ ---
-    window.openFeedback = function() { 
-        document.getElementById('feedbackModal').classList.add('active'); 
+    const tg = window.Telegram?.WebApp;
+    if (tg) { tg.ready(); tg.expand(); }
+
+    // ТВОИ РОДНЫЕ ФУНКЦИИ АККОРДЕОНОВ
+    window.toggleAccordion = function(panelId, btn) {
+        const panel = document.getElementById(panelId);
+        const icon = btn.querySelector('.acc-icon');
+        
+        if (panel.style.maxHeight) {
+            panel.style.maxHeight = null;
+            panel.classList.remove('show');
+            icon.style.transform = 'rotate(0deg)';
+        } else {
+            // Закрываем другие панели перед открытием новой
+            document.querySelectorAll('.panel').forEach(p => { p.style.maxHeight = null; p.classList.remove('show'); });
+            document.querySelectorAll('.acc-icon').forEach(i => i.style.transform = 'rotate(0deg)');
+            
+            panel.style.maxHeight = panel.scrollHeight + "px";
+            panel.classList.add('show');
+            icon.style.transform = 'rotate(180deg)';
+        }
     }
-    window.closeFeedback = function() { 
-        document.getElementById('feedbackModal').classList.remove('active'); 
-        document.getElementById('feedbackText').value = ""; 
-    }
+
+    // УПРАВЛЕНИЕ ОКНОМ СВЯЗИ
+    window.openFeedback = function() { document.getElementById('feedbackModal').classList.add('active'); }
+    window.closeFeedback = function() { document.getElementById('feedbackModal').classList.remove('active'); document.getElementById('feedbackText').value = ""; }
 
     window.sendFeedback = function() {
         const text = document.getElementById('feedbackText').value.trim();
         if (!text) {
-            if (window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert("Пожалуйста, введите текст сообщения!");
-            else alert("Пожалуйста, введите текст сообщения!");
+            if (tg && tg.showAlert) tg.showAlert("Пожалуйста, введите text сообщения!");
             return;
         }
 
-        // Твои вшитые технические параметры
         const BOT_TOKEN = "8794927474:AAG4C5t64F1R8kiH8lZxyFgIczbwLyoEJnE";
         const MY_TELEGRAM_ID = "5591880317";
 
-        // Автоматический сбор данных об авторе через Telegram WebApp
-        const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user || {};
+        const tgUser = tg?.initDataUnsafe?.user || {};
         const senderName = tgUser.first_name ? `${tgUser.first_name} ${tgUser.last_name || ''}`.trim() : "Анонимный юзер";
         const senderUsername = tgUser.username ? `@${tgUser.username}` : "нет юзернейма";
         const senderId = tgUser.id || "не определен";
@@ -446,7 +171,6 @@
                            `🆔 <b>ID пользователя:</b> <code>${senderId}</code>\n\n` +
                            `📝 <b>Текст сообщения:</b>\n${text}`;
 
-        // Запрос к серверам мессенджера
         fetch(`https://telegram.org{BOT_TOKEN}/sendMessage`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -454,265 +178,14 @@
         })
         .then(response => {
             if (response.ok) {
-                if (window.Telegram?.WebApp?.showAlert) {
-                    window.Telegram.WebApp.showAlert("✅ Сообщение успешно доставлено! TheBSgorm скоро ответит.");
-                } else {
-                    alert("✅ Сообщение успешно доставлено!");
-                }
+                if (tg && tg.showAlert) tg.showAlert("✅ Сообщение успешно доставлено! TheBSgorm скоро ответит.");
                 closeFeedback();
             } else {
-                if (window.Telegram?.WebApp?.showAlert) {
-                    window.Telegram.WebApp.showAlert("❌ Ошибка отправки. Убедись, что ты нажал кнопку СТАРТ (/start) внутри своего бота в Telegram!");
-                }
+                if (tg && tg.showAlert) tg.showAlert("❌ Ошибка отправки. Убедись, что ты нажал кнопку СТАРТ (/start) внутри своего бота в Telegram!");
             }
         })
         .catch(error => console.error("Ошибка:", error));
     }
-
-    // --- ПРИНУДИТЕЛЬНЫЙ ВЫКЛЮЧАТЕЛЬ ЭКРАНА ЗАГРУЗКИ ---
-    setTimeout(function() {
-        var splash = document.getElementById('splash-screen');
-        if (splash) {
-            splash.style.opacity = '0';
-            splash.style.pointerEvents = 'none';
-            setTimeout(function() { splash.remove(); }, 500);
-        }
-    }, 2500);
-
-    // --- БЛОК ССЫЛОК И КОНТАКТОВ (ТВОИ ОФИЦИАЛЬНЫЕ КАНАЛЫ) ---
-    const LINK_CONTACT = "https://t.me/BSgormYou123";  
-    const ADMIN_USERNAME = "BSgormYou123";            
-    const URL_TELEGRAM = "https://t.me/BSgormOff";     
-    const URL_YOUTUBE = "https://www.youtube.com/@TheBS_gorm"; 
-    const URL_TIKTOK = "https://www.tiktok.com/@bsgormtt?_r=1&_t=ZS-984IAZWKgBl"; 
-    const URL_RUTUBE = "https://rutube.ru/channel/79548817"; 
-    const URL_INSTAGRAM = "https://www.instagram.com/thebsgormoff?igsh=MXhoNnZ4cW44ejBoeA=="; 
-
-    const defaultProjects = [
-        { id: 1, name: "🤖 Направлятор Mini App", status: "current", badgeText: "Запущен", desc: "Текущее интерактивное приложение-визитка для удобной и быстрой навигации.", link: "" },
-        { id: 2, name: "🎮 AQUAPHOBIA: Escape", status: "planned", badgeText: "В разработке", desc: "Моя будущая игра в Roblox. Приготовься встретиться со своими страхами и найти выход!", link: "" }
-    ];
-
-    let myProjects = JSON.parse(localStorage.getItem('savedProjects')) || defaultProjects;
-
-    // Проверяем среду выполнения (Telegram или Браузер)
-    const isTelegram = !!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData);
-    let tg = null;
-
-    if (isTelegram) {
-        tg = window.Telegram.WebApp;
-        tg.ready(); tg.expand();
-    }
-
-    let currentFilter = "current";
-    // Твой уникальный ник в Telegram (без собачки @)
-const MY_TELEGRAM_USERNAME = "BSgormYou123"; 
-
-// Проверяем, совпадает ли ник зашедшего человека с твоим
-let isOwner = false;
-if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
-    const currentUser = window.Telegram.WebApp.initDataUnsafe.user.username;
-    if (currentUser === MY_TELEGRAM_USERNAME) {
-        isOwner = true; // Админка откроется ТОЛЬКО ТЕБЕ
-    }
-}
-
-
-    // Универсальная функция открытия ссылок (РАБОТАЕТ И В БРАУЗЕРЕ, И В ТГ)
-    function openLink(url) {
-        if (isTelegram && tg && tg.HapticFeedback) {
-            tg.HapticFeedback.impactOccurred('light');
-        }
-        if (isTelegram && tg && tg.openLink) {
-            tg.openLink(url); 
-        } else {
-            window.open(url, '_blank'); 
-        }
-    }
-
-    // Привязка событий клика
-    document.getElementById('btn-contact').addEventListener('click', (e) => { e.preventDefault(); openLink(LINK_CONTACT); });
-    document.getElementById('social-tg').addEventListener('click', (e) => { e.preventDefault(); openLink(URL_TELEGRAM); });
-    document.getElementById('social-yt').addEventListener('click', (e) => { e.preventDefault(); openLink(URL_YOUTUBE); });
-    document.getElementById('social-tt').addEventListener('click', (e) => { e.preventDefault(); openLink(URL_TIKTOK); });
-    document.getElementById('social-rt').addEventListener('click', (e) => { e.preventDefault(); openLink(URL_RUTUBE); });
-    document.getElementById('social-inst').addEventListener('click', (e) => { e.preventDefault(); openLink(URL_INSTAGRAM); });
-
-    const projectsModal = document.getElementById('modalOverlay');
-    const socialsModal = document.getElementById('socialsModal');
-    const adminPanel = document.getElementById('adminPanel');
-
-    document.getElementById('openProjectsBtn').addEventListener('click', () => {
-        projectsModal.classList.add('active');
-        if (isOwner) adminPanel.style.display = "flex";
-        renderProjects();
-    });
-    document.getElementById('closeProjectsBtn').addEventListener('click', () => { projectsModal.classList.remove('active'); });
-
-    document.getElementById('openSocialsBtn').addEventListener('click', () => { socialsModal.classList.add('active'); });
-    document.getElementById('closeSocialsBtn').addEventListener('click', () => { socialsModal.classList.remove('active'); });
-
-    function setupTabs() {
-        const tabs = { 'tab-current': 'current', 'tab-planned': 'planned', 'tab-finished': 'finished' };
-        Object.keys(tabs).forEach(tabId => {
-            document.getElementById(tabId).addEventListener('click', (e) => {
-                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-                e.currentTarget.classList.add('active');
-                currentFilter = tabs[tabId];
-                renderProjects();
-            });
-        });
-    }
-
-    document.getElementById('addProjBtn').addEventListener('click', () => {
-        const nameInput = document.getElementById('newProjName');
-        const descInput = document.getElementById('newProjDesc');
-        const linkInput = document.getElementById('newProjLink');
-        const statusSelect = document.getElementById('newProjStatus');
-
-        if (!nameInput.value.trim() || !descInput.value.trim()) {
-            if (isTelegram && tg && tg.showAlert) tg.showAlert("Заполните Название и Описание!");
-            else alert("Заполните Название и Описание!");
-            return;
-        }
-
-        let badgeText = "Запущен";
-        if (statusSelect.value === "planned") badgeText = "В разработке";
-        if (statusSelect.value === "finished") badgeText = "Архив";
-
-        const newProject = {
-            id: Date.now(),
-            name: nameInput.value.trim(),
-            status: statusSelect.value,
-            badgeText: badgeText,
-            desc: descInput.value.trim(),
-            link: linkInput.value.trim()
-        };
-
-        myProjects.push(newProject);
-        localStorage.setItem('savedProjects', JSON.stringify(myProjects));
-        nameInput.value = ""; descInput.value = ""; linkInput.value = "";
-
-        currentFilter = newProject.status;
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.getElementById(`tab-${currentFilter}`).classList.add('active');
-        renderProjects();
-    });
-    window.sendFeedback = function() {
-    const text = document.getElementById('feedbackText').value.trim();
-    if (!text) {
-        if (window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert("Напишите что-нибудь перед отправкой!");
-        return;
-    }
-
-    // 🔐 Вставь сюда токен своего бота из BotFather (не удаляй кавычки!)
-    const BOT_TOKEN = "ТВОЙ_ТОКЕН_БОТА";
-    const MY_TELEGRAM_ID = "5591880317";
-
-    // Автоматически считываем имя и ник игрока из Telegram
-    const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user || {};
-    const senderName = tgUser.first_name ? `${tgUser.first_name} ${tgUser.last_name || ''}`.trim() : "Аноним из браузера";
-    const senderUsername = tgUser.username ? `@${tgUser.username}` : "нет юзернейма";
-    const senderId = tgUser.id || "не определен";
-
-    // Красивый текст сообщения для твоего личного чата
-    const reportText = `📬 <b>НОВОЕ СООБЩЕНИЕ ИЗ ХАБА!</b>\n\n` +
-                       `👤 <b>Отправитель:</b> ${senderName} (${senderUsername})\n` +
-                       `🆔 <b>ID пользователя:</b> <code>${senderId}</code>\n\n` +
-                       `📝 <b>Текст сообщения:</b>\n${text}`;
-
-    // Прямой HTTP-запрос к серверам Telegram без использования Python
-    fetch(`https://telegram.org{BOT_TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            chat_id: MY_TELEGRAM_ID,
-            text: reportText,
-            parse_mode: "HTML"
-        })
-    })
-    .then(response => {
-        if (response.ok) {
-            if (window.Telegram?.WebApp?.showAlert) {
-                window.Telegram.WebApp.showAlert("✅ Сообщение успешно доставлено! TheBSgorm скоро ответит.");
-            } else {
-                alert("Сообщение успешно отправлено!");
-            }
-            closeFeedback(); // Очищаем поле и закрываем модалку связи
-        } else {
-            if (window.Telegram?.WebApp?.showAlert) {
-                window.Telegram.WebApp.showAlert("❌ Ошибка отправки. Убедись, что ты запустил (/start) этого бота у себя в ЛС!");
-            }
-        }
-    })
-    .catch(error => {
-        console.error("Ошибка сети:", error);
-    });
-    }
-
-    window.moveProject = function(id, newStatus, newBadge) {
-        const proj = myProjects.find(p => p.id === id);
-        if (proj) {
-            proj.status = newStatus;
-            proj.badgeText = newBadge;
-            localStorage.setItem('savedProjects', JSON.stringify(myProjects));
-            renderProjects();
-        }
-    }
-
-    window.deleteProject = function(id) {
-        myProjects = myProjects.filter(p => p.id !== id);
-        localStorage.setItem('savedProjects', JSON.stringify(myProjects));
-        renderProjects();
-    }
-
-    function renderProjects() {
-        const container = document.getElementById('projectsContainer');
-        container.innerHTML = "";
-        const filtered = myProjects.filter(p => p.status === currentFilter);
-
-        if (filtered.length === 0) {
-            container.innerHTML = `<div class="empty-text">Здесь пока ничего нет... 📁</div>`;
-            return;
-        }
-
-        filtered.forEach(project => {
-            const card = document.createElement('div');
-            card.className = 'project-card';
-            let linkHTML = project.link ? `<a href="#" class="project-link" data-url="${project.link}">Открыть →</a>` : '';
-            
-            let adminHTML = `
-                <div class="admin-controls">
-                    <span class="project-id">ID: ${project.id}</span>
-                    <div style="display: flex; gap: 4px; margin-left: auto;">
-                        ${project.status !== 'current' ? `<button class="admin-btn" onclick="moveProject(${project.id}, 'current', 'Запущен')">В 'Есть'</button>` : ''}
-                        ${project.status !== 'planned' ? `<button class="admin-btn" onclick="moveProject(${project.id}, 'planned', 'В разработке')">В 'Планы'</button>` : ''}
-                        ${project.status !== 'finished' ? `<button class="admin-btn" onclick="moveProject(${project.id}, 'finished', 'Архив')">В 'Завершенные'</button>` : ''}
-                        <button class="admin-btn delete" onclick="deleteProject(${project.id})">❌ Удалить</button>
-                    </div>
-                </div>
-            `;
-
-            card.innerHTML = `
-                <div class="project-card-header">
-                    <span class="project-name">${project.name}</span>
-                    <span class="badge ${project.status}">${project.badgeText}</span>
-                </div>
-                <div class="project-desc">${project.desc}</div>
-                ${linkHTML} ${adminHTML}
-            `;
-
-            if (project.link) {
-                card.querySelector('.project-link').addEventListener('click', (e) => {
-                    e.preventDefault();
-                    openLink(e.currentTarget.getAttribute('data-url'));
-                });
-            }
-            container.appendChild(card);
-        });
-    }
-
-    setupTabs();
 </script>
 </body>
 </html>
