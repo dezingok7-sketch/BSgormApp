@@ -175,29 +175,32 @@
     // НАДЁЖНЫЙ ОФИЦИАЛЬНЫЙ МЕТОД ОТКРЫТИЯ ТВОЕГО ЧАТА В ЛС
     // КИБЕР-ПЕРЕКЛЮЧЕНИЕ ЭКРАНА НА ЛС СОЗДАТЕЛЯ
     // СИСТЕМА ОТПРАВКИ ЗАЯВКИ НАПРЯМУЮ В FIREBASE
-    window.openCreatorChat = function() {
-        // Если окно VIP-заявки у тебя открывается по кнопке, вызываем его
-        if (typeof openFeedback === "function") {
-            openFeedback();
+    window.sendFeedback = function() {
+        const text = document.getElementById('feedbackText').value.trim();
+        if (!text) {
+            if (tg && tg.showAlert) tg.showAlert("Пожалуйста, введите текст заявки!");
             return;
         }
 
-        // Если же кнопка должна сразу отправлять быстрый сигнал:
-        const FIREBASE_URL = "https://ТВОЙ_://firebaseio.com";
+        // Твой личный сервер Firebase Realtime Database
+        const FIREBASE_URL = "https://firebaseio.com";
 
+        // Автоматический сбор Web3-данных об авторе из Telegram
         const tgUser = tg?.initDataUnsafe?.user || {};
         const senderName = tgUser.first_name ? `${tgUser.first_name} ${tgUser.last_name || ''}`.trim() : "Анонимный пилот";
         const senderUsername = tgUser.username ? `@${tgUser.username}` : "нет юзернейма";
         const senderId = tgUser.id || "не определен";
 
+        // Формируем пакет данных для отправки на сервер
         const requestData = {
             name: senderName,
             username: senderUsername,
             userId: senderId,
-            message: "Пользователь нажал кнопку связи и ждет ответа!",
-            time: new Date().toLocaleTimeString("ru-RU")
+            message: text,
+            time: new Date().toLocaleTimeString("ru-RU") // Время заявки
         };
 
+        // Отправляем данные методом POST в облако Firebase
         fetch(FIREBASE_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -205,10 +208,21 @@
         })
         .then(response => {
             if (response.ok) {
-                if (tg && tg.showAlert) tg.showAlert("🚀 Заявка отправлена в облако Firebase! Создатель скоро свяжется с вами.");
+                if (tg && tg.showAlert) {
+                    tg.showAlert("✅ Ваша VIP-заявка успешно занесена в базу данных Firebase!");
+                } else {
+                    alert("✅ Заявка успешно отправлена в Firebase!");
+                }
+                closeFeedback(); // Очищаем поле и закрываем модалку связи
+            } else {
+                if (tg && tg.showAlert) {
+                    tg.showAlert("❌ Ошибка Firebase. Убедись, что в панели Rules выставлены значения true.");
+                }
             }
         })
-        .catch(error => console.error("Ошибка Firebase:", error));
+        .catch(error => {
+            console.error("Ошибка сети Firebase:", error);
+        });
     }
 </script>
 </body>
