@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TheBSgorm Upgrades Shop</title>
+    <title>TheBSgorm Upgrades</title>
     <!-- Официальный скрипт Telegram Web App -->
     <script src="https://telegram.org"></script>
     <style>
@@ -13,7 +13,6 @@
             --card-bg: rgba(7, 15, 36, 0.75);
             --neon-cyan: #00f2fe;
             --neon-blue: #0072ff;
-            --neon-gold: #eab308;
             --glass-border: rgba(0, 242, 254, 0.16);
         }
 
@@ -24,7 +23,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
             background: linear-gradient(-45deg, #020617, #0b1329, #1c2541, #030712);
             background-size: 300% 300%;
             animation: spaceGradient 12s ease infinite;
@@ -32,15 +31,15 @@
             color: var(--text-color);
             margin: 0; padding: 15px;
             display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; box-sizing: border-box;
+            min-height: 100vh; box-sizing: border-box; overflow-x: hidden;
         }
 
         .balance-box {
             background: var(--card-bg); border: 1px solid var(--glass-border);
             padding: 14px 28px; border-radius: 24px; font-size: 26px; font-weight: 900;
             color: var(--neon-cyan); text-shadow: 0 0 12px rgba(0, 242, 254, 0.5);
-            margin: 15px 0 25px 0; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 10px;
+            margin: 15px 0 25px 0; backdrop-filter: blur(20px); box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            display: flex; align-items: center; gap: 10px;
         }
 
         .section-title { font-size: 16px; font-weight: 850; align-self: flex-start; margin: 10px 0 15px 5px; color: #7dd3fc; letter-spacing: 1px; text-transform: uppercase; }
@@ -50,10 +49,8 @@
             background: var(--card-bg); border: 1px solid var(--glass-border);
             padding: 18px; border-radius: 24px; display: flex; align-items: center;
             justify-content: space-between; box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            position: relative; overflow: hidden;
+            backdrop-filter: blur(20px); width: 100%; box-sizing: border-box;
         }
-        .upgrade-card.gold-glow { border-color: rgba(234, 179, 8, 0.3); box-shadow: inset 0 0 15px rgba(234, 179, 8, 0.1); }
 
         .upgrade-info { display: flex; flex-direction: column; gap: 4px; text-align: left; }
         .upgrade-name { font-weight: 900; font-size: 15px; color: #ffffff; }
@@ -78,30 +75,17 @@
 
     <div class="section-title">⚡ Апгрейды Станции</div>
     <div class="upgrades-container">
-        
-        <!-- Улучшение 1: Мощность клика -->
+        <!-- Квантовый ускорить силы клика -->
         <div class="upgrade-card">
             <div class="upgrade-info">
                 <div class="upgrade-name">🪐 Квантовый Ускоритель</div>
-                <div class="upgrade-desc">Повышает базовую силу каждого тапа по планете.</div>
+                <div class="upgrade-desc">Навсегда повышает базовую силу каждого тапа по планете.</div>
                 <div class="upgrade-stats" id="clickStats">Текущий клик: +0.005 🪙</div>
             </div>
-            <button class="buy-btn" id="btn-click" onclick="buyUpgrade('click')">1.500 🪙</button>
+            <button class="buy-btn" id="btn-click" onclick="buyUpgrade()">1.500 🪙</button>
         </div>
-
-        <!-- Улучшение 2: Критический накопитель -->
-        <div class="upgrade-card gold-glow">
-            <div class="upgrade-info">
-                <div class="upgrade-name" style="color:#eab308;">⚡ Критический Накопитель</div>
-                <div class="upgrade-desc">Заряжает планету. Каждое 5-7 нажатие гарантированно взрывает баланс бонусом!</div>
-                <div class="upgrade-stats" id="critStats">Статус: Отключен</div>
-            </div>
-            <button class="buy-btn" id="btn-crit" onclick="buyUpgrade('crit')">15.000 🪙</button>
-        </div>
-
     </div>
-
-<script>
+    <script>
     const tg = window.Telegram?.WebApp;
     if (tg) { tg.ready(); tg.expand(); }
 
@@ -114,12 +98,8 @@
         { level: 5, power: 0.100, cost: 0.0 } // Максимальный уровень
     ];
 
-    // Цена активации Критического Накопителя (+20.000)
-    const CRIT_UPGRADE_COST = 15.0;
-
     let userBalance = parseFloat(localStorage.getItem('game_balance')) || 0.0;
     let clickLevel = parseInt(localStorage.getItem('game_click_level')) || 1;
-    let hasCritUpgrade = localStorage.getItem('game_has_crit') === 'true';
 
     function updateUI() {
         document.getElementById('balanceDisplay').innerText = userBalance.toFixed(3);
@@ -130,71 +110,37 @@
         const nextClickData = clickLevels.find(l => l.level === clickLevel + 1);
         const clickBtn = document.getElementById('btn-click');
         
-        document.getElementById('clickStats').innerText = `Текущий клик: +${currentClickData.power.toFixed(3)} 🪙`;
-      if (nextClickData) {
+        document.getElementById('clickStats').innerText = `Текущий клик: +${currentClickData.power.toFixed(3)} 🪙 (Ур. ${clickLevel})`;
+
+        if (nextClickData) {
             clickBtn.innerText = `${nextClickData.cost.toFixed(3)} 🪙`;
             clickBtn.className = "buy-btn";
         } else {
             clickBtn.innerText = "МАКС. УРОВЕНЬ";
             clickBtn.className = "buy-btn maxed";
         }
-
-        // Рендерим статус Критического Накопителя
-        const critBtn = document.getElementById('btn-crit');
-        if (hasCritUpgrade) {
-            document.getElementById('critStats').innerText = `Статус: АКТИВИРОВАН (+20.000 🪙)`;
-            critBtn.innerText = "КУПЛЕНО ✓";
-            critBtn.className = "buy-btn maxed";
-        } else {
-            document.getElementById('critStats').innerText = `Статус: Отключен`;
-            critBtn.innerText = `${CRIT_UPGRADE_COST.toFixed(3)} 🪙`;
-            critBtn.className = "buy-btn";
-        }
     }
 
-    // ЛОГИКА ПОКУПКИ УЛУЧШЕНИЙ
-    window.buyUpgrade = function(type) {
-        if (type === 'click') {
-            const nextClickData = clickLevels.find(l => l.level === clickLevel + 1);
-            if (!nextClickData) return;
+    // ЛОГИКА ПОКУПКИ УЛУЧШЕНИЯ
+    window.buyUpgrade = function() {
+        const nextClickData = clickLevels.find(l => l.level === clickLevel + 1);
+        if (!nextClickData) return;
 
-            if (userBalance < nextClickData.cost) {
-                showNotification("Недостаточно монет! Продолжай тапать по планете 🪐");
-                return;
-            }
-
-            userBalance -= nextClickData.cost;
-            clickLevel += 1;
-            localStorage.setItem('game_click_level', clickLevel);
-            
-            // Записываем живую силу клика для основного файла игры
-            localStorage.setItem('game_click_power', nextClickData.power);
-
-        } else if (type === 'crit') {
-            if (hasCritUpgrade) return;
-
-            if (userBalance < CRIT_UPGRADE_COST) {
-                showNotification("Недостаточно монет! Продолжай тапать по планете 🪐");
-                return;
-            }
-
-            userBalance -= CRIT_UPGRADE_COST;
-            hasCritUpgrade = true;
-            localStorage.setItem('game_has_crit', 'true');
-            
-            // Настраиваем количество кликов до первого крита (случайно от 5 до 7)
-            let nextTarget = Math.floor(Math.random() * (7 - 5 + 1)) + 5;
-            localStorage.setItem('game_crit_target', nextTarget);
-            localStorage.setItem('game_current_click_count', '0');
+        if (userBalance < nextClickData.cost) {
+            if (tg && tg.showAlert) tg.showAlert("Недостаточно монет! Продолжай тапать по планете 🪐");
+            else alert("Недостаточно монет! Продолжай тапать по планете 🪐");
+            return;
         }
+
+        userBalance -= nextClickData.cost;
+        clickLevel += 1;
+        
+        // Сохраняем системные переменные для основного файла игры game.html
+        localStorage.setItem('game_click_level', clickLevel);
+        localStorage.setItem('game_click_power', nextClickData.power);
 
         if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
         updateUI();
-    }
-
-    function showNotification(text) {
-        if (tg && tg.showAlert) tg.showAlert(text);
-        else alert(text);
     }
 
     // Инициализация при открытии магазина
