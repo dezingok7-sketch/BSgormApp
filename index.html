@@ -279,7 +279,7 @@
     <h1>TheBSgorm</h1>
     <div class="subtitle">Официальный Бот-Помощник</div>
     <div class="nav-buttons-block">
-        <a href="#" class="nav-button primary-btn" id="btn-contact"><span class="icon">💬</span> <span>Связь с TheBSgorm</span> <span class="arrow">▶</span></a>
+        <button class="menu-btn" onclick="openFeedback()">📞 Связь / Поддержка</button>
         <button class="nav-button socials-trigger-btn" id="openSocialsBtn"><span class="icon">🌐</span> <span>Социальные сети</span> <span class="arrow">▼</span></button>
         <button class="nav-button projects-trigger-btn" id="openProjectsBtn"><span class="icon">📂</span> <span>Посмотреть проекты</span> <span class="arrow">▼</span></button>
         <a href="game.html" class="nav-button stars-btn" style="border-color: rgba(0, 242, 254, 0.4); background: rgba(0, 242, 254, 0.05); --neon-space: rgba(0, 242, 254, 0.25);"><span class="icon">🎮</span> <span>Играть в Clicker NFT</span> <span class="arrow">▶</span></a>
@@ -460,6 +460,57 @@ if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData
         document.getElementById(`tab-${currentFilter}`).classList.add('active');
         renderProjects();
     });
+    window.sendFeedback = function() {
+    const text = document.getElementById('feedbackText').value.trim();
+    if (!text) {
+        if (window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert("Напишите что-нибудь перед отправкой!");
+        return;
+    }
+
+    // 🔐 Вставь сюда токен своего бота из BotFather (не удаляй кавычки!)
+    const BOT_TOKEN = "ТВОЙ_ТОКЕН_БОТА";
+    const MY_TELEGRAM_ID = "5591880317";
+
+    // Автоматически считываем имя и ник игрока из Telegram
+    const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user || {};
+    const senderName = tgUser.first_name ? `${tgUser.first_name} ${tgUser.last_name || ''}`.trim() : "Аноним из браузера";
+    const senderUsername = tgUser.username ? `@${tgUser.username}` : "нет юзернейма";
+    const senderId = tgUser.id || "не определен";
+
+    // Красивый текст сообщения для твоего личного чата
+    const reportText = `📬 <b>НОВОЕ СООБЩЕНИЕ ИЗ ХАБА!</b>\n\n` +
+                       `👤 <b>Отправитель:</b> ${senderName} (${senderUsername})\n` +
+                       `🆔 <b>ID пользователя:</b> <code>${senderId}</code>\n\n` +
+                       `📝 <b>Текст сообщения:</b>\n${text}`;
+
+    // Прямой HTTP-запрос к серверам Telegram без использования Python
+    fetch(`https://telegram.org{BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            chat_id: MY_TELEGRAM_ID,
+            text: reportText,
+            parse_mode: "HTML"
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            if (window.Telegram?.WebApp?.showAlert) {
+                window.Telegram.WebApp.showAlert("✅ Сообщение успешно доставлено! TheBSgorm скоро ответит.");
+            } else {
+                alert("Сообщение успешно отправлено!");
+            }
+            closeFeedback(); // Очищаем поле и закрываем модалку связи
+        } else {
+            if (window.Telegram?.WebApp?.showAlert) {
+                window.Telegram.WebApp.showAlert("❌ Ошибка отправки. Убедись, что ты запустил (/start) этого бота у себя в ЛС!");
+            }
+        }
+    })
+    .catch(error => {
+        console.error("Ошибка сети:", error);
+    });
+    }
 
     window.moveProject = function(id, newStatus, newBadge) {
         const proj = myProjects.find(p => p.id === id);
