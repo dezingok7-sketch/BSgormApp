@@ -369,6 +369,61 @@
 </div>
 
 <script>
+        // --- ФУНКЦИИ ОКНА СВЯЗИ ---
+    window.openFeedback = function() { 
+        document.getElementById('feedbackModal').classList.add('active'); 
+    }
+    window.closeFeedback = function() { 
+        document.getElementById('feedbackModal').classList.remove('active'); 
+        document.getElementById('feedbackText').value = ""; 
+    }
+
+    window.sendFeedback = function() {
+        const text = document.getElementById('feedbackText').value.trim();
+        if (!text) {
+            if (window.Telegram?.WebApp?.showAlert) window.Telegram.WebApp.showAlert("Пожалуйста, введите текст сообщения!");
+            else alert("Пожалуйста, введите текст сообщения!");
+            return;
+        }
+
+        // Твои вшитые технические параметры
+        const BOT_TOKEN = "8794927474:AAG4C5t64F1R8kiH8lZxyFgIczbwLyoEJnE";
+        const MY_TELEGRAM_ID = "5591880317";
+
+        // Автоматический сбор данных об авторе через Telegram WebApp
+        const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user || {};
+        const senderName = tgUser.first_name ? `${tgUser.first_name} ${tgUser.last_name || ''}`.trim() : "Анонимный юзер";
+        const senderUsername = tgUser.username ? `@${tgUser.username}` : "нет юзернейма";
+        const senderId = tgUser.id || "не определен";
+
+        const reportText = `📬 <b>НОВОЕ СООБЩЕНИЕ ИЗ ХАБА!</b>\n\n` +
+                           `👤 <b>Отправитель:</b> ${senderName} (${senderUsername})\n` +
+                           `🆔 <b>ID пользователя:</b> <code>${senderId}</code>\n\n` +
+                           `📝 <b>Текст сообщения:</b>\n${text}`;
+
+        // Запрос к серверам мессенджера
+        fetch(`https://telegram.org{BOT_TOKEN}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ chat_id: MY_TELEGRAM_ID, text: reportText, parse_mode: "HTML" })
+        })
+        .then(response => {
+            if (response.ok) {
+                if (window.Telegram?.WebApp?.showAlert) {
+                    window.Telegram.WebApp.showAlert("✅ Сообщение успешно доставлено! TheBSgorm скоро ответит.");
+                } else {
+                    alert("✅ Сообщение успешно доставлено!");
+                }
+                closeFeedback();
+            } else {
+                if (window.Telegram?.WebApp?.showAlert) {
+                    window.Telegram.WebApp.showAlert("❌ Ошибка отправки. Убедись, что ты нажал кнопку СТАРТ (/start) внутри своего бота в Telegram!");
+                }
+            }
+        })
+        .catch(error => console.error("Ошибка:", error));
+    }
+
     // --- ПРИНУДИТЕЛЬНЫЙ ВЫКЛЮЧАТЕЛЬ ЭКРАНА ЗАГРУЗКИ ---
     setTimeout(function() {
         var splash = document.getElementById('splash-screen');
