@@ -18,6 +18,37 @@
             --neon-space: rgba(0, 242, 254, 0.25); /* Лазурное свечение */
             --glass-border: rgba(0, 242, 254, 0.16); /* Неоновый лазерный контур */
         }
+                /* АНИМИРОВАННАЯ НЕОНОВАЯ КНОПКА СВЯЗИ */
+        .feedback-trigger-btn {
+            width: 100%;
+            background: rgba(7, 15, 36, 0.8) !important;
+            color: #00f2fe !important;
+            border: 1px solid #00f2fe !important;
+            padding: 13px !important;
+            border-radius: 12px !important;
+            font-size: 14px !important;
+            font-weight: 800 !important;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+            transition: all 0.2s ease !important;
+            box-sizing: border-box;
+            animation: pulseNeon 3s infinite ease-in-out;
+        }
+        .feedback-trigger-btn:active {
+            transform: scale(0.96) !important;
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.6) !important;
+            background: #00f2fe !important;
+            color: #02040a !important;
+        }
+        @keyframes pulseNeon {
+            0%, 100% { box-shadow: 0 0 12px rgba(0, 242, 254, 0.2); border-color: rgba(0, 242, 254, 0.5); }
+            50% { box-shadow: 0 0 22px rgba(0, 242, 254, 0.5); border-color: #00f2fe; }
+        }
+
 
         /* Быстрая анимация перелива чисто синей туманности */
         @keyframes blueLiquidGradient {
