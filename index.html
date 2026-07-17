@@ -3,57 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TheBSgorm Hub</title>
+    <title>TheBSgorm VIP Hub</title>
     <!-- Официальный скрипт Telegram Web App -->
     <script src="https://telegram.org"></script>
     <style>
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
-            background: linear-gradient(180deg, #0076f6 0%, #0b1e3f 100%); 
-            background-attachment: fixed; 
-            color: #fff; margin: 0; padding: 20px; 
-            display: flex; flex-direction: column; align-items: center; 
-            min-height: 100vh; box-sizing: border-box; 
+        :root {
+            --bg-dark: #03001e;
+            --neon-pink: #ff007f;
+            --neon-purple: #7928ca;
+            --neon-cyan: #00f2fe;
+            --glass: rgba(15, 23, 42, 0.45);
+            --border-glass: rgba(255, 255, 255, 0.08);
         }
-        .avatar-zone { width: 120px; height: 120px; background: radial-gradient(circle, #38bdf8 0%, #0052d4 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 55px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.4); margin-top: 30px; }
-        h1 { font-size: 26px; font-weight: 900; margin: 15px 0 4px 0; letter-spacing: 0.5px; }
-        .subtitle { font-size: 13px; color: #93c5fd; opacity: 0.8; margin-bottom: 25px; font-weight: 600; }
-        .menu-container { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 12px; }
+
+        @keyframes cyberPulse {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(circle at 50% 0%, #110033 0%, var(--bg-dark) 70%);
+            background-attachment: fixed; 
+            color: #fff; margin: 0; padding: 25px 15px; 
+            display: flex; flex-direction: column; align-items: center; 
+            min-height: 100vh; box-sizing: border-box; overflow-x: hidden;
+        }
+
+        /* МЕГА-АВАТАР С НЕОНОВЫМ ПЕРЕЛИВОМ */
+        .avatar-zone { 
+            width: 125px; height: 125px; 
+            background: linear-gradient(-45deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+            background-size: 300% 300%; animation: cyberPulse 6s infinite ease-in-out;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 55px; 
+            box-shadow: 0 0 35px rgba(0, 242, 254, 0.4), inset 0 0 15px rgba(255,255,255,0.3); 
+            margin-top: 20px; border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        h1 { font-size: 28px; font-weight: 950; margin: 18px 0 4px 0; letter-spacing: 1px; text-transform: uppercase; background: linear-gradient(90deg, #fff, #93c5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { font-size: 13px; color: var(--neon-cyan); text-shadow: 0 0 8px rgba(0, 242, 254, 0.4); opacity: 0.9; margin-bottom: 30px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+        .menu-container { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 14px; }
         
-        /* АНИМИРОВАННАЯ НЕОНОВАЯ КНОПКА СВЯЗИ */
+        /* ПУЛЬСИРУЮЩАЯ КНОПКА ПОДДЕРЖКИ С НЕОНОВЫМ ДЫХАНИЕМ */
         .feedback-trigger-btn {
-            width: 100%; background: rgba(7, 15, 36, 0.8); color: #00f2fe;
-            border: 1px solid #00f2fe; padding: 13px; border-radius: 12px;
-            font-size: 14px; font-weight: 800; cursor: pointer;
+            width: 100%; background: var(--glass); color: #fff;
+            border: 2px solid var(--neon-cyan); padding: 15px; border-radius: 18px;
+            font-size: 14px; font-weight: 900; cursor: pointer; letter-spacing: 0.5px;
             display: flex; align-items: center; justify-content: center; gap: 8px;
             box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); box-sizing: border-box;
-            transition: all 0.2s ease; animation: pulseNeon 3s infinite ease-in-out;
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: pulseNeon 3s infinite ease-in-out;
         }
         .feedback-trigger-btn:active {
-            transform: scale(0.96); box-shadow: 0 0 25px rgba(0, 242, 254, 0.6);
-            background: #00f2fe; color: #02040a;
+            transform: scale(0.96); box-shadow: 0 0 30px var(--neon-cyan);
+            background: var(--neon-cyan); color: #000;
         }
         @keyframes pulseNeon {
-            0%, 100% { box-shadow: 0 0 12px rgba(0, 242, 254, 0.2); border-color: rgba(0, 242, 254, 0.5); }
-            50% { box-shadow: 0 0 22px rgba(0, 242, 254, 0.5); border-color: #00f2fe; }
+            0%, 100% { box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); border-color: rgba(0, 242, 254, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(0, 242, 254, 0.6); border-color: var(--neon-cyan); }
         }
 
-        /* ТВОИ ФИРМЕННЫЕ КНОПКИ-АККОРДЕОНЫ */
-        .accordion-btn { width: 100%; padding: 18px; border-radius: 16px; font-size: 15px; font-weight: 800; color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 6px 15px rgba(0,0,0,0.2); box-sizing: border-box; }
-        .acc-blue { background: linear-gradient(135deg, #00f2fe, #0072ff); }
-        .acc-cyan { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
-        .acc-icon { font-size: 18px; opacity: 0.7; transition: transform 0.2s; }
+        /* КНОПКИ-АККОРДЕОНЫ С УЛЬТРА-ГРАДИЕНТАМИ */
+        .accordion-btn { 
+            width: 100%; padding: 18px; border-radius: 18px; font-size: 15px; font-weight: 800; 
+            color: #fff; border: none; cursor: pointer; display: flex; align-items: center; 
+            justify-content: space-between; box-sizing: border-box;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .accordion-btn:active { transform: scale(0.97); filter: brightness(1.2); }
+        .acc-blue { background: linear-gradient(135deg, #00f2fe, #0072ff); box-shadow: 0 6px 20px rgba(0, 114, 255, 0.35); border: 1px solid rgba(255,255,255,0.15); }
+        .acc-cyan { background: linear-gradient(135deg, #7928ca, #ff007f); box-shadow: 0 6px 20px rgba(255, 0, 127, 0.35); border: 1px solid rgba(255,255,255,0.15); }
+        .acc-icon { font-size: 13px; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 0.8; }
+        /* КРАСИВО ВЫЕЗЖАЮЩИЕ ВНУТРЕННИЕ МЕНЮ С СЕТКОЙ КНОПОК */
+        .panel { 
+            max-height: 0; overflow: hidden; 
+            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease, margin 0.3s ease; 
+            background: var(--glass); border: 1px solid var(--border-glass);
+            border-radius: 18px; display: flex; flex-direction: column; gap: 8px; box-sizing: border-box; padding: 0 14px; 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+        }
+        .panel.show { padding: 14px; margin-top: -4px; margin-bottom: 6px; box-shadow: inset 0 0 15px rgba(255,255,255,0.03); }
         
-        /* ВНУТРЕННИЕ ПАНЕЛИ ДЛЯ ТВОИХ ФУНКЦИЙ */
-        .panel { max-height: 0; overflow: hidden; transition: max-height 0.2s ease-out; background: rgba(255, 255, 255, 0.05); border-radius: 12px; display: flex; flex-direction: column; gap: 8px; box-sizing: border-box; padding: 0 10px; }
-        .panel.show { padding: 12px 10px; margin-top: -4px; margin-bottom: 4px; }
-        .panel-link { background: rgba(255, 255, 255, 0.1); color: #fff; text-decoration: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 700; text-align: center; }
-        .panel-link:active { background: rgba(255, 255, 255, 0.2); }
+        /* СТИЛЬНЫЕ КНОПКИ ВНУТРИ ВЫПАДАЮЩИХ СПИСКОВ */
+        .panel-link { 
+            background: rgba(255, 255, 255, 0.05); color: #fff; text-decoration: none; 
+            padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 700; 
+            text-align: center; border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.15s ease; display: block; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .panel-link:active { background: #ffffff; color: #03001e; transform: translateY(1px); box-shadow: none; }
 
-        /* КРАСИВОЕ ОКНО ОБРАТНОЙ СВЯЗИ */
+        /* ЭФФЕКТНОЕ ZOOM-ОКНО ОБРАТНОЙ СВЯЗИ */
         .feedback-modal { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(2, 4, 10, 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            background: rgba(2, 4, 10, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             display: flex; align-items: center; justify-content: center; 
             opacity: 0; pointer-events: none; transition: all 0.25s ease; z-index: 3000; 
         }
@@ -61,18 +105,19 @@
         .feedback-modal.active .fb-content { transform: scale(1); opacity: 1; }
         .fb-content { 
             background: rgba(11, 19, 43, 0.96); border: 1px solid rgba(0, 242, 254, 0.25); 
-            padding: 25px; border-radius: 24px; width: 85%; max-width: 340px; 
-            text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.5); box-sizing: border-box; 
-            transform: scale(0.8); opacity: 0; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            padding: 25px; border-radius: 26px; width: 85%; max-width: 340px; 
+            text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); box-sizing: border-box; 
+            transform: scale(0.75); opacity: 0; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         .fb-textarea { 
-            width: 100%; height: 110px; background: rgba(0, 0, 0, 0.3); 
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; 
+            width: 100%; height: 110px; background: rgba(0, 0, 0, 0.35); 
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; 
             color: #fff; padding: 12px; font-family: inherit; font-size: 14px; 
             resize: none; margin: 15px 0; box-sizing: border-box; 
         }
-        .fb-textarea:focus { border-color: #00f2fe; outline: none; }
-        .action-btn { width: 100%; padding: 13px; border-radius: 12px; font-size: 13px; font-weight: 800; border: none; cursor: pointer; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .fb-textarea:focus { border-color: #00f2fe; outline: none; box-shadow: 0 0 10px rgba(0, 242, 254, 0.2); }
+        .action-btn { width: 100%; padding: 14px; border-radius: 12px; font-size: 13px; font-weight: 800; border: none; cursor: pointer; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.1s; }
+        .action-btn:active { transform: scale(0.97); }
     </style>
 </head>
 <body>
@@ -94,7 +139,6 @@
             <a href="https://t.me" class="panel-link" target="_blank">📢 Телеграм Канал</a>
             <a href="#" class="panel-link">🎬 Наш YouTube</a>
         </div>
-
         <!-- Аккордеон 2: Проекты -->
         <button class="accordion-btn acc-cyan" onclick="toggleAccordion('panel2', this)">
             <span>📁 &nbsp; Посмотреть проекты</span>
@@ -104,9 +148,9 @@
             <a href="https://github.com" class="panel-link" target="_blank">💻 Мой GitHub</a>
         </div>
 
-        <!-- Прямая кнопка запуска кликера -->
+        <!-- Кнопка запуска игры-кликера -->
         <a href="game.html" style="text-decoration: none;">
-            <button class="accordion-btn acc-blue" style="background: linear-gradient(135deg, #0284c7, #1e3a8a);">
+            <button class="accordion-btn" style="background: linear-gradient(135deg, #0284c7, #1e3a8a); box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3); border: 1px solid rgba(255,255,255,0.15);">
                 <span>🎮 &nbsp; Играть в Clicker NFT</span>
                 <span class="acc-icon">►</span>
             </button>
@@ -123,11 +167,12 @@
             <button class="action-btn" style="background: #334155; color: #94a3b8; margin-bottom: 0;" onclick="closeFeedback()">Закрыть окно</button>
         </div>
     </div>
+
 <script>
     const tg = window.Telegram?.WebApp;
     if (tg) { tg.ready(); tg.expand(); }
 
-    // ТВОИ РОДНЫЕ ФУНКЦИИ АККОРДЕОНОВ
+    // ФУНКЦИЯ ПЛАВНОГО РАСКРЫТИЯ АККОРДЕОНОВ И 3D ПОВОРОТА СТРЕЛОЧЕК
     window.toggleAccordion = function(panelId, btn) {
         const panel = document.getElementById(panelId);
         const icon = btn.querySelector('.acc-icon');
@@ -137,7 +182,7 @@
             panel.classList.remove('show');
             icon.style.transform = 'rotate(0deg)';
         } else {
-            // Закрываем другие панели перед открытием новой
+            // Мягко закрываем другие вкладки перед открытием текущей
             document.querySelectorAll('.panel').forEach(p => { p.style.maxHeight = null; p.classList.remove('show'); });
             document.querySelectorAll('.acc-icon').forEach(i => i.style.transform = 'rotate(0deg)');
             
@@ -154,15 +199,16 @@
     window.sendFeedback = function() {
         const text = document.getElementById('feedbackText').value.trim();
         if (!text) {
-            if (tg && tg.showAlert) tg.showAlert("Пожалуйста, введите text сообщения!");
+            if (tg && tg.showAlert) tg.showAlert("Пожалуйста, введите текст сообщения!");
             return;
         }
 
         const BOT_TOKEN = "8794927474:AAG4C5t64F1R8kiH8lZxyFgIczbwLyoEJnE";
         const MY_TELEGRAM_ID = "5591880317";
 
+        // Собираем Web3-данные об авторе
         const tgUser = tg?.initDataUnsafe?.user || {};
-        const senderName = tgUser.first_name ? `${tgUser.first_name} ${tgUser.last_name || ''}`.trim() : "Анонимный юзер";
+        const senderName = tgUser.first_name ? `${tgUser.first_name} ${tgUser.last_name || ''}`.trim() : "Анонимный пилот";
         const senderUsername = tgUser.username ? `@${tgUser.username}` : "нет юзернейма";
         const senderId = tgUser.id || "не определен";
 
@@ -189,3 +235,5 @@
 </script>
 </body>
 </html>
+
+        
