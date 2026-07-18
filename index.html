@@ -101,11 +101,16 @@
     <div class="subtitle">Web3 VIP Станция</div>
 
     <!-- ТВОЕ ГЛАВНОЕ МЕНЮ КНОПОК -->
+    <!-- ТВОЕ ОБНОВЛЕННОЕ ГЛАВНОЕ МЕНЮ КНОПОК -->
     <div class="menu-container">
-        <button class="hub-main-btn btn-cyan" onclick="openModal('feedbackModal')">
-            <span>📞 Написать Создателю в ЛС</span>
-            <span class="btn-icon">►</span>
-        </button>
+        <!-- Кнопка мгновенного перехода на твою рабочую страницу -->
+        <!-- Укажи здесь точное имя своего рабочего HTML-файла вместо register.html, если оно отличается -->
+        <a href="register.html" style="text-decoration: none;">
+            <button class="hub-main-btn btn-cyan" style="animation: breathePink 2.5s infinite ease-in-out;">
+                <span>📞 Написать Создателю в ЛС</span>
+                <span class="btn-icon">►</span>
+            </button>
+        </a>
 
         <button class="hub-main-btn btn-blue" onclick="openModal('socialModal')">
             <span>🌐 &nbsp; Социальная Карта</span>
@@ -124,6 +129,7 @@
             </button>
         </a>
     </div>
+
 
     <!-- ОКНО 1: ПОЛНОЭКРАННАЯ СОЦИАЛЬНАЯ КАРТА -->
     <div class="feedback-modal" id="socialModal">
