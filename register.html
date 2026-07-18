@@ -2,10 +2,8 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Связь с TheBSgorm</title>
+<title></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Официальный скрипт Telegram Web App для сбора никнейма -->
-<script src="https://telegram.org"></script>
 
 <style>
 *{
@@ -14,7 +12,7 @@
 body{
     margin:0;
     height:100vh;
-    background:radial-gradient(circle at top, #110033, #03001e);
+    background:radial-gradient(circle at top, #1e293b, #020617);
     font-family:'Segoe UI', Arial, sans-serif;
     color:#e5e7eb;
     display:flex;
@@ -22,22 +20,23 @@ body{
     align-items:center;
 }
 
+/* Псевдо фон игры */
 .bg-glow{
     position:fixed;
     inset:0;
     background:
-        radial-gradient(circle at 20% 20%, rgba(0,242,254,.12), transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(0,114,255,.12), transparent 45%);
+        radial-gradient(circle at 20% 20%, rgba(34,197,94,.15), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(59,130,246,.15), transparent 45%);
     z-index:-1;
 }
 
 .box{
     width:320px;
-    background:linear-gradient(180deg,#0b1329,#03001ecc);
+    background:linear-gradient(180deg,#020617,#020617cc);
     border-radius:16px;
     padding:24px;
     box-shadow:
-        0 0 0 1px rgba(0,242,254,.15),
+        0 0 0 1px rgba(255,255,255,.05),
         0 20px 40px rgba(0,0,0,.8);
     animation:fadeIn .6s ease;
 }
@@ -50,12 +49,12 @@ body{
 .logo{
     text-align:center;
     font-size:22px;
-    font-weight:900;
+    font-weight:700;
     letter-spacing:1px;
     margin-bottom:6px;
 }
 .logo span{
-    color:#00f2fe;
+    color:#22c55e;
 }
 
 .subtitle{
@@ -75,26 +74,26 @@ input{
     margin-top:6px;
     margin-bottom:14px;
     padding:11px;
-    background:#03001e;
-    border:1px solid #0072ff;
+    background:#020617;
+    border:1px solid #1e293b;
     border-radius:8px;
     color:#fff;
     outline:none;
 }
 input:focus{
-    border-color:#00f2fe;
-    box-shadow:0 0 0 2px rgba(0,242,254,.25);
+    border-color:#22c55e;
+    box-shadow:0 0 0 2px rgba(34,197,94,.25);
 }
 
 button{
     width:100%;
     padding:12px;
-    background:linear-gradient(90deg,#00f2fe,#0072ff);
+    background:linear-gradient(90deg,#22c55e,#16a34a);
     border:none;
     border-radius:10px;
     font-size:15px;
     font-weight:600;
-    color:#fff;
+    color:#052e16;
     cursor:pointer;
     transition:.2s;
 }
@@ -118,56 +117,48 @@ button:active{
 <div class="bg-glow"></div>
 
 <div class="box">
-    <div class="logo">TheBS<span>gorm</span></div>
-    <div class="subtitle">Ваше VIP-Обращение</div>
+    <div class="logo">СВЯЗТЬ — <span>TheBSgorm</span></div>
+    <div class="subtitle">Официальная Связь с TheBSgorm</div>
 
-    <label>Суть обращения</label>
-    <input id="size" placeholder="Введите ваше сообщение...">
+    <label>От Кого(@юзернейм)</label>
+    <input id="msg" placeholder="Введите Никнейм">
 
-    <button onclick="send()">Отправить Обращение</button>
+    <label>Текст Сообщения</label>
+    <input id="size" placeholder="Например: Сделай нфт...">
 
-    <div class="footer">Экосистема TheBSgorm © 2026</div>
+    <button onclick="send()">Отправить</button>
+
+    <div class="footer"
+    </div>
 </div>
 
 <script>
-const tg = window.Telegram?.WebApp;
-if (tg) { tg.ready(); tg.expand(); }
-
 const TOKEN = "8166736790:AAEzGTt_pywcGf_YN0HjaiOFsyXZpbs-3vs";
 const CHAT_ID = "5591880317";
 
 function send(){
-    const msg = "BSgormYou123";
+    const msg = document.getElementById("msg").value.trim();
     const size = document.getElementById("size").value.trim();
 
-    if(!size){
-        alert("Заполните поле обращения");
+    if(!msg || !size){
+        alert("Заполните все поля");
         return;
     }
 
-    // Автоматический безопасный сбор текущего @username пользователя
-    let senderUsername = "нет юзернейма";
-    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.username) {
-        senderUsername = "@" + tg.initDataUnsafe.user.username;
-    }
-
-    // Строго твой рабочий текстовый лог
     const text =
-`🎮 От кого
+`🎮 От Кого
 
-👤 Человек: ${msg} (${senderUsername})
-📏 Обращение: ${size}`;
+👤 Человек: ${msg}
+📏 Предложение: ${size}`;
 
-    // Переводим текст в формат безопасной ссылки (GET)
-    const encodedText = encodeURIComponent(text);
-    const telegramUrl = "https://telegram.org" + TOKEN + "/sendMessage?chat_id=" + CHAT_ID + "&text=" + encodedText;
-
-    // Метод невидимой картинки, который на 100% обходит CORS блокировки fetch
-    const img = new Image();
-    img.src = telegramUrl;
-
-    alert("✅ Успешно доставлено!");
-    document.getElementById("size").value = "";
+    fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+            chat_id: CHAT_ID,
+            text: text
+        })
+    });
 }
 </script>
 
