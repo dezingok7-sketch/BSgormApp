@@ -188,66 +188,41 @@
             return;
         }
 
-        // Твои вшитые технические параметры
-        const FIREBASE_URL = "https://firebaseio.com";
-        const BOT_TOKEN = "8794927474:AAG4C5t64F1R8kiH8lZxyFgIczbwLyoEJnE";
-        const MY_TELEGRAM_ID = "5591880317";
+        // Твоя персональная ссылка на облачный сервер Make
+        const WEBHOOK_URL = "https://hook.us2.make.com/9ym2wl5tib2xh8ueokpxgm07d6uqvw2v";
 
-        // Автоматический сбор Web3-данных об авторе из Telegram
+        // Автоматический сбор VIP-данных об авторе из Telegram
         const tgUser = tg?.initDataUnsafe?.user || {};
         const senderName = tgUser.first_name ? `${tgUser.first_name} ${tgUser.last_name || ''}`.trim() : "Анонимный пилот";
         const senderUsername = tgUser.username ? `@${tgUser.username}` : "нет юзернейма";
         const senderId = tgUser.id || "не определен";
-        const sendTime = new Date().toLocaleTimeString("ru-RU");
 
-        // Пакет данных для сохранения на сервере Firebase
         const requestData = {
             name: senderName,
             username: senderUsername,
             userId: senderId,
             message: text,
-            time: sendTime
+            time: new Date().toLocaleTimeString("ru-RU")
         };
 
-        // Текст красивой VIP-заявки для отправки в Telegram бота
-        const reportText = `👑 <b>ПОСТУПИЛА НОВАЯ VIP-ЗАЯВКА!</b>\n\n` +
-                           `👤 <b>Отправитель:</b> ${senderName} (${senderUsername})\n` +
-                           `🆔 <b>ID пользователя:</b> <code>${senderId}</code>\n` +
-                           `⏰ <b>Время отправки:</b> ${sendTime}\n\n` +
-                           `📝 <b>Суть обращения:</b>\n${text}`;
-
-        // ШАГ 1: Отправляем данные на сервер Firebase Realtime Database
-        fetch(FIREBASE_URL, {
+        // Засылаем данные напрямую в облако Make
+        fetch(WEBHOOK_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(requestData)
         })
-        .then(firebaseResponse => {
-            console.log("Данные успешно сохранены на сервере Firebase.");
-
-            // ШАГ 2: Мгновенно отправляем данные в Telegram бота
-            // Кодируем текст для передачи методом GET, чтобы обойти любые CORS блокировки браузера
-            const encodedText = encodeURIComponent(reportText);
-            const telegramUrl = `https://telegram.org{8084257713:AAEgr8hTRFg898dOCZP6SOG1zmbyJ-h4D7E}/sendMessage?chat_id=${MY_TELEGRAM_ID}&text=${encodedText}&parse_mode=HTML`;
-
-            // Обход блокировок через создание невидимого элемента картинки (GET запрос)
-            const img = new Image();
-            img.src = telegramUrl;
-
-            // Выводим уведомление и закрываем окно
-            setTimeout(() => {
-                if (tg && tg.showAlert) {
-                    tg.showAlert("✅ Ваша VIP-заявка успешно занесена на сервер и отправлена создателю!");
-                } else {
-                    alert("✅ Заявка отправлена!");
-                }
+        .then(response => {
+            if (response.ok) {
+                if (tg && tg.showAlert) tg.showAlert("✅ Ваша VIP-заявка успешно отправлена создателю!");
                 closeModal('feedbackModal');
                 document.getElementById('feedbackText').value = "";
-            }, 500);
+            } else {
+                if (tg && tg.showAlert) tg.showAlert("❌ Ошибка отправки на сервер автоматизации.");
+            }
         })
         .catch(error => {
-            console.error("Ошибка отправки:", error);
-            if (tg && tg.showAlert) tg.showAlert("❌ Ошибка соединения с сервером.");
+            console.error("Ошибка сети:", error);
+            if (tg && tg.showAlert) tg.showAlert("❌ Ошибка соединения.");
         });
     }
 </script>
