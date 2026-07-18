@@ -63,7 +63,7 @@
         @keyframes breatheSpace { 0%, 100% { box-shadow: 0 6px 15px rgba(2, 132, 199, 0.2); } 50% { box-shadow: 0 6px 25px rgba(0, 242, 254, 0.4); } }
         
         .btn-icon { font-size: 13px; opacity: 0.8; }
-        /* СЕТКА И НЕОНОВЫЕ ЯЧЕЙКИ ДЛЯ ССЫЛОК ВНУТРИ МОДАЛОК */
+/* СЕТКА И НЕОНОВЫЕ ЯЧЕЙКИ ДЛЯ ССЫЛОК ВНУТРИ МОДАЛОК */
         .gui-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; margin: 15px 0; }
         .gui-card {
             background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.05);
@@ -125,7 +125,7 @@
         </a>
     </div>
 
-    <!-- ОКНО 1: ПОЛНОЭКРАННАЯ СОЦИАЛЬНАЯ КАРТА (5 СЕТЕЙ) -->
+    <!-- ОКНО 1: ПОЛНОЭКРАННАЯ СОЦИАЛЬНАЯ КАРТА -->
     <div class="feedback-modal" id="socialModal">
         <div class="fb-content" style="max-width: 375px;">
             <h3 style="margin-top:0; color:#7dd3fc; font-weight:900; font-size:18px;">🌐 СОЦИАЛЬНЫЕ СЕТИ</h3>
@@ -140,7 +140,7 @@
             <button class="action-btn" style="background:#334155; color:#94a3b8; margin-bottom:0;" onclick="closeModal('socialModal')">Назад</button>
         </div>
     </div>
-    <!-- ОКНО 2: КАРТА ПРОЕКТОВ (AQUAPHOBIA) ПОВЕРХ ВСЕГО -->
+        <!-- ОКНО 2: КАРТА ПРОЕКТОВ (AQUAPHOBIA) ПОВЕРХ ВСЕГО -->
     <div class="feedback-modal" id="projectModal">
         <div class="fb-content">
             <h3 style="margin-top:0; color:#7dd3fc; font-weight:900; font-size:18px;">📁 КАРТА ПРОЕКТОВ</h3>
@@ -180,7 +180,7 @@
         document.getElementById(modalId).classList.remove('active'); 
     }
 
-    // ОТПРАВКА ДАННЫХ ЧЕРЕЗ ТВОЙ БРОНЕБОЙНЫЙ МЕТОД FETCH POST
+    // ТВОЯ ТЕСТИРОВАННАЯ И РАБОЧАЯ СХЕМА ОТПРАВКИ MESSAGES
     window.sendFeedback = function() {
         const text = document.getElementById('feedbackText').value.trim();
         if (!text) {
@@ -188,36 +188,35 @@
             return;
         }
 
-        // Твои проверенные рабочие параметры бота и чата
+        // Твои проверенные рабочие параметры бота и чата из GameX
         const TOKEN = "8166736790:AAEzGTt_pywcGf_YN0HjaiOFsyXZpbs-3vs";
         const CHAT_ID = "5591880317";
 
-        // Автоматический сбор Web3-данных о пользователе, открывшем Mini App
+        // Автоматический сбор Web3-данных о пользователе, открывшем Mini App хаб
         const tgUser = tg?.initDataUnsafe?.user || {};
         const senderName = tgUser.first_name ? `${tgUser.first_name} ${tgUser.last_name || ''}`.trim() : "Анонимный пилот";
         const senderUsername = tgUser.username ? `@${tgUser.username}` : "нет юзернейма";
         const senderId = tgUser.id || "не определен";
         const sendTime = new Date().toLocaleTimeString("ru-RU");
 
-        // Формируем красивый расширенный шаблон сообщения с данными юзера
-        const fullMessageText = 
-`👑 <b>ПОСТУПИЛА НОВАЯ VIP-ЗАЯВКА!</b>
+        // Объединяем твой шаблон лога с автоматическими ТГ-переменными
+        const textPayload = 
+`👑 ПОСТУПИЛА НОВАЯ VIP-ЗАЯВКА!
 
-👤 <b>Человек:</b> ${senderName} (${senderUsername})
-🆔 <b>ID пользователя:</b> <code>${senderId}</code>
-⏰ <b>Время отправки:</b> ${sendTime}
+👤 Человек: ${senderName} (${senderUsername})
+🆔 ID пользователя: ${senderId}
+⏰ Время отправки: ${sendTime}
 
-📝 <b>Суть обращения:</b>
+📝 Суть обращения:
 ${text}`;
 
-        // Твой безотказный метод отправки
+        // Твой безотказный метод POST-запроса fetch
         fetch(`https://telegram.org{TOKEN}/sendMessage`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 chat_id: CHAT_ID,
-                text: fullMessageText,
-                parse_mode: "HTML"
+                text: textPayload
             })
         })
         .then(response => {
@@ -230,7 +229,7 @@ ${text}`;
                 closeModal('feedbackModal');
                 document.getElementById('feedbackText').value = "";
             } else {
-                if (tg && tg.showAlert) tg.showAlert("❌ Ошибка отправки. Убедись, что ты запустил этого бота в ЛС.");
+                if (tg && tg.showAlert) tg.showAlert("❌ Ошибка отправки Telegram API. Убедись, что ты нажал /start в боте.");
             }
         })
         .catch(error => {
