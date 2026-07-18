@@ -127,7 +127,7 @@ button:active {
     const CHAT_ID = "5591880317";
 
     function send(){
-        const content = document.getElementById(" обращение").value.trim();
+        const content = document.getElementById("обращение").value.trim();
 
         if(!content){
             if(tg && tg.showAlert) {
@@ -172,7 +172,7 @@ ${content}`;
                 } else {
                     alert("✅ Ваше обращение успешно улетело создателю в ЛС!");
                 }
-                document.getElementById(" обращение").value = "";
+                document.getElementById("обращение").value = "";
             } else {
                 if(tg && tg.showAlert) {
                     tg.showAlert("⚠️ Ошибка отправки. Убедись, что запущен бот в ЛС!");
