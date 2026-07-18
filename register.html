@@ -131,7 +131,7 @@ button:active{
 const TOKEN = "8166736790:AAEzGTt_pywcGf_YN0HjaiOFsyXZpbs-3vs";
 const CHAT_ID = "5591880317";
 
-function send(){
+    function send(){
     const fixedUser = "BSgormYou123"; 
     const size = document.getElementById("size").value.trim();
 
@@ -140,24 +140,20 @@ function send(){
         return;
     }
 
-    // Твой новый текст лога
-    const text =
-`🎮 От кого
+    // Собираем текст в одну чистую, неуязвимую для URL строчку
+    const text = "🎮 От кого | 👤 Человек: " + fixedUser + " | 📏 Обращение: " + size;
 
-👤 Человек: ${fixedUser}
-📏 Обращение: ${size}`;
-
-    // Бронебойный метод обхода блокировок через Image GET
+    // Безопасное кодирование
     const encodedText = encodeURIComponent(text);
-    const telegramUrl = `https://telegram.org{TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodedText}`;
+    const telegramUrl = "https://telegram.org" + TOKEN + "/sendMessage?chat_id=" + CHAT_ID + "&text=" + encodedText;
 
     const img = new Image();
     img.src = telegramUrl;
 
-    // Выводим моментальное уведомление об успешной отправке
     alert("✅ Успешно доставлено!");
     document.getElementById("size").value = "";
-}
+    }
+
 </script>
 
 </body>
