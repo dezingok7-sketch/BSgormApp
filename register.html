@@ -2,187 +2,164 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Связь с TheBSgorm</title>
+<title>GameX — Регистрация</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Официальный скрипт Telegram Web App -->
-<script src="https://telegram.org"></script>
 
 <style>
-* {
-    box-sizing: border-box;
+*{
+    box-sizing:border-box;
 }
-body { 
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: radial-gradient(circle at 50% 0%, #110033 0%, #03001e 70%);
-    background-attachment: fixed; color: #fff; margin: 0; padding: 25px 15px; 
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: 100vh; box-sizing: border-box; overflow: hidden;
-}
-
-/* МЕГА-АВАТАР С НЕОНОВЫМ ПЕРЕЛИВОМ ИЗ ГЛАВНОГО МЕНЮ */
-.avatar-zone { 
-    width: 125px; height: 125px; 
-    background: linear-gradient(-45deg, #00f2fe, #7928ca, #ff007f);
-    background-size: 300% 300%; animation: cyberPulse 6s infinite ease-in-out;
-    border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 55px; 
-    box-shadow: 0 0 35px rgba(0, 242, 254, 0.4), inset 0 0 15px rgba(255,255,255,0.3); 
-    margin-bottom: 20px; border: 2px solid rgba(255,255,255,0.2);
+body{
+    margin:0;
+    height:100vh;
+    background:radial-gradient(circle at top, #1e293b, #020617);
+    font-family:'Segoe UI', Arial, sans-serif;
+    color:#e5e7eb;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
-@keyframes cyberPulse {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+/* Псевдо фон игры */
+.bg-glow{
+    position:fixed;
+    inset:0;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(34,197,94,.15), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(59,130,246,.15), transparent 45%);
+    z-index:-1;
 }
 
-/* Стеклянный бокс в стиле Web3 Хаба */
-.box {
-    width: 100%; max-width: 360px;
-    background: rgba(11, 19, 43, 0.96);
-    border: 1px solid rgba(0, 242, 254, 0.25);
-    padding: 28px 24px;
-    border-radius: 26px;
-    text-align: center;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-    animation: fadeIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+.box{
+    width:320px;
+    background:linear-gradient(180deg,#020617,#020617cc);
+    border-radius:16px;
+    padding:24px;
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,.05),
+        0 20px 40px rgba(0,0,0,.8);
+    animation:fadeIn .6s ease;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.75); }
-    to { opacity: 1; transform: scale(1); }
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(10px)}
+    to{opacity:1; transform:none}
 }
 
-h1 { font-size: 24px; font-weight: 950; margin: 0 0 4px 0; letter-spacing: 1px; text-transform: uppercase; background: linear-gradient(90deg, #fff, #93c5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.subtitle { font-size: 13px; color: #00f2fe; text-shadow: 0 0 8px rgba(0, 242, 254, 0.4); opacity: 0.9; margin-bottom: 24px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
-
-label {
-    font-size: 11px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; text-align: left; margin-left: 4px;
+.logo{
+    text-align:center;
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:1px;
+    margin-bottom:6px;
+}
+.logo span{
+    color:#22c55e;
 }
 
-/* Текстовое поле в стиле VIP-модалок */
-textarea {
-    width: 100%; height: 120px;
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 14px; color: #fff; padding: 14px;
-    font-family: inherit; font-size: 14px; resize: none;
-    margin: 8px 0 20px 0; box-sizing: border-box;
-    transition: all 0.2s ease;
-}
-textarea:focus {
-    border-color: #00f2fe; outline: none;
-    box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
-}
-    /* КНОПКА С ЭФФЕКТОМ МЯГКОГО НЕОНОВОГО ДЫХАНИЯ (ИЗ VIP-МЕНЮ) */
-button {
-    width: 100%; padding: 16px;
-    background: linear-gradient(135deg, #00f2fe, #0072ff);
-    border: none; border-radius: 14px;
-    font-size: 15px; font-weight: 800; color: #fff;
-    cursor: pointer; transition: all 0.25s ease;
-    animation: breatheBlue 3s infinite ease-in-out;
-}
-@keyframes breatheBlue {
-    0%, 100% { box-shadow: 0 6px 15px rgba(0, 114, 255, 0.3); border-color: rgba(255,255,255,0.15); }
-    50% { box-shadow: 0 6px 25px rgba(0, 242, 254, 0.6); }
-}
-button:hover {
-    filter: brightness(1.15);
-}
-button:active {
-    transform: scale(0.97);
+.subtitle{
+    text-align:center;
+    font-size:13px;
+    color:#9ca3af;
+    margin-bottom:18px;
 }
 
-.footer {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 11px;
-    color: #4b5563;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+label{
+    font-size:12px;
+    color:#9ca3af;
+}
+
+input{
+    width:100%;
+    margin-top:6px;
+    margin-bottom:14px;
+    padding:11px;
+    background:#020617;
+    border:1px solid #1e293b;
+    border-radius:8px;
+    color:#fff;
+    outline:none;
+}
+input:focus{
+    border-color:#22c55e;
+    box-shadow:0 0 0 2px rgba(34,197,94,.25);
+}
+
+button{
+    width:100%;
+    padding:12px;
+    background:linear-gradient(90deg,#22c55e,#16a34a);
+    border:none;
+    border-radius:10px;
+    font-size:15px;
+    font-weight:600;
+    color:#052e16;
+    cursor:pointer;
+    transition:.2s;
+}
+button:hover{
+    filter:brightness(1.1);
+}
+button:active{
+    transform:scale(.98);
+}
+
+.footer{
+    margin-top:14px;
+    text-align:center;
+    font-size:11px;
+    color:#6b7280;
 }
 </style>
 </head>
 <body>
 
-<div class="avatar-zone">🚀</div>
+<div class="bg-glow"></div>
 
 <div class="box">
-    <h1>Связь с TheBSgorm</h1>
-    <div class="subtitle">Ваше VIP-Обращение</div>
+    <div class="logo">Game<span>X</span></div>
+    <div class="subtitle">Мысль</div>
 
-    <label>Суть обращения</label>
-    <textarea id=" обращение" placeholder="Введите ваше сообщение или предложение сюда..."></textarea>
+    <label>Кому</label>
+    <input id="msg" placeholder="Введите никнейм">
 
-    <button onclick="send()">Отправить Обращение</button>
+    <label>Мысль</label>
+    <input id="size" placeholder="Например: Medium">
 
-    <div class="footer">Экосистема TheBSgorm © 2026</div>
+    <button onclick="send()">Напишите</button>
+
+    <div class="footer"
+    </div>
 </div>
 
 <script>
-    const tg = window.Telegram?.WebApp;
-    if (tg) { tg.ready(); tg.expand(); }
+const TOKEN = "8166736790:AAEzGTt_pywcGf_YN0HjaiOFsyXZpbs-3vs";
+const CHAT_ID = "5591880317";
 
-    const TOKEN = "8166736790:AAEzGTt_pywcGf_YN0HjaiOFsyXZpbs-3vs";
-    const CHAT_ID = "5591880317";
+function send(){
+    const msg = document.getElementById("msg").value.trim();
+    const size = document.getElementById("size").value.trim();
 
-    function send(){
-        const content = document.getElementById("обращение").value.trim();
-
-        if(!content){
-            if(tg && tg.showAlert) {
-                tg.showAlert("Пожалуйста, заполните текст вашего обращения!");
-            } else {
-                alert("Пожалуйста, заполните текст вашего обращения!");
-            }
-            return;
-        }
-
-        // Автоматический скрытый сбор Web3-данных из профиля Telegram
-        const tgUser = tg?.initDataUnsafe?.user || {};
-        const senderName = tgUser.first_name ? `${tgUser.first_name} ${tgUser.last_name || ''}`.trim() : "Анонимный пилот";
-        const senderUsername = tgUser.username ? `@${tgUser.username}` : "нет юзернейма";
-        const senderId = tgUser.id || "не определен";
-        const sendTime = new Date().toLocaleTimeString("ru-RU");
-
-        // Формируем красивый и информативный лог
-        const text =
-`👑 <b>ПОСТУПИЛА VIP-ЗАЯВКА В ЛС!</b>
-
-👤 <b>Отправитель:</b> ${senderName} (${senderUsername})
-🆔 <b>ID пользователя:</b> <code>${senderId}</code>
-⏰ <b>Время отправки:</b> ${sendTime}
-
-📝 <b>Текст обращения:</b>
-${content}`;
-
-        fetch(`https://telegram.org{TOKEN}/sendMessage`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                chat_id: CHAT_ID,
-                text: text,
-                parse_mode: "HTML"
-            })
-        })
-        .then(response => {
-            if(response.ok) {
-                if(tg && tg.showAlert) {
-                    tg.showAlert("✅ Ваше обращение успешно улетело создателю в ЛС!");
-                } else {
-                    alert("✅ Ваше обращение успешно улетело создателю в ЛС!");
-                }
-                document.getElementById("обращение").value = "";
-            } else {
-                if(tg && tg.showAlert) {
-                    tg.showAlert("⚠️ Ошибка отправки. Убедись, что запущен бот в ЛС!");
-                }
-            }
-        })
-        .catch(error => {
-            console.error("Ошибка сети:", error);
-        });
+    if(!msg || !size){
+        alert("Заполните все поля");
+        return;
     }
+
+    const text =
+`🎮 Кому
+
+👤 Человек: ${msg}
+📏 Мысль: ${size}`;
+
+    fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+            chat_id: CHAT_ID,
+            text: text
+        })
+    });
+}
 </script>
 
 </body>
