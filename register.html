@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>GameX — Регистрация</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+    box-sizing:border-box;
+}
+body{
+    margin:0;
+    height:100vh;
+    background:radial-gradient(circle at top, #1e293b, #020617);
+    font-family:'Segoe UI', Arial, sans-serif;
+    color:#e5e7eb;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* Псевдо фон игры */
+.bg-glow{
+    position:fixed;
+    inset:0;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(34,197,94,.15), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(59,130,246,.15), transparent 45%);
+    z-index:-1;
+}
+
+.box{
+    width:320px;
+    background:linear-gradient(180deg,#020617,#020617cc);
+    border-radius:16px;
+    padding:24px;
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,.05),
+        0 20px 40px rgba(0,0,0,.8);
+    animation:fadeIn .6s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(10px)}
+    to{opacity:1; transform:none}
+}
+
+.logo{
+    text-align:center;
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:1px;
+    margin-bottom:6px;
+}
+.logo span{
+    color:#22c55e;
+}
+
+.subtitle{
+    text-align:center;
+    font-size:13px;
+    color:#9ca3af;
+    margin-bottom:18px;
+}
+
+label{
+    font-size:12px;
+    color:#9ca3af;
+}
+
+input{
+    width:100%;
+    margin-top:6px;
+    margin-bottom:14px;
+    padding:11px;
+    background:#020617;
+    border:1px solid #1e293b;
+    border-radius:8px;
+    color:#fff;
+    outline:none;
+}
+input:focus{
+    border-color:#22c55e;
+    box-shadow:0 0 0 2px rgba(34,197,94,.25);
+}
+
+button{
+    width:100%;
+    padding:12px;
+    background:linear-gradient(90deg,#22c55e,#16a34a);
+    border:none;
+    border-radius:10px;
+    font-size:15px;
+    font-weight:600;
+    color:#052e16;
+    cursor:pointer;
+    transition:.2s;
+}
+button:hover{
+    filter:brightness(1.1);
+}
+button:active{
+    transform:scale(.98);
+}
+
+.footer{
+    margin-top:14px;
+    text-align:center;
+    font-size:11px;
+    color:#6b7280;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<div class="box">
+    <div class="logo">Game<span>X</span></div>
+    <div class="subtitle">Мысль</div>
+
+    <label>Кому</label>
+    <input id="msg" placeholder="Введите никнейм">
+
+    <label>Мысль</label>
+    <input id="size" placeholder="Например: Medium">
+
+    <button onclick="send()">Напишите</button>
+
+    <div class="footer"
+    </div>
+</div>
+
+<script>
+const TOKEN = "8166736790:AAEzGTt_pywcGf_YN0HjaiOFsyXZpbs-3vs";
+const CHAT_ID = "5591880317";
+
+function send(){
+    const msg = document.getElementById("msg").value.trim();
+    const size = document.getElementById("size").value.trim();
+
+    if(!msg || !size){
+        alert("Заполните все поля");
+        return;
+    }
+
+    const text =
+`🎮 Кому
+
+👤 Человек: ${msg}
+📏 Мысль: ${size}`;
+
+    fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+            chat_id: CHAT_ID,
+            text: text
+        })
+    });
+}
+</script>
+
+</body>
+</html>
+на
